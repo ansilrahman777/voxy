@@ -1,0 +1,474 @@
+{% extends 'user_temp/base.html' %}
+{% load static %}
+{% block title %}ADDRESS{% endblock title %}
+{% block body %}
+
+<main class="main">
+    <section class="section block-banner-shop"> 
+      <div class="container"> 
+        <h1 class="text-56-medium">PROFILE</h1>
+        <div class="breadcrumbs"> 
+          <ul> 
+            <li> <a href="/">Home </a></li>
+            <li> <a href="/user_profile">Profile</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section block-content-shop">
+        <div class="container">
+            {% for messages in messages  %}
+                <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
+                    <strong></strong>{{messages}}
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
+                </div>
+            {% endfor %}
+            <div class="row mt-5">
+                <div class="col-lg-4 pb-5">
+                    <!-- Account Sidebar-->
+                    <div class="author-card pb-3">
+                    <div
+                        class="author-card-cover"
+                        style="background-image: url('{% static 'img/about/about-us.jpg' %}')"
+                    >
+                        <a
+                        class="btn btn-style-1 btn-white btn-sm"
+                        href="#"
+                        data-toggle="tooltip"
+                        title=""
+                        data-original-title="You currently have 290 Reward points to spend"
+                        >
+                        <i class="fa fa-award text-md"></i>&nbsp;Active
+                        </a>
+                    </div>
+                    <div class="author-card-profile">
+                        <div class="author-card-avatar">
+                        <img src="{% static 'img/about/testimonial-author.jpg' %}" alt="" />
+                        </div>
+                        <div class="author-card-details">
+                        <h5 class="author-card-name text-lg">{{request.user.username}}</h5>
+                        <span class="author-card-position"
+                            >Joined {{request.user.date_joined}}</span
+                        >
+                        </div>
+                    </div>
+                    </div>
+                    <div class="wizard">
+                        <nav class="list-group list-group-flush">
+                            <a class="list-group-item " href="user_profile"><i class="fe-icon-user text-muted"></i>Profile Settings</a>
+                            <a class="list-group-item active" href="/user_address"><i class="fe-icon-user text-muted"></i>Address</a>
+                            <a class="list-group-item " href="/user_order"><i class="fe-icon-user text-muted"></i>Order details</a>
+                            <a class="list-group-item " href="/user_change_password"><i class="fe-icon-user text-muted"></i>Change Password</a>
+                            <hr>
+                            <a class="list-group-item " href="/user_logout"><i class="fe-icon-user text-muted"></i>Logout</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane  fade  active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <h4 class="font-weight-bold mt-0 mb-4">
+                        DELIVERY ADDRESS 
+                        <div class="float-right">
+                            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal">
+                            ADD NEW ADDRESS
+                            </button>
+                            {% comment %} add addresss modal {% endcomment %}
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">ADDRESS</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                        <div class="address-form">
+                                        <form class="row" method="post" action="{% url 'user_add_address' %}">
+                                            {% csrf_token %}
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="checkout__input">
+                                                            <p>First Name<span>*</span></p>
+                                                            <input type="text" name="first_name" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="checkout__input">
+                                                            <p>Last Name<span>*</span></p>
+                                                            <input type="text" name="last_name" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-6">
+                                                <div class="checkout__input">
+                                                    <p>Phone<span>*</span></p>
+                                                    <input type="text" name="phone" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-12">
+                                                <div class="checkout__input">
+                                                    <p>Address<span>*</span></p>
+                                                    <input type="text" placeholder="Street Address" name="address_line_1" required>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="col-md-12">
+                                                <div class="checkout__input">
+                                                    <input type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" name="address_line_2" >
+                                                </div>    
+                                            </div>
+        
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="checkout__input">
+                                                    <p>STATE<span>*</span></p>
+                                                    <select id="state" name="state" required>
+                                                        <option value="" disabled selected>Select State</option>
+                                                        {% for state, state_name in state_choices %}
+                                                            <option value="{{ state }}">{{ state_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    </div>
+                                                
+                                                    <div class="checkout__input">
+                                                        <p>city<span>*</span></p>
+                                                        <input type="text" name='city' required>
+                                                    </div>
+                                                </div>
+        
+                                            </div>
+        
+                                            <div class="col-md-6">
+                                                <div class="checkout__input">
+                                                    <p>Postcode / ZIP<span>*</span></p>
+                                                    <input type="text" name="pin" required>
+                                                </div>
+                                            </div>
+        
+                                            <div class="col-md-12">
+                                                <div class="checkout__input">
+                                                    <p>Country/State<span>*</span></p>
+                                                    <input type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
+                                                </div>
+                                            </div>
+        
+                                            <div class="col-md-6">
+                                                <div class="checkout__input__checkbox">
+                                                <p>Set as Default Address</p>
+                                                <input type="checkbox" name="is_default" id="acc">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="modal-footer col-md-12">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit"class="btn btn-primary">Add Address</button>
+                                            </div>
+                                        </form>
+                                        </div>
+                                    </div>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                            {% comment %} end add address modal {% endcomment %}
+                        </div>
+                        </h4>
+                        <div class="">
+                            <h2 class="mb-0">
+                                <a class="btn font-weight-bold btn-link  fa-chevron-down" data-toggle="collapse"  aria-expanded="true" aria-controls="collapseOne">
+                                    DEFAULT ADDRESS 
+                                </a>
+                            </h2>
+                            {% for address in addresses %}
+                            {% if address.is_default %}
+                                <div class="gold-members p-4">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <p class="text-gray mb-1 " style="font-weight: 900 !important ">{{ address.first_name| capfirst }} {{ address.last_name| capfirst }}</p>
+                                            <p class="text-gray mb-1"> {{address.address_line_1| capfirst}}</p>
+                                            <p class="text-gray mb-1">{{address.city| capfirst}},{{address.state}}</p>
+                                            <p class="text-gray mb-1">PIN:{{address.pin}}</p>
+                                            <p class="text-gray mb-1">{{address.country}}</p>
+                                            <hr>
+                                            <div class="float-right">
+                                            <button type="button"  class="btn btn-light" data-toggle="modal" data-target="#edit{{address.id}}">
+                                                EDIT
+                                            </button>
+                                            <a class="btn btn-danger" href="{% url 'user_remove_address' address.id %}" onclick="return confirm('Are you sure you want to delete?')" >
+                                                REMOVE
+                                            </a>                              
+                                            </div>
+                                            {% comment %} edit addresss modal {% endcomment %}
+                                            <div class="modal fade" id="edit{{address.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                    <h5 class="modal-title" id="edit">EDIT ADDRESS</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>
+                                                    
+                                                    <div class="modal-body">
+                                                    <div class="address-form">
+                                                        <form class="row" method="post" action="{% url 'user_edit_address' id=address.id %}">
+                                                        {% csrf_token %}
+                                                            <div class="col-md-12">
+                                                                <div class="row">
+                                                                    <div class="col-lg-6">
+                                                                        <div class="checkout__input">
+                                                                            <p>First Name<span>*</span></p>
+                                                                            <input type="text" name="first_name" value="{{address.first_name}}" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="checkout__input">
+                                                                            <p>Last Name<span>*</span></p>
+                                                                            <input type="text" name="last_name" value="{{address.last_name}}" required>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <div class="col-md-6">
+                                                                <div class="checkout__input">
+                                                                    <p>Phone<span>*</span></p>
+                                                                    <input type="text" name="phone" value="{{address.phone}}"  required>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-12">
+                                                                <div class="checkout__input">
+                                                                    <p>Address<span>*</span></p>
+                                                                    <input type="text" placeholder="Street Address" name="address_line_1"  value="{{address.address_line_1}}"  required>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <div class="col-md-12">
+                                                                <div class="checkout__input">
+                                                                    <input type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" value="{{address.address_line_2}}"  name="address_line_2" >
+                                                                </div>    
+                                                            </div>
+                                                    
+                                                            <div class="col-md-6">
+                                                            <div class="checkout__input">
+                                                                <p>STATE<span>*</span></p>
+                                                                <select id="state" name="state" required>
+                                                                    <option value="" disabled>Select State</option>
+                                                                    {% for state, state_name in state_choices %}
+                                                                        <option value="{{ state }}" {% if state == address.state %}selected{% endif %}>{{ state_name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            </div>
+                                                        
+                                                            <div class="col-md-6">
+                                                                <div class="checkout__input">
+                                                                    <p>city<span>*</span></p>
+                                                                    <input type="text" name='city'  value="{{address.city}}"  required>
+                                                                </div>
+                                                            </div>
+                            
+                                                            <div class="col-md-6">
+                                                            <div class="checkout__input">
+                                                                <p>Postcode / ZIP<span>*</span></p>
+                                                                <input type="text" name="pin"  value="{{address.pin}}"  required>
+                                                            </div>
+                                                            </div>
+                            
+                                                            <div class="col-md-12">
+                                                            <div class="checkout__input">
+                                                                <p>Country/State<span>*</span></p>
+                                                                <input type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
+                                                            </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                            <div class="checkout__input__checkbox">
+                                                                <p>Set as Default Address</p>
+                                                                <input type="checkbox" name="is_default" id="acc" {% if address.is_default %}checked{% endif %}>
+                                                            </div>
+                                                            </div> 
+                                                            <div class="modal-footer col-md-12">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit"class="btn btn-primary">Save Address</button>
+        
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                </div>
+                                            </div>
+                                            {% comment %} edit add address modal {% endcomment %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane  fade  active show" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <div class="accordion" id="accordionExample">
+                            <div class="gold-members">
+                            <div class="gold-members" id="headingOne">
+                                <h2 class="mb-0">
+                                <button class="btn font-weight-bold fa-chevron-down" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    OTHER ADDRESS
+                                </button>
+                                </h2>
+                                </div>
+                                {% for address in addresses %}
+                                    {% if not address.is_default %}
+                                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="gold-members">
+                                            <div class="media">
+                                                <div class="media-body card-header">
+                                                <p class="text-gray mb-1 " style="font-weight: 900 !important ">{{ address.first_name| capfirst }} {{ address.last_name| capfirst }}</p>
+                                                <p class="text-gray mb-1"> {{address.address_line_1| capfirst}}</p>
+                                                <p class="text-gray mb-1">{{address.city| capfirst}},{{address.state}}</p>
+                                                <p class="text-gray mb-1">PIN:{{address.pin}}</p>
+                                                <p class="text-gray mb-1">{{address.country}}</p>
+                                                <div class="float-right">
+                                                    <button type="button"  class="btn btn-light" data-toggle="modal" data-target="#edit{{address.id}}">
+                                                    EDIT
+                                                    </button>
+                                                    <a class="btn btn-danger" href="{% url 'user_remove_address' address.id %}" onclick="return confirm('Are you sure you want to delete?')" >
+                                                    REMOVE
+                                                    </a>                              
+                                                </div>
+                                                {% comment %} edit addresss modal {% endcomment %}
+                                                <div class="modal fade" id="edit{{address.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="edit">EDIT ADDRESS</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="modal-body">
+                                                            <div class="address-form">
+                                                            <form class="row" method="post" action="{% url 'user_edit_address' id=address.id %}">
+                                                                {% csrf_token %}
+                                                                <div class="col-md-12">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="checkout__input">
+                                                                                <p>First Name<span>*</span></p>
+                                                                                <input type="text" name="first_name" value="{{address.first_name}}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-6">
+                                                                            <div class="checkout__input">
+                                                                                <p>Last Name<span>*</span></p>
+                                                                                <input type="text" name="last_name" value="{{address.last_name}}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        
+                                                                <div class="col-md-6">
+                                                                    <div class="checkout__input">
+                                                                        <p>Phone<span>*</span></p>
+                                                                        <input type="text" name="phone" value="{{address.phone}}"  required>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="col-md-12">
+                                                                    <div class="checkout__input">
+                                                                        <p>Address<span>*</span></p>
+                                                                        <input type="text" placeholder="Street Address" name="address_line_1"  value="{{address.address_line_1}}"  required>
+                                                                    </div>
+                                                                </div>
+                                                        
+                                                                <div class="col-md-12">
+                                                                    <div class="checkout__input">
+                                                                        <input type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" value="{{address.address_line_2}}"  name="address_line_2" >
+                                                                    </div>    
+                                                                </div>
+                                                        
+                                                                <div class="col-md-6">
+                                                                    <div class="checkout__input">
+                                                                        <p>STATE<span>*</span></p>
+                                                                        <select id="state" name="state" required>
+                                                                        <option value="" disabled>Select State</option>
+                                                                        {% for state, state_name in state_choices %}
+                                                                            <option value="{{ state }}" {% if state == address.state %}selected{% endif %}>{{ state_name }}</option>
+                                                                        {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="col-md-6">
+                                                                    <div class="checkout__input">
+                                                                        <p>city<span>*</span></p>
+                                                                        <input type="text" name='city'  value="{{address.city}}"  required>
+                                                                    </div>
+                                                                </div>
+                                
+                                                                <div class="col-md-6">
+                                                                    <div class="checkout__input">
+                                                                        <p>Postcode / ZIP<span>*</span></p>
+                                                                        <input type="text" name="pin"  value="{{address.pin}}"  required>
+                                                                    </div>
+                                                                </div>
+                                
+                                                                <div class="col-md-12">
+                                                                    <div class="checkout__input">
+                                                                        <p>Country/State<span>*</span></p>
+                                                                        <input type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="checkout__input__checkbox">
+                                                                    <p>Set as Default Address</p>
+                                                                    <input type="checkbox" name="is_default" id="acc" {% if address.is_default %}checked{% endif %}>
+                                                                    </div>
+                                                                </div> 
+                                                                <div class="modal-footer col-md-12">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="submit"class="btn btn-primary">Save Address</button>
+                        
+                                                                </div>
+                                                            </form>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% comment %} end edit  address modal {% endcomment %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+</main> 
+  
+
+
+{% endblock body %}

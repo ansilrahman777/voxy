@@ -1,0 +1,116 @@
+{% extends 'admin_temp/base.html' %}
+{% load static %}
+{% block title %}ADD CATEGORY{% endblock title %}
+{% block body %}
+
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin_index" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users List</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Banners</span>
+                    </a>
+                </li>
+            </ul>
+            
+        </nav>
+    </aside>
+
+    <main class="main-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="close" onclick="dismissAlert(this)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        <section class="content-main">
+            <form method="POST" action="{% url 'admin_edit_category' id=category.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-9">
+                        <div class="content-header">
+                            <h2 class="content-title">Edit Category</h2>
+                            <div>
+                                <button type="submit" class="btn btn-md rounded font-sm hover-up">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            
+                            <div class="card-body">
+                                
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Category Name</label>
+                                        <input type="text" value="{{ category.category_name}} " class="form-control" id="product_name" name="category_name" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea  class="form-control" rows="4" name="description" required >{{ category.description}}</textarea>
+                                    </div>
+
+                                    
+                                
+                            </div>
+                        </div> <!-- card end// -->
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4>Media</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <img src="{% if category.category_image %}{{ category.category_image.url }}{% else %}{% static 'assets/imgs/theme/placeholder_image.png' %}{% endif %}" alt="">
+                                    <input class="form-control" type="file" name='category_image' value="{{category.category_image.url}}" accept="image/*" required>
+                                </div>
+                            </div>
+                        </div> <!-- card end// -->
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>    
+
+{% endblock body %}

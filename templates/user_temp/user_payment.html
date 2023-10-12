@@ -1,0 +1,117 @@
+{% extends 'user_temp/base.html' %} 
+{% load static %} 
+{% block title%}PAYMENT{%endblock title %}
+{% block body %}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="breadcrumb__text">
+          <h4>{{request.user.first_name | capfirst}}</h4>
+          <div class="breadcrumb__links">
+            <a href="/">Home</a>
+            <a href="/user_shop">Shop</a>
+            <a href="/user_cart">Shoping cart</a>
+            <a href="/user_shipping">Shipping</a>
+            <a href="/user_checkout">Checkout</a>
+            <span>Payment</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Breadcrumb Section End -->
+<section class="checkout spad">
+    {% for messages in messages  %}
+        <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
+            <strong></strong>{{messages}}
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
+        </div>
+    {% endfor %}
+
+    <div class="container">
+        <div class="checkout__form">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="checkout__title">Billing Details</h6>
+                        {% for address in default_address %}
+                        <div class="gold-members">
+                            <div class="media">
+                                <div class="media-body">
+                                    <p class="text-gray mb-1 " style="font-weight: 900 !important ">{{ address.first_name| capfirst }} {{ address.last_name| capfirst }}</p>
+                                    <p class="text-gray mb-1"> {{address.address_line_1| capfirst}}</p>
+                                    <p class="text-gray mb-1">{{address.city| capfirst}},{{address.state}}</p>
+                                    <p class="text-gray mb-1">PIN:{{address.pin}}</p>
+                                    <p class="text-gray mb-1">{{address.country}}</p>
+
+                                    <p class="text-gray mb-1"><span>Order Note:</span:>{{order.order_note}}</p>
+
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <h6 class="checkout__title">Product Details</h6>
+                        {% for cart_item in cart_items %}
+                        <div class="gold-members">
+                            <div class="media">
+                                <div class="media-body">
+                                    <p class="text-gray mb-1 " style="font-weight: 900 !important ">{{cart_item.product.product_name}} </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <ul class="checkout__total__all">
+                            <li>Total Payable Amount<span>&#8377;&nbsp;{{total}}</span></li>
+                        </ul>
+
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            <div class="shopping__cart__table">
+                                <h4 class="order__title">Payment Option</h4>
+                                
+                                <a type="button" href="{% url 'user_cash_on_delivery' order.order_number %}"  class="btn btn-dark btn-lg btn-block">Cash On Delivery</a>
+                                <hr>
+                                <button id="rzp-button1" class="btn btn-primary btn-lg btn-block">Pay with Razorpay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    var options = {
+        "key": "rzp_test_QLdX2Sorqhxv6w",
+        "amount": {{ order.order_total|floatformat:2 }} * 100,
+        "currency": "INR",
+        "name": "UHB",
+        "description": "Purchase",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{ payment.id }}", 
+        "handler": function (response) {
+            var orderNumber = "{{ order.order_number }}";
+            var transactionId = response.razorpay_payment_id; 
+            window.location.href = `/user_payment/${orderNumber}/?transactionId=${transactionId}`;
+        },
+            
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').addEventListener('click', function (e) {
+        rzp1.open();
+        e.preventDefault();
+    });
+</script>
+
+{% endblock body %}

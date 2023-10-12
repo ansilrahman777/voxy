@@ -1,0 +1,160 @@
+            {% extends 'admin_temp/base.html' %}
+            {% load static %}
+            {% block title %}CATEGORY{% endblock title %}
+            {% block body %}
+
+                <div class="screen-overlay"></div>
+                <aside class="navbar-aside" id="offcanvas_aside">
+                    <div class="aside-top">
+                        <a href="/admin_index" class="brand-wrap">
+                            <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+                        </a>
+                        <div>
+                            <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+                        </div>
+                    </div>
+                    <nav>
+                        <ul class="menu-aside">
+                            <li class="menu-item ">
+                                <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                                    <span class="text">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="menu-item active">
+                                <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                                    <span class="text">Category</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                                    <span class="text">Products</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                                    <span class="text">Orders</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                                    <span class="text">Coupon</span>
+                                </a>
+                            </li>
+                            <li class="menu-item  ">
+                                <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                                    <span class="text">Users List</span>
+                                </a>
+                            </li>
+                            <li class="menu-item  ">
+                                <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
+                                    <span class="text">Banners</span>
+                                </a>
+                            </li>
+                        </ul>
+                        
+                    </nav>
+                </aside>
+                <main class="main-wrap">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong></strong>{{ message }}
+                        <button type="button" class="close" onclick="dismissAlert(this)">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    <section class="content-main">
+                        <div class="content-header">
+                            <div>
+                                <h2 class="content-title card-title">Category</h2>
+                            </div>
+                            <div>
+                                <a href="/admin_add_category" class="btn btn-primary btn-sm rounded">Add Category</a>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            {% comment %} <header class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                                        <select class="form-select">
+                                            <option selected>All category</option>
+                                            <option>Boots</option>
+                                            <option>Football</option>
+                                            <option>Gloves</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </header>{% endcomment %}
+                            
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Category</th>
+                                                <th scope="col">Slug</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for category in categories %}
+                                            <tr class="itemlist">
+                                                <td class="align-middle">
+                                                        {{ category.id}}
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a class="itemside" href="{% url 'admin_edit_category' id=category.id %}">
+                                                        <div class="left">
+                                                            {% if category.category_image %}
+                                                            <img src="{{ category.category_image.url }}" class="img-sm img-thumbnail" alt="Item">
+                                                        {% else %}
+                                                            <p>No image available</p>
+                                                        {% endif %}                                            
+                                                        </div>
+                                                        <div class="info">
+                                                            <h6 class="mb-0">{{ category.category_name}}</h6>
+                                                        </div>
+                                                    </a>
+                                                </td>
+                                                <td class="align-middle">
+                                                    {{category.slug}}
+                                                </td>
+                                                <td class="align-middle">
+                                                    {{category.description}}
+                                                </td>
+                                                {% if category.soft_deleted %}
+                                                <td class="align-middle"><span class="badge rounded-pill alert-danger">inactive</span></td>
+                                                <td class="align-middle">
+                                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                                        <a href="{% url 'admin_enable_disable_category' id=category.id %}" class="btn btn-sm font-sm btn-danger rounded">
+                                                            UnBlock
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                {% else %}
+                                                <td class="align-middle"><span class="badge rounded-pill alert-success">active</span></td>
+                                                <td class="align-middle">
+                                                    <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                                        <a href="{% url 'admin_enable_disable_category' id=category.id %}" class="btn btn-sm font-sm rounded btn-brand">
+                                                            Block
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                {% endif %}
+                                            </tr>
+                                            {%endfor%}
+                                        </tbody>
+                                    </table>
+                                </div> <!-- table-responsive //end -->
+                            </div>
+
+                        </div> <!-- card end// -->
+                        
+                    </section>
+                </main>
+
+            {% endblock body %}

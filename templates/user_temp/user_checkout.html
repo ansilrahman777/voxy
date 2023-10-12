@@ -1,0 +1,143 @@
+{% extends 'user_temp/base.html' %} 
+{% load static %} 
+{% block title%}CHECKOUT{%endblock title %}
+{% block body %}
+
+<main class="main">
+    <div class="section block-breadcrumb">
+      <div class="container"> 
+        <div class="breadcrumbs"> 
+          <ul> 
+            <li> <a href="/">Home </a></li>
+            <li> <a href="/user_cart">Cart</a></li>
+            <li> <a href="#">Checkout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <section class="section block-cart">
+      <div class="container mb-100 mt-60">
+        <form method="post" action="{% url 'user_place_order' %}">
+            {% csrf_token %}
+          <div class="row mt-20"> 
+            <div class="col-lg-6">
+                <div class="box-gift-coupon">
+                    Have a coupon?  <a href="/user_cart">Click here to enter your code</a>
+                </div>
+                {% for address in addresses %}
+                    {% if address.is_default %}
+                    <div class="box-form-checkout form-comment"> 
+                        <h4 class="mt-32 mb-25">Shipping address </h4>
+                        <div class="row"> 
+                        <div class="col-lg-6"> 
+                            <div class="form-group"> 
+                                <p>Fist Name</p>
+                                <input class="form-control" type="text" value="{{address.first_name}}" name="address.first_name"  readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-6"> 
+                            <div class="form-group"> 
+                                <p>Last Name</p>
+                                <input class="form-control" type="text" value="{{address.last_name}}" name="address.last_name" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <p>Address</p>
+                                <input class="form-control" type="text" placeholder="Street Address" class="checkout__input__add" value="{{address.address_line_1}}" name="address.address_line_1" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <input class="form-control" type="text" placeholder="Apartment, suite, unite ect (optinal)" value="{{address.address_line_2}}" name="address.address_line_2" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <p>Town/City</p>
+                                <input class="form-control" type="text" value="{{address.city}}" name="address.city" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <p>State</p>
+                                <input class="form-control" type="text" value="{{address.state}}" name="address.state" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <p>Postcode / ZIP</p>
+                                <input class="form-control" type="text" value="{{address.pin}}" name="address.pin" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <p>Phone</p>
+                                <input class="form-control" type="text" value="{{address.phone}}" name="address.phone" readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-12"> 
+                            <div class="form-group"> 
+                                <p>Order notes(optional)</p>
+                                <input class="form-control" type="text" placeholder="Notes about your order, e.g. special notes for delivery" name="note"></textarea>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-lg-6">
+              <div class="box-detail-cart">
+                <h4 class="mb-25">Your Order</h4>
+                <div class="box-info-cart"> 
+                    {% for cart_item in cart_items %}
+                        <div class="box-info-checkout-inner">
+                            <div class="list-items-cart"> 
+                            <div class="item-cart"> 
+                                <div class="item-cart-image"> <img src="{{cart_item.product.product_images.url}}" alt="Guza"></div>
+                                <div class="item-cart-info">
+                                <div class="item-cart-info-1"> <p class="text-17-medium">{{cart_item.product.product_name}} - x {{cart_item.quantity}}</p>
+                                </div>
+                                <div class="item-cart-info-2"> 
+                                    <p class="body-p2">&#8377;&nbsp;{{cart_item.sub_total}}</p>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                        <h5 class="neutral-medium-dark">Subtotal</h5>
+                        <h5 class="neutral-dark">&#8377;&nbsp;{{total}}</h5>
+                    </div>
+                    {% if applied_coupon_discount %}
+                        <div class="box-info-cart-inner">
+                            <p class="text-17-medium text-uppercase mb-15 neutral-medium-dark">Discount</p>
+                            <div class="list-radio"> 
+                                <div class="item-radio">
+                                    <label>
+                                    <input type="radio" name="shipping" checked="checked">Coupon Code:{{applied_coupon_code}}
+                                    </label><span class="price-ship">-&nbsp;&nbsp;&#8377;&nbsp;{{applied_coupon_discount}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                      <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                        <h5 class="neutral-medium-dark">Total</h5>
+                        <h5 class="color-9">&#8377;&nbsp;{{grand_total}}</h5>
+                      </div>
+                  <div class="box-button-checkout"> <button type="submit" class="btn btn-black" >Place Order</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+</main>
+
+
+
+{% endblock body %}

@@ -1,0 +1,128 @@
+{% extends 'user_temp/base.html' %}
+{% load static %}
+{% block title %}SIGN UP{% endblock title %}
+{% block body %}
+
+<section class="breadcrumb-option">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="breadcrumb__text">
+          <h4>Sign Up</h4>
+          <div class="breadcrumb__links">
+            <a href="/">Home</a>
+            <span>Sign Up</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="contact-from-section mt-150 mb-150">
+  <div class="container">
+    {% for messages in messages %}
+      <div class="alert alert-{{ messages.tags }} alert-dismissible fade show" role="alert">
+        <strong></strong>{{ messages }}
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+      </div>
+    {% endfor %}
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-4 offset-lg-2">
+        <div class="form-title">
+          <h2>Create an Account</h2>
+          <p>Fill in the details below to sign up.</p>
+        </div>
+        <div class="contact-form">
+          <form method="POST" id="signup-form" action="{% url 'user_sign_up' %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="first_name"></label>
+              {{ form.first_name }}
+              {% if form.first_name.errors %}
+                <span class="text-danger">{{ form.first_name.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="last_name"></label>
+              {{ form.last_name }}
+              {% if form.last_name.errors %}
+                <span class="text-danger">{{ form.last_name.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="email"></label>
+              {{ form.email }}
+              {% if form.email.errors %}
+                <span class="text-danger">{{ form.email.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="mobile"></label>
+              {{ form.mobile }}
+              {% if form.mobile.errors %}
+                <span class="text-danger">{{ form.mobile.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="password"></label>
+              {{ form.password }}
+              {% if form.password.errors %}
+                <span class="text-danger">{{ form.password.errors.0 }}</span>
+              {% endif %}
+            </div>
+            <div class="form-group">
+              <label for="confirm_password" class="checkout__input"></label>
+              {{ form.confirm_password }}
+              {% if form.non_field_errors %}
+                <span class="text-danger">{{ form.non_field_errors.0 }}</span>
+              {% endif %}
+            </div>
+            <p class="forgot-signup-links">
+              Already have an account? <a href="/user_login">Login</a>
+            </p>
+            <div class="form-group">
+              <input type="submit" class="site-btn"value="Sign Up">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-6 ">
+        <div class="bd-example">
+          <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+              <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{% static 'img/banner/banner-1.jpg' %}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>WIDE RANGE OF BOOTS</h5>
+                  {% comment %} <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> {% endcomment %}
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'img/banner/banner-2.jpg' %}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>FOOTBALLS</h5>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'img/banner/banner-3.jpg' %}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <h5>GOLVES</h5>
+                  
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>                
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

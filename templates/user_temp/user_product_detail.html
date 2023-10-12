@@ -1,0 +1,324 @@
+{% extends 'user_temp/base.html' %}
+{% load static %}
+{% block title %}PRODUCT DETAILS{% endblock title %}
+{% block body %}
+
+<main class="main">
+    <div class="section block-breadcrumb">
+      <div class="container"> 
+        <div class="breadcrumbs"> 
+          <ul> 
+            <li> <a href="/">Home </a></li>
+            <li> <a href="/user_shop">Shop</a></li>
+            <li> <a href="">{{ single_product.product_name}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <section class="section block-product-single block-product-single-12">
+        {% for messages in messages  %}
+        <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
+          <strong></strong>{{messages}}
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
+        </div>
+        {% endfor %}
+        <form id="cartForm" action="{% url 'user_add_cart' single_product.id %}" method="POST">
+            {% csrf_token %}
+            <div class="container">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="detail-gallery detail-gallery-2">
+                        <div class="box-main-gallery"><a class="zoom-image glightbox" href="{{single_product.product_images.url}}"></a>
+                        <div class="product-image-slider product-image-slider-5">
+
+                            {% if single_product.product_images %}
+                                <figure class="border-radius-10"><a class="glightbox" href="{{single_product.product_images.url}}"><img src="{{single_product.product_images.url}}" alt="kidify"></a></figure>
+                            {% else %}
+                                    <p>No image available</p>
+                            {% endif %}
+
+                            {% if single_product.product_image_1 %}
+                                <figure class="border-radius-10"><a class="glightbox" href="{{single_product.product_image_1.url}}"><img src="{{single_product.product_image_1.url}}" alt="kidify"></a></figure>
+                            {% else %}
+                                    <p>No image available</p>
+                            {% endif %}
+                            
+                            {% if single_product.product_image_2 %}
+                                <figure class="border-radius-10"><a class="glightbox" href="{{single_product.product_image_2.url}}"><img src="{{single_product.product_image_2.url}}" alt="kidify"></a></figure>
+                            {% else %}
+                                    <p>No image available</p>
+                            {% endif %}
+
+                            {% if single_product.product_image_3 %}
+                                <figure class="border-radius-10"><a class="glightbox" href="{{single_product.product_image_3.url}}"><img src="{{single_product.product_image_3.url}}" alt="kidify"></a></figure>
+                            {% else %}
+                                    <p>No image available</p>
+                            {% endif %}
+                        </div>
+                        </div>
+                        <div class="slider-nav-thumbnails slider-nav-thumbnails-5">
+                            <div>
+                                {% if single_product.product_images %}
+                                    <div class="item-thumb"><img src="{{single_product.product_images.url}}" alt="kidify"></div>
+                                {% else %}
+                                        <p>No image available</p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if single_product.product_image_1 %}
+                                    <div class="item-thumb"><img src="{{single_product.product_image_1.url}}" alt="kidify"></div>
+                                {% else %}
+                                        <p>No image available</p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if single_product.product_image_2 %}
+                                    <div class="item-thumb"><img src="{{single_product.product_image_2.url}}" alt="kidify"></div>
+                                {% else %}
+                                        <p>No image available</p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if single_product.product_image_3 %}
+                                    <div class="item-thumb"><img src="{{single_product.product_image_3.url}}" alt="kidify"></div>
+                                {% else %}
+                                        <p>No image available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="box-product-info">
+                    <div class="product-title">
+                        <h3 class="mb-5">{{ single_product.product_name}}</h3><a class="btn" href="#">
+                        <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_116_452)">
+                            <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z" fill=""></path>
+                            </g>
+                            <defs>
+                            <clippath id="clip0_116_452">
+                                <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
+                            </clippath>
+                            </defs>
+                        </svg></a>
+                    </div>
+                    {% comment %} <div class="block-rating"><img src="assets/imgs/template/icons/star-fill.svg" alt="Guza"><img src="assets/imgs/template/icons/star-fill.svg" alt="Guza"><img src="assets/imgs/template/icons/star-fill.svg" alt="Guza"><img src="assets/imgs/template/icons/star-fill.svg" alt="Guza"><img src="assets/imgs/template/icons/star-none.svg" alt="Guza"><span class="text-17 neutral-medium-dark">(5)</span></div> {% endcomment %}
+                        {% if single_product.discount_percentage %}
+                        <div class="block-price"><span class="price-line">&#8377;&nbsp;{{ single_product.get_discounted_price }}</span><span class="price-main">&#8377;&nbsp;{{ single_product.price}}</span></div>
+                        {% else %}
+                        <div class="block-price"><span class="price-line">&#8377;&nbsp;{{ single_product.price}}</span><span class="price-main">&#8377;&nbsp;{{ single_product.price}}</span></div>
+                        {% endif %}
+                    {% comment %} <p class="body-p2 viewed-guest viewed-guest-black mb-25"><span class="text-17-medium">{{ single_product.description}}</span></p> {% endcomment %}
+                    {% if single_product.variation_set.sizes %}
+                    <div class="block-size"><span>Size:</span>
+                        <div class="product__details__option__size">
+                                {% for i in single_product.variation_set.sizes %}
+                                <label for="{{i.variation_value | lower}}" class="size-label">
+                                    <input type="radio" id="{{i.variation_value | lower}}" name="size" value="{{i.variation_value | lower}}" required>
+                                    {{i.variation_value | capfirst}}
+                                </label>
+                                {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if single_product.variation_set.colors %}
+                    <div class="block-size"><span>Color:</span>
+                        <div class="product__details__option__color">
+                                {% for i in single_product.variation_set.colors %}
+                                <label for="{{i.variation_value | lower}}" class="color-label">
+                                    <input type="radio" id="{{i.variation_value | lower}}" name="color" value="{{i.variation_value | lower}}" required>
+                                    {{i.variation_value | capfirst}}
+                                </label>
+                                {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="block-quantity">
+                            {% if single_product.quantity <= 0 %}
+                                <a class="btn btn-black" style="background-color: red; color: white;" href="#">out of stock</a>
+                            {% else %}
+                            <button type="method" class="btn btn-black">Add to Cart</button>
+                            {% endif %}
+
+                            {% if single_product in wishlist_products %}
+                                <a class="btn btn-navy " href="{% url 'user_remove_wishlist' single_product.id %}"><i class="fa fa-times"></i> Remove from wishlist</a>
+                            {% else %}
+                            <a class="btn btn-navy " href="{% url 'user_add_wishlist' single_product.id %}"><i class="fa fa-heart"></i> add to wishlist</a>
+                                
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="block-shipping">
+                        <div class="free-shipping">Free shipping</div>
+                        <div class="time-shipping">30 - Days Returns</div>
+                    </div>
+                    {% comment %} <div class="block-share"><a class="campage body-p2 mr-30" href="#">Campage</a><a class="link-share body-p2" href="#">Share</a></div> {% endcomment %}
+                    <div class="block-tags-product">
+                        <p class="body-p2"><span class="neutral-medium-dark">Category:</span><a class="neutral-dark" href="#">Dress</a></p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="box-detail-product">
+                <ul class="nav-tabs nav-tab-product" role="tablist">
+                    <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
+                    </li>
+                    {% comment %} <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews (3)</button>
+                    </li> {% endcomment %}
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <p>{{ single_product.description}}</p>
+                    <div class="row mt-40">
+                        <div class="col-lg-6">
+                        <p><strong>Model wears:</strong>UK 10/ EU 38/ US 6<br><strong>Occasion:</strong>Lifestyle, Sport<br><strong>Country:</strong>Italy</p>
+                        </div>
+                        <div class="col-lg-6">
+                        <p><strong>Outer:</strong>Leather 100%, Polyamide 100%<br><strong>Lining:</strong>Polyester 100%<br><strong>CounSoletry:</strong>Rubber 100%</p>
+                        </div>
+                    </div>
+                    </div>
+                    {% comment %} <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                    <div class="comments-area">
+                        <div class="row">
+                        <div class="col-lg-12 mb-30">
+                            <h4 class="mb-30 title-question">Customer reviews</h4>
+                            <div class="d-flex align-items-center mb-30">
+                            <div class="product-rate d-inline-block mr-15">
+                                <div class="product-rating" style="width: 90%"></div>
+                            </div>
+                            <h6>4.8 out of 5</h6>
+                            </div>
+                            <div class="progress"><span>5 star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
+                            </div>
+                            <div class="progress"><span>4 star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                            <div class="progress"><span>3 star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                            </div>
+                            <div class="progress"><span>2 star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
+                            </div>
+                            <div class="progress mb-30"><span>1 star</span>
+                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%</div>
+                            </div><a class="font-xs text-muted" href="#">How are ratings calculated?</a>
+                        </div>
+                        <div class="col-lg-12 mb-30">
+                            <h4 class="mb-30 title-question">Customer questions &amp; answers</h4>
+                            <div class="comment-list">
+                            <div class="single-comment justify-content-between d-flex mb-30 hover-up">
+                                <div class="user justify-content-between d-flex">
+                                <div class="thumb text-center"><img src="assets/imgs/page/about1/team.png" alt="Ecom"><a class="font-heading text-brand" href="#">Sienna</a></div>
+                                <div class="desc">
+                                    <div class="d-flex justify-content-between mb-10">
+                                    <div class="d-flex align-items-center"><span class="font-xs color-gray-700">December 4, 2023 at 3:12 pm</span></div>
+                                    <div class="product-rate d-inline-block">
+                                        <div class="product-rating" style="width: 100%"></div>
+                                    </div>
+                                    </div>
+                                    <p class="mb-10 font-sm color-gray-900">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi
+                                    repudiandae minus ab deleniti totam officia id incidunt?<a class="reply" href="#"> Reply</a>
+                                    </p>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="single-comment justify-content-between d-flex mb-30 ml-30 hover-up">
+                                <div class="user justify-content-between d-flex">
+                                <div class="thumb text-center"><img src="assets/imgs/page/about1/team.png" alt="Ecom"><a class="font-heading text-brand" href="#">Brenna</a></div>
+                                <div class="desc">
+                                    <div class="d-flex justify-content-between mb-10">
+                                    <div class="d-flex align-items-center"><span class="font-xs color-gray-700">December 4, 2023 at 3:12 pm</span></div>
+                                    <div class="product-rate d-inline-block">
+                                        <div class="product-rating" style="width: 80%"></div>
+                                    </div>
+                                    </div>
+                                    <p class="mb-10 font-sm color-gray-900">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi
+                                    repudiandae minus ab deleniti totam officia id incidunt?<a class="reply" href="#"> Reply</a>
+                                    </p>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="single-comment justify-content-between d-flex hover-up">
+                                <div class="user justify-content-between d-flex">
+                                <div class="thumb text-center"><img src="assets/imgs/page/about1/team.png" alt="Ecom"><a class="font-heading text-brand" href="#">Gemma</a></div>
+                                <div class="desc">
+                                    <div class="d-flex justify-content-between mb-10">
+                                    <div class="d-flex align-items-center"><span class="font-xs color-gray-700">December 4, 2023 at 3:12 pm</span></div>
+                                    <div class="product-rate d-inline-block">
+                                        <div class="product-rating" style="width: 80%"></div>
+                                    </div>
+                                    </div>
+                                    <p class="mb-10 font-sm color-gray-900">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi
+                                    repudiandae minus ab deleniti totam officia id incidunt?<a class="reply" href="#"> Reply</a>
+                                    </p>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div> {% endcomment %}
+                </div>
+                </div>
+            </div>
+        </form>
+    </section>
+  </main>
+  
+
+<script>
+    const zoomableImages = document.querySelectorAll(".zoomable-image");
+    
+    function toggleZoom(imageElement) {
+        imageElement.addEventListener("click", function() {
+            if (!imageElement.classList.contains("zoomed")) {
+                imageElement.style.transform = "scale(1.8)"; // Zoom in
+                imageElement.classList.add("zoomed");
+            } else {
+                imageElement.style.transform = "scale(1)"; // Zoom out
+                imageElement.classList.remove("zoomed");
+            }
+        });
+    }
+    
+    zoomableImages.forEach(function(image) {
+        toggleZoom(image);
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+
+  <script>
+
+    document.getElementById('cartForm').addEventListener('submit', function(event) {
+      event.preventDefault(); 
+
+      swal({
+        title: "Item Added to Cart",
+        text: "The item has been added to your shopping cart.",
+        icon: "success",
+        buttons: {
+          confirm: "OK",
+        },
+      }).then((value) => {
+        if (value) {
+         
+          this.submit();
+        }
+      });
+    });
+  </script>
+    
+{% endblock body %}

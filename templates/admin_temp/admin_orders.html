@@ -1,0 +1,151 @@
+{% extends 'admin_temp/base.html' %}
+{% load static %}
+{% block title %}ORDERS{% endblock title %}
+{% block body %}
+
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin_index" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users List</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Banners</span>
+                    </a>
+                </li>
+            </ul>
+            
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="close" onclick="dismissAlert(this)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order List </h2>
+                </div>
+            </div>
+            <div class="card mb-4">
+                {% comment %} <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                </header> {% endcomment %}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Mob Number</th>
+                                    <th scope="col">Total Amount</th>
+                                    <th scope="col">Payment Method</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col"> Order Date</th>
+                                    <th scope="col"> Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr >
+                                    <td><a href="{% url 'admin_order_details' order.id %}">{{order.order_number}}</a></td>
+                                    <td><b>{{order.address.first_name | capfirst}} {{order.address.last_name | capfirst}}</b></td>
+                                    <td>{{order.address.phone}}</td>
+                                    <td>{{order.order_total}}</td>
+                                    <td>{{order.payment.payment_method}}</td>
+                                    <td>
+                                        {% if order.status == 'Delivered' %}
+                                            <span class="badge rounded-pill alert-success">Deliverd</span>
+                                        {% elif order.status == 'Order Placed' %}
+                                            <span class="badge rounded-pill alert-success">Placed</span>
+                                        {% elif order.status == 'Accepted' %}
+                                            <span class="badge rounded-pill alert-warning">Accepted</span>
+                                        {% elif order.status == 'Cancelled' %}
+                                            <span class="badge rounded-pill alert-danger">Cancelled</span>
+                                        {% elif order.status == 'Returned' %}
+                                            <span class="badge rounded-pill alert-danger">Returned</span>
+                                        {% elif order.status == 'Return Pending' %}
+                                            <span class="badge rounded-pill alert-danger">Return Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <td>{{order.created_at}}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                <i class="bx bx-dots-vertical-rounded">{{order.status}}</i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                
+                                                <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Accepted' %}">
+                                                    <i class="bx bx-check me-1"></i> Accept
+                                                </a>
+                                                <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Delivered' %}">
+                                                    <i class="bx bx-user-check me-1"></i> Deliver
+                                                </a>
+                                                <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Return' %}">
+                                                    <i class="bx bx-user-check me-1"></i> Return
+                                                </a>
+                                                <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Cancelled' %}">
+                                                    <i class="bx bx-trash me-1"></i> Cancel
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section>
+    </main>
+
+{% endblock body %}

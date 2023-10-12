@@ -1,0 +1,170 @@
+{% extends 'admin_temp/base.html' %}
+{% load static %}
+{% block title %}ADD CATEGORY{% endblock title %}
+{% block body %}
+
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin_index" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users List</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Banners</span>
+                    </a>
+                </li>
+            </ul>
+            
+        </nav>
+    </aside>
+
+    <main class="main-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="close" onclick="dismissAlert(this)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        <section class="content-main">
+        <form method="post" action="/admin_add_product" enctype="multipart/form-data">
+            {% csrf_token %}            
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        <div>
+                           <button type='Submit' class="btn btn-md rounded font-sm hover-up">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        
+                        <div class="card-body">
+                            
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Product Name</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_name" name='product_name' required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea  placeholder="Type here" class="form-control" rows="4"  name='description' required ></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Price</label>
+                                            <div class="row gx-2">
+                                                <input placeholder="$" type="text" class="form-control"  name='price' required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Quatity</label>
+                                            <input placeholder="" type="text" class="form-control"  name='quantity' required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label class="form-label">Category</label>
+                                        <select class="form-select" name='category'>
+                                            {% for category in categories %}
+                                            <option value="{{ category.id }}">{{ category.category_name }} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                        </div>
+                    </div> <!-- card end// -->
+                </div>
+                <div class="col-lg-6">
+                    <div class="card-header">
+                        <h4>MEDIA</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <img id="preview-images" src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                        <input class="form-control file-input" type="file" name='product_images' data-preview-id="preview-images" required>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <img id="preview-image-1" src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                        <input class="form-control file-input" type="file" name='product_image_1' data-preview-id="preview-image-1" required>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <img id="preview-image-2" src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                        <input class="form-control file-input" type="file" name='product_image_2' data-preview-id="preview-image-2"required>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <img id="preview-image-3" src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                        <input class="form-control file-input" type="file" name='product_image_3' data-preview-id="preview-image-3" required>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                     
+            </div>
+        </form>
+        </section>
+    </main>
+
+
+
+
+{% endblock body %}
+
+
+    

@@ -1,0 +1,114 @@
+{% extends 'user_temp/base.html' %}
+{% load static %}
+{% block title %}WISHLIST{% endblock title %}
+{% block body %}
+
+
+<main class="main">
+    <section class="section block-banner-shop"> 
+      <div class="container"> 
+        <h1 class="text-56-medium">Wishlist</h1>
+        <div class="breadcrumbs"> 
+          <ul> 
+            <li> <a href="/">Home </a></li>
+            <li> <a href="#">wishlist</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section class="section block-content-shop">
+      <div class="container">
+        {% for messages in messages  %}
+        <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
+          <strong></strong>{{messages}}
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
+        </div>
+        {% endfor %}
+        <div class="container">
+            <div class="box-list-products box-list-products-4 box-list-products-shop-2">
+                {% if  wishlist_products%}
+                    {% for product in wishlist_products %}
+                        {% if not product.soft_deleted %}
+                            <div class="product-item">
+                                <div class="cardProduct wow fadeInUp">
+                                <div class="cardImage"><a href="{{ product.get_url }}"><img class="imageMain" src="{{product.product_images.url}}" alt="voxly"><img class="imageHover" src="{{product.product_images.url}}" alt="voxly"></a>
+                                    <div class="button-select"><a href="{{ product.get_url }}">View Product</a></div>
+                                    <div class="box-quick-button">
+                                        {% if product in wishlist_products %}
+                                            <a class="btn " style="background-color: white;" href="{% url 'user_remove_wishlist' product.id %}">
+                                                <svg class="d-inline-flex align-items-center justify-content-center " width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z" fill="red"></path>
+                                                </svg>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn " style="background-color: white;" href="{% url 'user_add_wishlist' product.id %}">
+                                                <svg class="d-inline-flex align-items-center justify-content-center " width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z" fill="black"></path>
+                                                </svg>
+                                            </a>
+                                        {% endif %}
+                                        <a class="btn preview-product" href="{{ product.get_url }}">
+                                        <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" fill="" xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_91_73)">
+                                            <path d="M20.031 18.617L24.314 22.899L22.899 24.314L18.617 20.031C17.0237 21.3082 15.042 22.0029 13 22C8.032 22 4 17.968 4 13C4 8.032 8.032 4 13 4C17.968 4 22 8.032 22 13C22.0029 15.042 21.3082 17.0237 20.031 18.617ZM18.025 17.875C19.2941 16.5699 20.0029 14.8204 20 13C20 9.132 16.867 6 13 6C9.132 6 6 9.132 6 13C6 16.867 9.132 20 13 20C14.8204 20.0029 16.5699 19.2941 17.875 18.025L18.025 17.875Z" fill=""></path>
+                                        </g>
+                                        <defs>
+                                            <clippath id="clip0_91_73">
+                                            <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
+                                            </clippath>
+                                        </defs>
+                                        </svg></a>
+                                    </div>
+                                </div>
+                                <div class="cardInfo"><a href="{{ product.get_url }}">
+                                    <h6 class="text-16-medium cardTitle">{{product.product_name}}</h6></a>
+                                    <p class="body-p2 cardDesc">&#8377;&nbsp;{{product.price}}</p>
+                                </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <h1>OOps!! no item in Whislist</h1>
+                </div>
+                <div class="row"style="height: 100px;">
+                    
+                </div>
+                
+                <div class="row mb-2">
+                        <a class="btn btn-border mb-2" href="/user_shop"> Shop</a>
+                </div>
+            </div>
+                    
+                {% endif %}
+            </div>
+            <div class="text-center mt-50">
+            <nav class="box-pagination">
+                <ul class="pagination">
+                    {% if products.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">&larr;</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
+                    {% endif %}
+        
+                    {% for i in products.paginator.page_range %}
+                        {% if products.number == i %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+        
+                    {% if products.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">&rarr;</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock body %}

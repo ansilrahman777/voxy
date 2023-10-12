@@ -1,0 +1,122 @@
+{% extends 'admin_temp/base.html' %}
+{% load static %}
+{% block title %}COUPONS{% endblock title %}
+{% block body %}
+
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin_index" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users List</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Banners</span>
+                    </a>
+                </li>
+            </ul>
+            
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="close" onclick="dismissAlert(this)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Coupon List </h2>
+                </div>
+                <div>
+                    <a href="/admin_add_coupons" class="btn btn-primary btn-sm rounded">Add coupon</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                {% comment %} <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                </header> {% endcomment %}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Coupon Name</th>
+                                    <th scope="col">Discription</th>
+                                    <th scope="col">Min Purchase</th>
+                                    <th scope="col">Discount Amount</th>
+                                    <th scope="col">Expiry Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" > Action </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for coupon in coupons %}
+                                <tr>
+                                    <td><b><a href="{% url 'admin_edit_coupons' coupon.id %}">{{coupon.coupon_code}}</a></b></td>
+                                    <td>{{coupon.description}}</td>
+                                    <td>{{coupon.minimum_amount}}</td>
+                                    <td>{{coupon.discount}}</td>
+                                    <td>{{coupon.valid_to}}</td>
+                                    {% if coupon.is_expired %}
+                                    <td><span class="badge rounded-pill alert-danger">Expired</span></td>
+                                    {% else %}
+                                    <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                    {% endif %}
+                                    <td>
+                                        <a href="{% url 'admin_delete_coupons' coupon.id %}"  class="btn btn-md rounded font-sm">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> 
+                </div> 
+            </div> 
+        </section>
+    </main>
+
+{% endblock body %}

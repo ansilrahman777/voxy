@@ -1,0 +1,100 @@
+{% extends 'user_temp/base.html' %}
+{% load static %}
+{% block title %}PROFILE EDIT{% endblock title %}
+{% block body %}
+
+<main class="main">
+    <section class="section block-banner-shop"> 
+      <div class="container"> 
+        <h1 class="text-56-medium">PROFILE</h1>
+        <div class="breadcrumbs"> 
+          <ul> 
+            <li> <a href="/">Home </a></li>
+            <li> <a href="/user_profile">Profile</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  
+    <section class="section block-content-shop">
+        <div class="container">
+            {% for messages in messages  %}
+                <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
+                    <strong></strong>{{messages}}
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
+                </div>
+            {% endfor %}
+            <div class="row">
+                <div class="col-lg-4 pb-5">
+                    <!-- Account Sidebar-->
+                    <div class="author-card pb-3">
+                        <div class="author-card-cover" style="background-image: url('{% static 'img/about/about-us.jpg' %}')">
+                            <a class="btn btn-style-1 btn-white btn-sm" href="#" data-toggle="tooltip" title="" data-original-title="You currently have 290 Reward points to spend">
+                                <i class="fa fa-award text-md"></i>&nbsp;active
+                            </a>
+                        </div>                    
+                        <div class="author-card-profile">
+                            <div class="author-card-avatar"><img src="{% static 'img/about/testimonial-author.jpg' %}" alt="Daniel Adams">
+                            </div>
+                            <div class="author-card-details">
+                                <h5 class="author-card-name text-lg">{{request.user.username}}</h5><span class="author-card-position">Joined {{request.user.date_joined}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard">
+                        <nav class="list-group list-group-flush">
+                            <a class="list-group-item active" href="#"><i class="fe-icon-user text-muted"></i>Profile Settings</a>
+                            <a class="list-group-item " href="/user_address"><i class="fe-icon-user text-muted"></i>Address</a>
+                            <a class="list-group-item " href="#"><i class="fe-icon-user text-muted"></i>Order details</a>
+                            <a class="list-group-item " href="/user_change_password"><i class="fe-icon-user text-muted"></i>Change Password</a>
+    
+                            <a class="list-group-item " href="/user_logout"><i class="fe-icon-user text-muted"></i>Logout</a>
+                        </nav>
+                    </div>
+                </div>
+                <!-- Profile Settings-->
+                <div class="col-lg-8 pb-5">
+                    <form class="row" method="post" action="{% url 'user_profile_edit' %}" >
+                        {% csrf_token %}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="account-fn">First Name</label>
+                                <input class="form-control" type="text" name="first_name" value="{{ request.user.first_name }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="account-ln">Last Name</label>
+                                <input class="form-control" type="text" name="last_name" value="{{ request.user.last_name }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="account-email">Email</label>
+                                <input class="form-control" type="email" disabled value="{{ request.user.email }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="account-phone">Mobile </label>
+                                <input class="form-control" type="text" name="mobile" value="{{ request.user.mobile }}">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="mt-2 mb-3">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-style-1 btn-dark" data-toast="" data-toast-position="topRight" data-toast-type="success" data-toast-icon="fe-icon-check-circle" data-toast-title="Success!" data-toast-message="Your profile updated successfully.">Update Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+ </main> 
+
+
+
+{% endblock body %}
+
+
