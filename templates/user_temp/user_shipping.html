@@ -462,7 +462,9 @@
                                     <h6>Cart total</h6>
                                     <ul>
                                         <li>Subtotal <span>&#8377;&nbsp;{{total}}</span></li>
+                                        {% if applied_coupon_code %}
                                         <li>Discount <span>-&nbsp;&nbsp;&#8377;&nbsp;{{applied_coupon_discount}}</span></li>
+                                        {% endif %}
                                         <li>Grand Total <span>&#8377;&nbsp;{{grand_total}}</span></li>
                                     </ul>
                                 </div>

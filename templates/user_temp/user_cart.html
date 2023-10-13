@@ -56,7 +56,12 @@
                                                 <p class="box-color"><span class="body-p2 neutral-medium-dark">{{ item.variation_category | capfirst }}:</span><span class="body-p2 neutral-dark">{{ item.variation_value | capfirst }} </span></p>
                                             {% endfor %}
                                             <br>
-                                            <p class="body-p2">&#8377;&nbsp;{{cart_item.product.price}}</p>
+                                        {% endif %}
+                                        {% if cart_item.product.discount_percentage or cart_item.product.category.offer %}                                            <p class="body-p2"><span class="price-line"><s>&#8377;&nbsp;{{ cart_item.product.price }}</s></span><br>
+                                            <span class="price-main">&#8377;&nbsp;{{ cart_item.product.discount_price}}</span>
+                                            </p>
+                                            {% else %}
+                                            <p class="body-p2"><span class="price-main">&#8377;&nbsp;{{ cart_item.product.price}}</span></p>
                                         {% endif %}
                                     </div>
                                     <div class="box-form-cart">
@@ -89,7 +94,7 @@
                                     <p class="body-p2"></p>
                                 </div>
                                 <div class="item-cart-info-2">
-                                    <p class="body-p2">&#8377;&nbsp;{{cart_item.sub_total}}</p><a  href="#" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
+                                    <p class="body-p2">&#8377;&nbsp;{{cart_item.sub_total}}</p><a  href="{% url 'user_remove_cart_item' cart_item.product.id cart_item.id%}" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
                                 </div>
                                 </div>
                             
@@ -117,6 +122,8 @@
                                     <p>Coupon Applied: {{ applied_coupon_code }} - {{ applied_coupon_discount }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="?remove_coupon=1"><i class="fa fa-close"></i></a></p>
                                 </div>
                         {% endif %}
+                        <br>
+                        <br>
                         <!-- Bootstrap Modal -->
                         <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -158,8 +165,9 @@
                             <div class="cart__total" style="background-color: transparent;">
                                 <ul>
                                     <li>Subtotal <span>&#8377;&nbsp;{{total}}</span></li>
+                                    {% if applied_coupon_code %}
                                     <li>Discount <span>-&nbsp;&nbsp;&#8377;&nbsp;{{applied_coupon_discount}}</span></li>
-
+                                    {% endif %}
                                     <li>Total <span>&#8377;&nbsp;{{grand_total}}</span></li>
                                 </ul>
                             </div>

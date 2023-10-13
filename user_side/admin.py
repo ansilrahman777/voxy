@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Category ,User ,Product , Cart,CartItem,Variation,TempUser,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons
+from .models import  Category ,User ,Product , Cart,CartItem,Variation,TempUser,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -20,7 +20,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields={'slug':('product_name',)}
-    list_display = ('product_name','price','category','quantity','is_available')
+    list_display = ('product_name','price','category','quantity','is_available','discount_price')
 
 class VariationAdmin(admin.ModelAdmin):
     list_display =('product','variation_category','variation_value','is_active')
@@ -59,3 +59,4 @@ admin.site.register(Payment)
 admin.site.register(Wishlist)
 admin.site.register(Coupons,CouponsAdmin)
 admin.site.register(UserCoupons)
+admin.site.register(ReviewRating)

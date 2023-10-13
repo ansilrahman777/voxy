@@ -44,6 +44,7 @@ urlpatterns = [
     path('user_order',views.user_order,name='user_order'),
     path('user_update_order_status/<int:order_id>/<str:new_status>/', views.user_update_order_status, name='user_update_order_status'),
     path('user_order_detailed_view/<int:order_id>/',views.user_order_detailed_view,name='user_order_detailed_view'),
+    path('user_sumbit_review/<int:product_id>/',views.user_sumbit_review,name='user_sumbit_review'),
 
 
     path('user_wishlist/', views.user_wishlist, name='user_wishlist'),

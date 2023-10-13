@@ -1,9 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.conf import settings 
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons
+from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
 from django.contrib import messages,auth
-from .forms import SignupForm,ProfileEditForm
+from .forms import SignupForm,ProfileEditForm,ReviewForm
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
@@ -260,7 +260,7 @@ def user_shop(request, category_slug=None):
     user=request.user
     category = None
     products = None
-    
+        
     if category_slug != None:
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=categories,is_available=True)
@@ -274,15 +274,10 @@ def user_shop(request, category_slug=None):
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
-
-    
     wishlist_products = []
     
     if user.is_authenticated:
         wishlist_products = [item.product for item in Wishlist.objects.filter(user=user)]
-
-        
-
     context = {
         'products': paged_products,
         'product_count': product_count,
@@ -291,6 +286,7 @@ def user_shop(request, category_slug=None):
     }
 
     return render(request, 'user_temp/user_shop.html', context)
+
 
 def search(request):
     keyword = request.GET.get('keyword') 
@@ -315,7 +311,6 @@ def user_product_detail(request,category_slug,product_slug):
     user=request.user
     try:
         single_product = Product.objects.get(category__slug=category_slug,slug=product_slug)
-        discounted_price = single_product.get_discounted_price()
         
     except Exception as e:
         raise e
@@ -324,11 +319,19 @@ def user_product_detail(request,category_slug,product_slug):
     
     if user.is_authenticated:
         wishlist_products = [item.product for item in Wishlist.objects.filter(user=user)]
+
+    try:
+        order_products = OrderProduct.objects.filter(user__id=request.user.id, product__id=single_product.id).exists()
+    except ObjectDoesNotExist:
+        order_products=None
+    
+    reviews = ReviewRating.objects.filter(product__id=single_product.id,status=True)
         
     context = {
         'single_product': single_product,
         'wishlist_products':wishlist_products,
-        'discounted_price':discounted_price,
+        'order_products':order_products,
+        'reviews':reviews,
     }
     return render(request,'user_temp/user_product_detail.html',context)
 
@@ -486,6 +489,8 @@ def user_remove_cart_item(request, product_id,cart_item_id):
     cart_item.delete()
 
     return redirect('user_cart')
+
+
 def user_cart(request, total=0, quantity=0, cart_items=None):
 
     
@@ -496,7 +501,7 @@ def user_cart(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
+            total += (cart_item.product.discount_price * cart_item.quantity)
             quantity += cart_item.quantity
     except Cart.DoesNotExist:
         pass
@@ -538,7 +543,6 @@ def user_cart(request, total=0, quantity=0, cart_items=None):
     }
 
     return render(request, 'user_temp/user_cart.html', context)
-
 
 
 # ----------------------------------------------------------------------------------------------------------------
@@ -754,7 +758,7 @@ def user_shipping(request,total=0,quantity=0,cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items=CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total +=(cart_item.product.price * cart_item.quantity)
+            total +=(cart_item.product.discount_price * cart_item.quantity)
             quantity += cart_item.quantity
     except ObjectDoesNotExist:
         pass
@@ -800,7 +804,7 @@ def user_checkout(request,total=0,quantity=0,cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items=CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total +=(cart_item.product.price * cart_item.quantity)
+            total +=(cart_item.product.discount_price * cart_item.quantity)
             quantity += cart_item.quantity
     except ObjectDoesNotExist:
         pass
@@ -845,7 +849,7 @@ def user_place_order(request,total=0,quantity=0,cart_items=None):
 
     grand_total = 0
     for cart_item in cart_items:
-        total += (cart_item.product.price * cart_item.quantity)
+        total += (cart_item.product.discount_price * cart_item.quantity)
         quantity += cart_item.quantity
     grand_total = total
 
@@ -955,7 +959,7 @@ def user_payment(request,order_number):
             user=current_user,
             product=cart_item.product,
             quantity=cart_item.quantity,
-            product_price=cart_item.product.price,
+            product_price=cart_item.product.discount_price,
             ordered=True,
         )
         order_product.save()
@@ -1024,7 +1028,7 @@ def user_cash_on_delivery(request, order_number):
             user=current_user,
             product=cart_item.product,
             quantity=cart_item.quantity,
-            product_price=cart_item.product.price,
+            product_price=cart_item.product.discount_price,
             ordered=True,
         )
         order_product.save()
@@ -1075,7 +1079,7 @@ def user_update_order_status(request, order_id, new_status):
     
     messages.success(request, f"Order #{order.order_number} has been updated to '{new_status}' status.")
     
-    return redirect('user_order_details')
+    return redirect('user_order')
 
 @login_required
 def user_order_detailed_view(request, order_id):
@@ -1087,7 +1091,7 @@ def user_order_detailed_view(request, order_id):
 
     for order_product in order_products:
         order_product.total = order_product.quantity * order_product.product_price
-        order_product.single_product_total = order_product.quantity * order_product.product.price
+        order_product.single_product_total = order_product.quantity * order_product.product.discount_price
     context = {
         'order_products': order_products,
         'orders': orders,
@@ -1145,7 +1149,6 @@ def user_remove_wishlist(request, product_id):
     referer = request.META.get('HTTP_REFERER')
     return HttpResponseRedirect(referer or '/user_wishlist/')
 
-@login_required(login_url='user_login')
 
 # ----------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------user_coupons--------------------------------------------------------
@@ -1176,7 +1179,7 @@ def user_apply_coupon(request):
                 cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
             for cart_item in cart_items:
-                total += (cart_item.product.price * cart_item.quantity)
+                total += (cart_item.product.discount_price * cart_item.quantity)
         except Cart.DoesNotExist:
             pass
 
@@ -1190,6 +1193,26 @@ def user_apply_coupon(request):
         messages.success(request, 'Coupon applied successfully.')
 
     return redirect('user_cart')
-    
 
+def user_sumbit_review(request, product_id):
+    if request.method == "POST":
+        try:
+            reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
+            form = ReviewForm(request.POST, instance=reviews)
+            form.save()
+            messages.success(request, 'Thank you, your review has been updated')
+        except ObjectDoesNotExist:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                data = ReviewRating()
+                data.subject = form.cleaned_data['subject']
+                data.review = form.cleaned_data['review']
+                data.product_id = product_id
+                data.user_id = request.user.id
+                data.save()
+                messages.success(request, 'Thank you, your review has been posted')
+
+        
+        referer = request.META.get('HTTP_REFERER')
+        return HttpResponseRedirect(referer)
 

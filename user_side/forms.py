@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import validators
-from .models import User
+from .models import User,ReviewRating
 import re
 
 class SignupForm(forms.ModelForm):
@@ -107,3 +107,9 @@ class ProfileEditForm(UserProfileForm):
             raise forms.ValidationError("Mobile number should contain only digits.")
 
         return mobile
+
+class ReviewForm(forms.ModelForm):
+    
+    class Meta:
+        model = ReviewRating
+        fields = ['subject','review','rating']

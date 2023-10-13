@@ -3,9 +3,10 @@ from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 from django.urls import reverse
 from django import forms
 from django.db.models.signals import post_delete
-from django.dispatch import receiver
 from django.utils import timezone 
 from decimal import Decimal
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -114,6 +115,7 @@ class Category(models.Model):
     is_available = models.BooleanField(default=True)
     soft_deleted = models.BooleanField(default=False)
     category_image = models.ImageField(upload_to='photos/categories',blank=True)
+    offer = models.DecimalField(max_digits=5,decimal_places=2,null=True,blank=True,)
     
     class Meta:
         verbose_name = 'category'
@@ -124,6 +126,14 @@ class Category(models.Model):
 
     def __str__(self):
         return self.category_name
+    
+    def save(self, *args, **kwargs):
+        if self._state.adding or self._state.db is None or self.offer != self.__class__.objects.get(pk=self.pk).offer:
+            products_to_update = self.product_set.all()
+            for product in products_to_update:
+                product.save()
+
+        super().save(*args, **kwargs)
 
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
@@ -138,21 +148,21 @@ class Product(models.Model):
     product_image_1 = models.ImageField(upload_to='photos/products', blank=True)
     product_image_2 = models.ImageField(upload_to='photos/products', blank=True)
     product_image_3 = models.ImageField(upload_to='photos/products', blank=True)
-    discount_percentage = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        null=True,
-        blank=True,
-        help_text="Discount percentage (e.g., 10.00 for 10% off)",
-    )
+    discount_percentage = models.DecimalField(max_digits=5,decimal_places=2,null=True,blank=True,)
+    discount_price = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True,)
 
-    def get_discounted_price(self):
+    def save(self, *args, **kwargs):
+        self.discount_price = self.price
+
         if self.discount_percentage is not None:
             discount_factor = 1 - (self.discount_percentage / Decimal('100.00'))
-            discounted_price = self.price * discount_factor
-            return discounted_price
-        else:
-            return self.price
+            self.discount_price = self.discount_price * discount_factor
+
+        if self.category.offer is not None:
+            category_discount_factor = 1 - (self.category.offer / Decimal('100.00'))
+            self.discount_price = self.discount_price * category_discount_factor
+
+        super(Product, self).save(*args, **kwargs)
 
     def get_url(self):
         return reverse('user_product_detail', args=[self.category.slug,self.slug])
@@ -204,7 +214,7 @@ class CartItem(models.Model):
     is_active = models.BooleanField(default=True)
 
     def sub_total(self):
-        return self.product.price*self.quantity
+        return self.product.discount_price*self.quantity
 
     def __unicode__(self):
         return self.product         
@@ -376,3 +386,19 @@ class UserCoupons(models.Model):
 
     def __str__(self):
         return self.coupon.coupon_code
+
+class ReviewRating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)  
+    subject = models.CharField(max_length=50,blank=True)
+    review = models.TextField(max_length=500,blank=True)
+    rating = models.FloatField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.subject

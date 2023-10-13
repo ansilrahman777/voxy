@@ -226,7 +226,14 @@
                             </div>
                             <div class="cardInfo"><a href="{{ product.get_url }}">
                                 <h6 class="text-16-medium cardTitle">{{product.product_name}}</h6></a>
-                                <p class="body-p2 cardDesc">&#8377;&nbsp;{{product.price}}</p>
+
+                                {% if product.discount_percentage or product.category.offer %}
+                                <p class="body-p2 cardDesc"><span class="price-line"><s>&#8377;&nbsp;{{ product.price }}</s></span><br>
+                                  <span class="price-main">&#8377;&nbsp;{{ product.discount_price}}</span>
+                                </p>
+                                {% else %}
+                                <p class="body-p2 cardDesc"><span class="price-main">&#8377;&nbsp;{{ product.price}}</span></p>
+                                {% endif %}
                             </div>
                             </div>
                         </div>
