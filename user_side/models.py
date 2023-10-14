@@ -402,3 +402,16 @@ class ReviewRating(models.Model):
 
     def __str__(self):
         return self.subject
+
+class ReviewReply(models.Model):
+    review = models.ForeignKey(ReviewRating, on_delete=models.CASCADE)
+
+    reply_text = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return self.reply_text

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.conf import settings 
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
+from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,ReviewReply
 from django.contrib import messages,auth
 from .forms import SignupForm,ProfileEditForm,ReviewForm
 from django.contrib.auth import authenticate, login,logout
@@ -309,6 +309,7 @@ def search(request):
 @never_cache
 def user_product_detail(request,category_slug,product_slug):
     user=request.user
+    current_user=request.user
     try:
         single_product = Product.objects.get(category__slug=category_slug,slug=product_slug)
         
@@ -326,12 +327,14 @@ def user_product_detail(request,category_slug,product_slug):
         order_products=None
     
     reviews = ReviewRating.objects.filter(product__id=single_product.id,status=True)
-        
+    review_replay = ReviewReply.objects.filter(review__in=reviews, status=True)
     context = {
         'single_product': single_product,
         'wishlist_products':wishlist_products,
         'order_products':order_products,
         'reviews':reviews,
+        'review_replay':review_replay,
+        'current_user':current_user,
     }
     return render(request,'user_temp/user_product_detail.html',context)
 
@@ -1215,4 +1218,3 @@ def user_sumbit_review(request, product_id):
         
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)
-

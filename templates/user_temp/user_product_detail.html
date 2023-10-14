@@ -212,33 +212,45 @@
                                     <div class="col-lg-12 mb-30">
                                         <h4 class="mb-30 title-question">Customer Reviews &amp; Ratings</h4>
                                         <div class="comment-list">
-                                            {% for review in reviews %}
-                                                <div class="list-comments">
+                                            {% if reviews %}
+                                                {% for review in reviews %}
+                                                    <div class="list-comments">
 
-                                                    <div class="item-comment">
-                                                    <div class="comment-image"><img src="{% static 'assets/imgs/page/blog/avatar.png'%}" alt="Guza"></div>
-                                                    <div class="comment-info">
-                                                        <div class="comment-info-top">
-                                                        <div class="comment-author-name">{{review.user.first_name | capfirst}} {{review.user.last_name | capfirst}}</div>
-                                                        <div class="comment-date">{{review.created_at}}</div>
+                                                        <div class="item-comment">
+                                                        <div class="comment-image"><img src="{% static 'assets/imgs/page/blog/avatar.png'%}" alt="Guza"></div>
+                                                        <div class="comment-info">
+                                                            <div class="comment-info-top">
+                                                            <div class="comment-author-name">{{review.user.first_name | capfirst}} {{review.user.last_name | capfirst}}
+                                                                {% if review.user == current_user %}(you){% endif %}
+                                                            </div>
+                                                            <div class="comment-date">{{review.created_at}}</div>
+                                                            </div>
+                                                            <div class="comment-info-bottom">
+                                                            <h5 class="body-p2">{{review.subject}}</h5>
+                                                            <p class="body-p2">{{review.review}}</p>
+                                                            </div>
+                                                            <br>
+                                                                {% for reply in review_replay   %}
+                                                                    {% if review.user == review_replay.review.user %}
+                                                                    <li>
+                                                                        <p><strong>VOXY(admin):</strong>{{ reply.reply_text }}</p>
+                                                                    </li>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                         </div>
-                                                        <div class="comment-info-bottom">
-                                                        <h5 class="body-p2">{{review.subject}}</h5>
-                                                        <p class="body-p2">{{review.review}}</p>
                                                         </div>
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
 
+                                                    </div>
+                                                {% endfor %}
+                                                No reviews yet Be the first one to comment.
+                                                <a class="link" href="#">click here to purchase</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     {% if order_products %}
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                             Add your Review
                                         </button>
-                                    {% else %}
-                                    sdfsdfdsfdsf
                                     {% endif %}
                                     
                                 </div>

@@ -28,6 +28,9 @@ urlpatterns = [
     path('admin_orders',views.admin_orders,name='admin_orders'),
     path('admin_update_order_status/<int:order_id>/<str:new_status>/', views.admin_update_order_status, name='admin_update_order_status'),
     path('admin_order_details/<int:order_id>/',views.admin_order_details,name='admin_order_details'),
+    path('admin_review',views.admin_review,name='admin_review'),
+    path('admin_review_replay/<int:review_id>/',views.admin_review_replay,name='admin_review_replay'),
+
 
     path('admin_coupons',views.admin_coupons,name='admin_coupons'),
     path('admin_add_coupons',views.admin_add_coupons,name='admin_add_coupons'),

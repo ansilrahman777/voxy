@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import HttpResponse
-from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons
+from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating,ReviewReply
 from django.contrib import messages,auth
 from user_side.forms import SignupForm
 from django.contrib.auth import authenticate, login,logout
@@ -60,6 +60,7 @@ def admin_category(request):
         'categories' : categories
     }
     return render(request,'admin_temp/admin_category.html',context)
+    
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_add_category(request):
@@ -99,6 +100,7 @@ def admin_add_category(request):
         return render(request, 'admin_temp/admin_add_category.html')
 
     return render(request, 'admin_temp/admin_add_category.html')
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_edit_category(request, id):
@@ -131,6 +133,7 @@ def admin_edit_category(request, id):
         return redirect('admin_category')
 
     return render(request, 'admin_temp/admin_edit_category.html', {'category': category})
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -229,6 +232,7 @@ def admin_add_product(request):
     }
     
     return render(request,'admin_temp/admin_add_product.html',context)
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_edit_product(request, product_id):
@@ -367,6 +371,7 @@ def admin_user_block_unblock(request,id):
 def admin_banners(request):
     return render(request,'admin_temp/admin_banners.html')
 
+@login_required
 def admin_orders(request):
     orders = Order.objects.all()
 
@@ -394,6 +399,7 @@ def admin_order_details(request, order_id):
 
     return render(request, 'admin_temp/admin_order_details.html', context)
 
+@login_required
 def admin_update_order_status(request, order_id, new_status):
     order = get_object_or_404(Order, pk=order_id)
     
@@ -412,6 +418,7 @@ def admin_update_order_status(request, order_id, new_status):
     
     return redirect('admin_orders')
     
+@login_required    
 def admin_coupons(request):
     if not request.user.is_authenticated:
         return redirect('admin_login')
@@ -420,7 +427,7 @@ def admin_coupons(request):
     context = {'coupons': coupons}
     return render(request, 'admin_temp/admin_coupons.html', context)
     
-
+@login_required
 def admin_add_coupons(request):
     if not request.user.is_authenticated:
         return redirect('admin_login')
@@ -464,7 +471,7 @@ def admin_add_coupons(request):
 
     return render(request,'admin_temp/admin_add_coupons.html')
 
-
+@login_required
 def admin_edit_coupons(request, coupon_id):
     try:
         coupon = Coupons.objects.get(pk=coupon_id)
@@ -519,5 +526,17 @@ def admin_delete_coupons(request, coupon_id):
     
     return redirect('admin_coupons')
 
+@login_required
+def admin_review(request):
+    reviews = ReviewRating.objects.all()
+    context = {'reviews': reviews}
+
+    return render(request, 'admin_temp/admin_review.html',context)
+
+@login_required
+def admin_review_replay(request,review_id):
+    if request.method == "POST":
+        pass
+        
 
 

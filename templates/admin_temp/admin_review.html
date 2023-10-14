@@ -1,0 +1,158 @@
+{% extends 'admin_temp/base.html' %}
+{% load static %}
+{% block title %}DASHBOARD{% endblock title %}
+{% block body %}
+
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin_index" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item active ">
+                    <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users List</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+                {% comment %} <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Banners</span>
+                    </a>
+                </li> {% endcomment %}
+            </ul>
+            
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="close" onclick="dismissAlert(this)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Review</h2>
+                </div>
+            </div>
+            <div class="card mb-4">
+                {% comment %} <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                </header> {% endcomment %}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th scope="col">product</th>
+                                    <th scope="col">subject</th>
+                                    <th scope="col">review</th>
+                                    <th scope="col">created_at</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Replay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for review in reviews %}
+                                <tr >
+                                    <td><a href="">{{review.user}}</a></td>
+                                    <td><b>{{review.product}}</b></td>
+                                    <td>{{review.subject}}</td>
+                                    <td>{{review.review}}</td>
+                                    <td>{{review.created_at}}</td>
+                                    <td>{{review.status}}</td>
+                                    <td>
+                                            <button type="button" class="btn btn-xs" data-toggle="modal" data-target="#exampleModal">
+                                               Replay
+                                            </button>
+                                    </td>
+                                
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive //end -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section>
+
+
+    </main>     
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Write Your Review</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <div class="block-form-comment">
+                    <form method="POST" id="review_submit">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                <input class="form-control" type="text" placeholder="Replay" name="reply_text">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="text-center mt-10">
+                                <button type="submit" class="btn btn-red">Post Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock body %}
