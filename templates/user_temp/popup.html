@@ -1,0 +1,183 @@
+{% load static %}
+
+    <div class="box-popup-cart">
+    <div class="box-cart-overlay"></div>
+    <div class="box-cart-wrapper"><a class="btn-close-popup" href="#">
+        <svg class="icon-16 d-inline-flex align-items-center justify-content-center" fill="#111111" stroke="#111111" width="24" height="24" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg></a>
+        <h5 class="mb-15">Your Cart</h5>
+        <p class="body-p2"><span class="text-17-medium">Free Shipping </span> on every order<span class="text-17-medium"></span></p>
+        
+        <div class="box-products-cart">
+        {% if cart_items%}
+            <div class="list-items-cart">
+                {% for cart_item in cart_items %}
+                <div class="item-cart">
+                <div class="item-cart-image"><img src="{{ cart_item.product.product_images.url }}" alt="Voxy"></div>
+                <div class="item-cart-info">
+                    <div class="item-cart-info-1"><a class="text-16-medium" href="{{ cart_item.product.get_url}}">{{cart_item.product.product_name}}</a>
+                        {% if cart_item.product.quantity  <= 0  %}
+                        <br>
+                            <p class="box-color "style=" color: red;" >out of stock</p>
+                        {% endif %}
+                    <div class="box-info-size-color-product">
+                        {% if cart_item.variations.all %}
+                            {% for item in cart_item.variations.all %}
+                                <p class="box-color"><span class="body-p2 neutral-medium-dark">{{ item.variation_category | capfirst }}:</span><span class="body-p2 neutral-dark">{{ item.variation_value | capfirst }} </span></p>
+                            {% endfor %}
+                        {% endif %}
+                        <p class="box-size"><span class="body-p2 neutral-medium-dark">x</span><span class="body-p2 neutral-dark">{{ cart_item.quantity }}</span></p>
+                    </div>
+                    
+                    </div>
+                    <div class="item-cart-info-2">
+                        {% if cart_item.product.discount_percentage or cart_item.product.category.offer %}
+                        <p class="body-p2"><span class="price-line"><s>&#8377;&nbsp;{{ cart_item.product.price }}</s></span><br>
+                        <span class="price-main">&#8377;&nbsp;{{ cart_item.product.discount_price}}</span>
+                        </p>
+                        {% else %}
+                        <p class="body-p2"><span class="price-main">&#8377;&nbsp;{{ cart_item.product.price}}</span></p>
+                        {% endif %}
+                    <a class="btn-remove-cart" href="{% url 'user_remove_cart_item' cart_item.product.id cart_item.id %}" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
+                    </div>
+                </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="box-fire">
+                <div class="icon-fire body-p2">Checkout now before they’re<span class="text-17-medium">GONE!</span></div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-25 mb-15">
+                <h6 class="neutral-medium-dark">Subtotal</h6>
+                <h6 class="neutral-dark">{{grand_total}}</h6>
+                </div>
+                <div class="box-button-popup-cart d-flex align-items-center justify-content-between"><a class="btn btn-border w-100 mr-5" href="/user_cart">View Cart</a><a class="btn btn-black w-100 ml-5" href="/user_checkout">Check Out</a></div>
+            {% else %}
+                <div class="box-empty-cart">
+                <div class="icon-empty-cart"><img src="{% static 'img/icon/cartempty.png' %}" alt="voxy"></div>
+                <div class="info-empty-cart">
+                <p class="text-17 neutral-medium-dark">Your cart is empty</p>
+                <a class="btn btn-border"  href="/user_shop"><i class="fa fa-shopify"></i></i> Shopping</a>
+                <a class="btn btn-border"  href="/user_wishlist"><i class="fa fa-heart" style="color: red;"></i>Add from Wishlist</a>
+                </div>
+            {% endif %}
+        </div>        
+    </div>
+    </div>
+
+    <div class="box-popup-wishlist">
+        <div class="box-wishlist-overlay"></div>
+        <div class="box-wishlist-wrapper"><a class="btn-close-popup" href="#">
+            <svg class="icon-16 d-inline-flex align-items-center justify-content-center" fill="#111111" stroke="#111111" width="24" height="24" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg></a>
+            <h5 class="mb-15">Your Wishlist</h5>
+            {% if  wishlist_products%}
+                <div class="box-products-cart">
+                    <div class="box-empty-cart d-none">
+                        <div class="icon-empty-cart"><img src="assets/imgs/template/icons/empty-cart.svg" alt="Guza"></div>
+                        <div class="info-empty-cart">
+                        <p class="text-17 neutral-medium-dark">Your cart is empty</p><a class="link-underline" href="#">Add from Wishlist</a>
+                        </div>
+                    </div>
+                    <div class="list-items-cart">
+                        {% for product in wishlist_products %}
+                        <div class="item-cart">
+                            <div class="item-cart-image"><img src="{{product.product_images.url}}" alt="voXy"></div>
+                            <div class="item-cart-info">
+                            <div class="item-cart-info-1"><a class="text-16-medium" href="{{ product.get_url }}">{{product.product_name}}</a>
+                                <div>
+                                <a href="{% url 'user_remove_wishlist' product.id %}">
+                                    <svg class="d-inline-flex align-items-center justify-content-center " width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z" fill="red"></path>
+                                    </svg>
+                                </a>
+                                </div>
+                            </div>
+                            <div class="item-cart-info-2">
+                                <p class="body-p2 d-none d-sm-block">{{product.discount_price}}</p>
+                            </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="box-button-popup-cart d-flex align-items-center justify-content-between"><a class="btn btn-border w-100 mr-5" href="/user_wishlist">View Wishlist</a></div>
+            {% else %}
+            <div style=" display: flex; justify-content: center; align-items: center;">
+                <img src="{% static 'assets/imgs/template/icons/empty-cart.svg' %}" alt="voxy">
+            </div>
+            <h4 style="text-align: center; display: flex; justify-content: center; align-items: center; ">Wishlist is Empty!!!</h4>
+            <br>
+            <a class="btn btn-border" style="text-align: center; display: flex; justify-content: center; align-items: center; " href="/user_shop"><i class="fa fa-shopify"></i></i>Continue To Shopping</a>
+            {% endif %}
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(".btn-remove-cart").click(function (e) {
+        e.preventDefault();
+    
+        var productId = $(this).data("product-id");
+        var cartItemId = $(this).data("cart-item-id");
+    
+        // Construct the URL dynamically
+        var url = `/user_remove_cart_item/${productId}/${cartItemId}/`;
+    
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function (data) {
+                // Handle success (e.g., update the cart view)
+                // You can use data to check if the item was successfully removed
+                // For example, if data.success is true, you can update the cart UI
+                // Remove the item from the cart UI without reloading the page
+                $(e.target).closest("tr").remove(); // Remove the row containing the item from the cart table
+            },
+            error: function (error) {
+                // Handle error
+                console.log(error);
+            }
+        });
+    });
+    $(document).ready(function () {
+        $(".button-minus").click(function (e) {
+            e.preventDefault(); // Prevent the default form submission behavior
+    
+            var productId = $(this).data("product-id");
+            var cartItemId = $(this).data("cart-item-id");
+    
+            var quantityInput = $(`.quantity-input[data-cart-item-id="${cartItemId}"]`);
+    
+            $.ajax({
+                type: "POST",
+                url: `/user_remove_cart/${productId}/${cartItemId}/`,
+                data: {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
+                },
+                success: function (data) {
+                    // Handle success (e.g., update the cart view)
+                    // You can use data to check if the item was successfully removed
+    
+                    // Update the quantity input value, ensuring it doesn't go negative
+                    var currentQuantity = parseInt(quantityInput.val());
+                    if (currentQuantity - 1 < 1) {
+                        // Remove the item from the cart UI without reloading the page
+                        $(e.target).closest("tr").remove(); // Remove the row containing the item from the cart table
+                    } else {
+                        // Update the quantity input value
+                        quantityInput.val(currentQuantity - 1);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // Handle AJAX error
+                }
+            });
+        });
+    });
+</script>

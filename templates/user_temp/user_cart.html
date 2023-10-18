@@ -16,33 +16,31 @@
     </div>
     <section class="section block-cart">
       <div class="container">
-        {% for messages in messages  %}
-            <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
-            <strong></strong>{{messages}}
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
-            </div>
-        {% endfor %}
         <div class="row mt-20">
+            {% if not cart_items%}
+                <div class="list-items-cart">
+                    <div class="row">
+                        <div style="height: 400px; display: flex; justify-content: center; align-items: center;">
+                            <img src="{% static 'img/icon/cartempty.png' %}" alt="voxy">
+                        </div>
+                        <h1 style="text-align: center; display: flex; justify-content: center; align-items: center; ">Shopping Cart is Empty!!!</h1>
+                        </div>
+                        <div class="row"style="height: 40px;">
+                            
+                        </div>
+                        <div class="row mb-2">
+                                <a class="btn btn-border mb-2" href="/user_shop">Continue Shopping</a>
+                                <a class="btn btn-border" href="/user_wishlist"><i class="fa  fa-heart"></i> add from wishlist</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
             <div class="col-lg-7">
                 <div class="box-title-cart">
                     <h4>Your Cart</h4>
                     <h6>items</h6>
                 </div>
-                {% if not cart_items%}
-                    <div class="list-items-cart">
-                        <div class="row">
-                            <h1>Shopping Cart is Empty!!!</h1>
-                            </div>
-                            <div class="row"style="height: 100px;">
-                                
-                            </div>
-                            <div class="row mb-2">
-                                    <a class="btn btn-border mb-2" href="/user_shop">Continue Shopping</a>
-                                    <a class="btn btn-border" href="/user_wishlist"><i class="fa  fa-heart"></i> add from wishlist</a>
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
+                
                     <div class="list-items-cart">
                         {% for cart_item in cart_items %}
                             <div class="item-cart">
@@ -50,6 +48,10 @@
                                 <div class="item-cart-image"><img src="{{ cart_item.product.product_images.url }}" alt="Guza"></div>
                                 <div class="item-cart-info">
                                 <div class="item-cart-info-1"><a class="text-16-medium" href="{{ cart_item.product.get_url}}">{{cart_item.product.product_name}}</a>
+                                    {% if cart_item.product.quantity  <= 0  %}
+                                    <br>
+                                        <p class="box-color "style=" color: red;" >out of stock</p>
+                                    {% endif %}
                                     <div class="box-info-size-color-product">
                                         {% if cart_item.variations.all %}
                                             {% for item in cart_item.variations.all %}
@@ -57,7 +59,7 @@
                                             {% endfor %}
                                             <br>
                                         {% endif %}
-                                        {% if cart_item.product.discount_percentage or cart_item.product.category.offer %}                                            <p class="body-p2"><span class="price-line"><s>&#8377;&nbsp;{{ cart_item.product.price }}</s></span><br>
+                                        {% if cart_item.product.discount_percentage or cart_item.product.category.offer %}<p class="body-p2"><span class="price-line"><s>&#8377;&nbsp;{{ cart_item.product.price }}</s></span><br>
                                             <span class="price-main">&#8377;&nbsp;{{ cart_item.product.discount_price}}</span>
                                             </p>
                                             {% else %}
@@ -94,7 +96,7 @@
                                     <p class="body-p2"></p>
                                 </div>
                                 <div class="item-cart-info-2">
-                                    <p class="body-p2">&#8377;&nbsp;{{cart_item.sub_total}}</p><a  href="{% url 'user_remove_cart_item' cart_item.product.id cart_item.id%}" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
+                                    <p class="body-p2">&#8377;&nbsp;{{cart_item.sub_total}}</p><a  href="{% url 'user_remove_cart_item' cart_item.product.id cart_item.id %}" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
                                 </div>
                                 </div>
                             

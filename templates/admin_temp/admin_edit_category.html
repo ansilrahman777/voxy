@@ -89,9 +89,12 @@
                                         <label class="form-label">Description</label>
                                         <textarea  class="form-control" rows="4" name="description" required >{{ category.description}}</textarea>
                                     </div>
-
-                                    
-                                
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">offerPercentage</label>
+                                            <input  value="{{ category.offer }}" class="form-control"  type="text" class="form-control"  name="offer">
+                                        </div>
+                                    </div>
                             </div>
                         </div> <!-- card end// -->
                     </div>
@@ -102,15 +105,35 @@
                             </div>
                             <div class="card-body">
                                 <div class="input-upload">
-                                    <img src="{% if category.category_image %}{{ category.category_image.url }}{% else %}{% static 'assets/imgs/theme/placeholder_image.png' %}{% endif %}" alt="">
-                                    <input class="form-control" type="file" name='category_image' value="{{category.category_image.url}}" accept="image/*" required>
+                                    <img id="category-image" src="{% if category.category_image %}{{ category.category_image.url }}{% else %}{% static 'assets/imgs/theme/placeholder_image.png' %}{% endif %}" alt="">
+                                    <input class="form-control" type="file" name="category_image" accept="image/*">
                                 </div>
+                                
                             </div>
-                        </div> <!-- card end// -->
+                        </div>
                     </div>
                 </div>
             </form>
         </section>
     </main>    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryImageInput = document.querySelector('input[name="category_image"]');
+            const categoryImage = document.getElementById('category-image');
+        
+            categoryImageInput.addEventListener('change', function() {
+                const file = categoryImageInput.files[0];
+                if (file) {
+                    const objectURL = URL.createObjectURL(file);
+                    categoryImage.src = objectURL;
+                } else {
+                    // Handle the case where the user clears the file input
+                    categoryImage.src = '{% static 'assets/imgs/theme/placeholder_image.png' %}';
+                }
+            });
+        });
+        </script>
+        
 
 {% endblock body %}

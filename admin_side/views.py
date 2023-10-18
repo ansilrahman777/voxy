@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import HttpResponse
-from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating,ReviewReply
+from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating
 from django.contrib import messages,auth
 from user_side.forms import SignupForm
 from django.contrib.auth import authenticate, login,logout
@@ -12,6 +12,8 @@ from django.utils.text import slugify
 from django.db import IntegrityError
 from datetime import datetime
 from django.utils import timezone
+from decimal import Decimal,InvalidOperation  
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -72,6 +74,19 @@ def admin_add_category(request):
         category_name = request.POST.get('category_name')
         description = request.POST.get('description')
         category_image = request.FILES.get('category_image')
+        offer_str = request.POST.get('offer')
+        try:
+            offer_decimal = Decimal(offer_str)
+            if offer_decimal < 0 or offer_decimal > 100: 
+                raise InvalidOperation
+            if (offer_decimal * 100) % 1 != 0:
+                raise InvalidOperation
+        except (ValueError, InvalidOperation):
+            messages.error(request, 'Invalid offer value. Please enter a valid percentage value ')
+            return render(request, 'admin_temp/admin_add_category.html')
+
+
+        
         base_slug = slugify(category_name)
         slug = base_slug
         count = 1
@@ -91,6 +106,7 @@ def admin_add_category(request):
             slug=slug,
             description=description,
             category_image=category_image,
+            offer=offer_decimal,
         )
         category.save()
 
@@ -99,7 +115,6 @@ def admin_add_category(request):
     else:
         return render(request, 'admin_temp/admin_add_category.html')
 
-    return render(request, 'admin_temp/admin_add_category.html')
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
@@ -114,10 +129,22 @@ def admin_edit_category(request, id):
         raise Http404("Category does not exist")
 
     if request.method == 'POST':
-        category.category_name = request.POST.get('category_name')
-        category.description = request.POST.get('description')
-        category.stock = request.POST.get('stock')
-        category.category_image = request.FILES.get('category_image')
+        category_name = request.POST.get('category_name')
+        description = request.POST.get('description')
+        stock = request.POST.get('stock')
+        category_image = request.FILES.get('category_image')
+        offer_str = request.POST.get('offer')
+        try:
+            offer_decimal = Decimal(offer_str)
+            if offer_decimal < 0 or offer_decimal > 100: 
+                raise InvalidOperation
+            if (offer_decimal * 100) % 1 != 0:
+                raise InvalidOperation
+            category.offer = offer_decimal
+        except (ValueError, InvalidOperation):
+            messages.error(request, 'Invalid offer value. Please enter a valid percentage.')
+            return render(request, 'admin_temp/admin_edit_category.html', {'category': category})
+
         base_slug = slugify(category.category_name)
         slug = base_slug
         count = 1
@@ -125,7 +152,16 @@ def admin_edit_category(request, id):
         while Category.objects.filter(slug=slug).exclude(id=category.id).exists():
             slug = f"{base_slug}-{count}"
             count += 1
-        
+
+        Category.objects.filter(id=id).update(
+            category_name=category_name,
+            slug=slug,
+            description=description,
+            offer=offer_decimal,
+        )
+        if category_image:
+            category.category_image = category_image
+
         category.slug = slug  
         category.save()
 
@@ -181,19 +217,47 @@ def admin_add_product(request):
     if not request.user.is_authenticated and not request.user.is_admin:
         messages.success(request,"Please Login")
         return redirect('admin_login')
-
+    categories = Category.objects.all()
     if request.method == 'POST':
 
         product_name = request.POST['product_name']
         category_id = request.POST['category']
-        # brand = request.POST['brand']
         description = request.POST['description']
-        price = request.POST['price']
-        quantity = request.POST['quantity']
+        price_str = request.POST['price']
+        quantity_str = request.POST['quantity']
+        
+        if not price_str.isdigit():
+            messages.error(request, 'Price should be a valid number.')
+            return render(request, 'admin_temp/admin_add_product.html', {'categories': categories})
+        
+        if not quantity_str.isdigit():
+            messages.error(request, 'Quantity should be a valid number.')
+            return render(request, 'admin_temp/admin_add_product.html', {'categories': categories})
+
+        
+
+        price = Decimal(price_str)
+        quantity = int(quantity_str)
+        if price < 1 :
+            messages.error(request, 'Price cannot be less than 0')
+            return render(request, 'admin_temp/admin_add_product.html', {'categories': categories})
+
         product_images = request.FILES.get('product_images')
         product_image_1 = request.FILES.get('product_image_1')
         product_image_2 = request.FILES.get('product_image_2')
         product_image_3 = request.FILES.get('product_image_3')
+        discount_percentage_str = request.POST.get('discount_percentage')
+        try:
+            discount_percentage = Decimal(discount_percentage_str)
+            if discount_percentage < 0 or discount_percentage > 100: 
+                raise InvalidOperation("Discount percentage is out of range.")
+            if (discount_percentage * 100) % 1 != 0:
+                raise InvalidOperation("Discount percentage must be a whole number.")
+        except InvalidOperation as e:
+            messages.error(request, f'Invalid discount percentage value: {e}. Please enter a valid percentage.')
+            return render(request, 'admin_temp/admin_add_product.html', {'categories': categories})
+
+
         base_slug = slugify(product_name)
         slug = base_slug
         count = 1
@@ -208,10 +272,10 @@ def admin_add_product(request):
                 product_name=product_name,
                 slug=slug,
                 category_id=category_id,
-                # brand=brand,
                 description=description,
                 price=price,
                 quantity=quantity,
+                discount_percentage=discount_percentage,
                 product_images=product_images,
                 product_image_1=product_image_1,
                 product_image_2=product_image_2,
@@ -222,7 +286,7 @@ def admin_add_product(request):
             product.save()
             messages.success(request, 'Product added successfully!')
             return redirect('admin_products')
-        except IntegrityError as e:  # Handle IntegrityError
+        except IntegrityError as e:
             messages.warning(request, 'Oops! Error occurred while adding the product.')
             return redirect('admin_add_product')
     
@@ -244,19 +308,49 @@ def admin_edit_product(request, product_id):
         product = get_object_or_404(Product, id=product_id)
     except Http404:
         raise Http404("Product does not exist")
+    categories = Category.objects.all()
+    context = {
+        'categories': categories,
+        'product': product,
+    }
 
     if request.method == 'POST':
         product_name = request.POST['product_name']
         category_id = request.POST['category']
-        # brand = request.POST['brand']
         description = request.POST['description']
-        price = request.POST['price']
-        quantity = request.POST['quantity']
+        price_str = request.POST['price']
+        quantity_str = request.POST['quantity']
+        if not price_str.isdigit():
+            messages.error(request, 'Price should be a valid number.')
+            return render(request,'admin_temp/admin_edit_product.html',context)
+        
+        if not quantity_str.isdigit():
+            messages.error(request, 'Quantity should be a valid number.')
+            return render(request,'admin_temp/admin_edit_product.html',context)
+
+        price = Decimal(price_str)
+        quantity = int(quantity_str)
+        if price < 1:
+            messages.error(request, 'Price cannot be less than 0')
+            return render(request,'admin_temp/admin_edit_product.html',context)
+
         product_images = request.FILES.get('product_images')
         product_image_1 = request.FILES.get('product_image_1')
         product_image_2 = request.FILES.get('product_image_2')
         product_image_3 = request.FILES.get('product_image_3')
         base_slug = slugify(product_name)
+        discount_percentage_str = request.POST.get('discount_percentage')
+        try:
+            discount_percentage = Decimal(discount_percentage_str)
+            if discount_percentage< 0 or discount_percentage > 100: 
+                raise InvalidOperation
+            if (discount_percentage* 100) % 1 != 0:
+                raise InvalidOperation
+            product.discount_percentage = discount_percentage
+        except (ValueError, InvalidOperation):
+            messages.error(request, 'Invalid discount percentage value. Please enter a valid percentage.')
+            return render(request,'admin_temp/admin_edit_product.html',context)
+        
         slug = base_slug
         count = 1
 
@@ -268,10 +362,10 @@ def admin_edit_product(request, product_id):
             product_name=product_name,
             slug=slug,
             category_id=category_id,
-            # brand=brand,
             description=description,
             price=price,
             quantity=quantity,
+            discount_percentage=discount_percentage,
         )
 
         if product_images:
@@ -282,7 +376,8 @@ def admin_edit_product(request, product_id):
             product.product_image_2 = product_image_2
         if product_image_3:
             product.product_image_3 = product_image_3
-   
+        
+        product.discount_percentage = discount_percentage   
         product.product_name = product_name
         product.slug = slug
         product.category_id = category_id
@@ -294,9 +389,6 @@ def admin_edit_product(request, product_id):
         product.save()
         messages.success(request, 'Product updated successfully!')
         return redirect('admin_products')
-        # except IntegrityError:
-        #     messages.warning(request, 'Oops! Error occurred while updating the product.')
-        #     return redirect('admin_edit_product', product_id=product.id)
 
     categories = Category.objects.all()
     context = {
@@ -402,15 +494,24 @@ def admin_order_details(request, order_id):
 @login_required
 def admin_update_order_status(request, order_id, new_status):
     order = get_object_or_404(Order, pk=order_id)
+    order_products = OrderProduct.objects.filter(order__id=order_id)
     
     if new_status == 'Cancelled':
         order.status = 'Cancelled'
+        for order_product in order_products:
+            product = order_product.product
+            product.quantity += order_product.quantity
+            product.save()
     elif new_status == 'Accepted':
         order.status = 'Accepted'
     elif new_status == 'Delivered':
         order.status = 'Delivered'
     elif new_status == 'Return':
         order.status = 'Returned'
+        for order_product in order_products:
+            product = order_product.product
+            product.quantity += order_product.quantity
+            product.save()
     
     order.save()
     
@@ -533,10 +634,5 @@ def admin_review(request):
 
     return render(request, 'admin_temp/admin_review.html',context)
 
-@login_required
-def admin_review_replay(request,review_id):
-    if request.method == "POST":
-        pass
-        
 
 

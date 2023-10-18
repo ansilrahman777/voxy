@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.conf import settings 
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,ReviewReply
+from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
 from django.contrib import messages,auth
 from .forms import SignupForm,ProfileEditForm,ReviewForm
 from django.contrib.auth import authenticate, login,logout
@@ -14,7 +14,7 @@ from django.utils import timezone
 import requests,random
 import razorpay
 from django.http import JsonResponse
-
+from django.db import transaction
 #activation
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -22,8 +22,6 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
-
-
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_index(request):
@@ -327,13 +325,11 @@ def user_product_detail(request,category_slug,product_slug):
         order_products=None
     
     reviews = ReviewRating.objects.filter(product__id=single_product.id,status=True)
-    review_replay = ReviewReply.objects.filter(review__in=reviews, status=True)
     context = {
         'single_product': single_product,
         'wishlist_products':wishlist_products,
         'order_products':order_products,
         'reviews':reviews,
-        'review_replay':review_replay,
         'current_user':current_user,
     }
     return render(request,'user_temp/user_product_detail.html',context)
@@ -379,8 +375,12 @@ def user_add_cart(request, product_id):
                 index =ex_var_list.index(product_variation)
                 item_id=id[index]
                 item =CartItem.objects.get(product=product,id=item_id)
-                item.quantity +=1
-                item.save()
+                if item.quantity < product.quantity:
+                    item.quantity += 1
+                    item.save()
+                else:
+                    messages.error(request, "Product is out of stock.")
+                
             else:
                 item =CartItem.objects.create(product=product,quantity=1,user=current_user)
                 if len(product_variation)>0:
@@ -437,8 +437,11 @@ def user_add_cart(request, product_id):
                 index =ex_var_list.index(product_variation)
                 item_id=id[index]
                 item =CartItem.objects.get(product=product,id=item_id)
-                item.quantity +=1
-                item.save()
+                if item.quantity < product.quantity:
+                    item.quantity += 1
+                    item.save()
+                else:
+                    messages.error(request, "Product is out of stock.")
                 
             else:
                 item =CartItem.objects.create(product=product,quantity=1,cart=cart)
@@ -651,8 +654,32 @@ def user_add_address(request):
             phone=phone,
             is_default=is_default
         )
+        invalid_characters = [' ', '*', '#','@','$','(','+','-','!','^','&']
+
+        if any(char in first_name for char in invalid_characters):
+            messages.warning(request, 'First name cannot contain spaces or symbols.')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+        
+        if len(first_name) < 3:
+            messages.warning(request,'First name is very short !')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+
+        if ' ' in address_line_1:
+            messages.warning(request,'Address cannot contian space')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+        if ' ' in city:
+            messages.warning(request,'City cannot contian space')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
         if len(phone) != 10:
             messages.warning(request,'Mobile number must be 10 digits !')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+        if not phone.isdigit():
+            messages.warning(request,'Mobile number must contain only digits !')
             referer = request.META.get('HTTP_REFERER')
             return HttpResponseRedirect(referer)
         if len(pin) > 6:
@@ -707,10 +734,37 @@ def user_edit_address(request,id):
         save_address.phone=phone
         save_address.is_default = is_default == "on"
 
+        invalid_characters = [' ', '*', '#','@','$','(','+','-','!','^','&']
+
+        if any(char in first_name for char in invalid_characters):
+            messages.warning(request, 'First name cannot contain spaces or symbols.')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+
+        if len(first_name) < 3:
+            messages.warning(request,'First name is very short !')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+        
+        if ' ' in address_line_1:
+            messages.warning(request,'Address cannot contian space')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+        if ' ' in city:
+            messages.warning(request,'City cannot contian space')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+
         if len(phone) != 10:
             messages.warning(request,'Mobile number must be 10 digits !')
             referer = request.META.get('HTTP_REFERER')
             return HttpResponseRedirect(referer)
+             
+        if not phone.isdigit():
+            messages.warning(request,'Mobile number must contain only digits !')
+            referer = request.META.get('HTTP_REFERER')
+            return HttpResponseRedirect(referer)
+
         if len(pin) > 6:
             messages.warning(request,'Invalid Pincode !')
             referer = request.META.get('HTTP_REFERER')
@@ -761,10 +815,17 @@ def user_shipping(request,total=0,quantity=0,cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items=CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
+            if cart_item.product.quantity <=0:
+                messages.warning(request, f"{cart_item.product.product_name} is out of stock")
+                return redirect('user_cart')
             total +=(cart_item.product.discount_price * cart_item.quantity)
             quantity += cart_item.quantity
     except ObjectDoesNotExist:
         pass
+
+    cart_count = cart_items.count()
+    if cart_count <=0:
+        return redirect('/')
 
     coupons = Coupons.objects.all()
     
@@ -807,6 +868,9 @@ def user_checkout(request,total=0,quantity=0,cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items=CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
+            if cart_item.quantity > cart_item.product.quantity:
+                messages.warning(request, f"{cart_item.product.product_name} is out of stock Reduce the Quantity and try again")
+                return redirect('user_cart')
             total +=(cart_item.product.discount_price * cart_item.quantity)
             quantity += cart_item.quantity
     except ObjectDoesNotExist:
@@ -817,7 +881,9 @@ def user_checkout(request,total=0,quantity=0,cart_items=None):
     applied_coupon_code = request.session.get('applied_coupon_code')
     applied_coupon_discount = request.session.get('applied_coupon_discount')
     
-    
+    cart_count = cart_items.count()
+    if cart_count <=0:
+        return redirect('/')
 
     if applied_coupon_code and applied_coupon_discount:
         grand_total = total - applied_coupon_discount
@@ -1066,7 +1132,7 @@ def user_order(request):
 
 def user_update_order_status(request, order_id, new_status):
     order = get_object_or_404(Order, pk=order_id)
-
+    order_products = OrderProduct.objects.filter(order__id=order_id)
     if new_status == 'Order Placed':
         order.status = 'Order Placed'
     elif new_status == 'Accepted':
@@ -1077,7 +1143,10 @@ def user_update_order_status(request, order_id, new_status):
         order.status = 'Return Pending'
     elif new_status == 'Cancelled':
         order.status = 'Cancelled'
-    
+        for order_product in order_products:
+            product = order_product.product
+            product.quantity += order_product.quantity
+            product.save()
     order.save()
     
     messages.success(request, f"Order #{order.order_number} has been updated to '{new_status}' status.")
@@ -1214,7 +1283,5 @@ def user_sumbit_review(request, product_id):
                 data.user_id = request.user.id
                 data.save()
                 messages.success(request, 'Thank you, your review has been posted')
-
-        
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)

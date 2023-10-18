@@ -22,12 +22,6 @@
 <!-- Breadcrumb Section End -->
 
 <div class="container mt-5">
-    {% for messages in messages  %}
-        <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
-          <strong></strong>{{messages}}
-          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
-        </div>
-    {% endfor %}
     <main class="main-wrap">
         <section class="content-main">
         {% for i in orders %}

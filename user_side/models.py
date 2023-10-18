@@ -7,6 +7,9 @@ from django.utils import timezone
 from decimal import Decimal
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+import logging
+from django.core.files.storage import default_storage
+from django.core.files import File
 
 
 # Create your models here.
@@ -115,7 +118,7 @@ class Category(models.Model):
     is_available = models.BooleanField(default=True)
     soft_deleted = models.BooleanField(default=False)
     category_image = models.ImageField(upload_to='photos/categories',blank=True)
-    offer = models.DecimalField(max_digits=5,decimal_places=2,null=True,blank=True,)
+    offer = models.DecimalField(max_digits=5,decimal_places=2,null=True,blank=True,default=0)
     
     class Meta:
         verbose_name = 'category'
@@ -128,12 +131,26 @@ class Category(models.Model):
         return self.category_name
     
     def save(self, *args, **kwargs):
-        if self._state.adding or self._state.db is None or self.offer != self.__class__.objects.get(pk=self.pk).offer:
-            products_to_update = self.product_set.all()
-            for product in products_to_update:
-                product.save()
+        if self._state.adding:
+            super().save(*args, **kwargs)
+        else:
+            # Check if the category_image field has changed
+            if self.category_image and self.category_image != self._original_category_image:
+                # If it has changed, delete the old image file
+                if self._original_category_image:
+                    default_storage.delete(self._original_category_image.path)
+                
+                # Save the new image and update the offer field
+                super().save(update_fields=['category_image', 'offer'])
+            else:
+                super().save(update_fields=['offer'])
 
-        super().save(*args, **kwargs)
+        # Rest of your code
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._original_category_image = self.category_image
+
 
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
@@ -148,18 +165,18 @@ class Product(models.Model):
     product_image_1 = models.ImageField(upload_to='photos/products', blank=True)
     product_image_2 = models.ImageField(upload_to='photos/products', blank=True)
     product_image_3 = models.ImageField(upload_to='photos/products', blank=True)
-    discount_percentage = models.DecimalField(max_digits=5,decimal_places=2,null=True,blank=True,)
+    discount_percentage = models.DecimalField(max_digits=5,decimal_places=2,null=True,blank=True,default=0)
     discount_price = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True,)
 
     def save(self, *args, **kwargs):
         self.discount_price = self.price
 
-        if self.discount_percentage is not None:
+        if type(self.discount_percentage) is Decimal:
             discount_factor = 1 - (self.discount_percentage / Decimal('100.00'))
-            self.discount_price = self.discount_price * discount_factor
+            self.discount_price = Decimal(self.price) * discount_factor
 
-        if self.category.offer is not None:
-            category_discount_factor = 1 - (self.category.offer / Decimal('100.00'))
+        if self.category and self.category.offer is not None:
+            category_discount_factor = 1 - (Decimal(self.category.offer) / Decimal('100.00'))
             self.discount_price = self.discount_price * category_discount_factor
 
         super(Product, self).save(*args, **kwargs)
@@ -325,7 +342,7 @@ class Order(models.Model):
     order_number = models.CharField(max_length=50)
     order_total = models.CharField(max_length=50)
     tax = models.FloatField()
-    order_note = models.TextField(blank=True) 
+    order_note = models.TextField(default='', blank=True)
     status = models.CharField(max_length=20,choices=STATUS,default='Order Placed')
     ip = models.CharField(blank=True,max_length=50)
     is_ordered = models.BooleanField(default=False)
@@ -393,6 +410,7 @@ class ReviewRating(models.Model):
     subject = models.CharField(max_length=50,blank=True)
     review = models.TextField(max_length=500,blank=True)
     rating = models.FloatField(blank=True, null=True)
+    review_reply = models.TextField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=True)
@@ -403,15 +421,3 @@ class ReviewRating(models.Model):
     def __str__(self):
         return self.subject
 
-class ReviewReply(models.Model):
-    review = models.ForeignKey(ReviewRating, on_delete=models.CASCADE)
-
-    reply_text = models.TextField(max_length=500)
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.BooleanField(default=True)
-
-    class Meta:
-        ordering = ['created_at']
-
-    def __str__(self):
-        return self.reply_text

@@ -16,15 +16,7 @@
       </div>
     </div>
     <section class="section block-cart">
-        {% for messages in messages  %}
-            <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
-            <strong></strong>{{messages}}
-            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
-            </div>
-        {% endfor %}
         <div class="container mb-100 mt-60">
-            <form method="post" action="{% url 'user_place_order' %}">
-                {% csrf_token %}
             <div class="row mt-20"> 
                 <div class="col-lg-6">
                     <div class="tab-content" id="myTabContent">
@@ -475,7 +467,6 @@
                     </div>
                 </div>
             </div>
-            </form>
         </div>
     </section>
 </main>

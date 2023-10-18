@@ -23,6 +23,14 @@ class SignupForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Email'
         self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile Number'
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if not email.lower().endswith('@gmail.com'):
+            raise forms.ValidationError("Please enter a valid Gmail address.")
+
+        return email
+
     def clean_mobile(self):
         mobile = self.cleaned_data.get('mobile')
         mobile = ''.join(filter(str.isdigit, mobile))
@@ -49,19 +57,23 @@ class SignupForm(forms.ModelForm):
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
 
-        # if not first_name[0].isupper():
-        #         raise forms.ValidationError("The first letter of the first name should be capitalized.")
+        
 
-        if ' ' in first_name:
-            raise forms.ValidationError("First name cannot contain spaces.")
+        invalid_characters = [' ', '*', '#', '@', '$', '(', '+', '-', '!', '^', '&']
+        if any(char in first_name for char in invalid_characters):
+            raise forms.ValidationError("First name cannot contain invalid characters.")
+
+        if len(first_name) < 4:
+            raise forms.ValidationError("First name is very short.")
 
         return first_name
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
 
-        if ' ' in last_name:
-            raise forms.ValidationError("Last name cannot contain spaces.")
+        invalid_characters = [' ', '*', '#', '@', '$', '(', '+', '-', '!', '^', '&']
+        if any(char in last_name for char in invalid_characters):
+            raise forms.ValidationError("First name cannot contain invalid characters.")
 
         return last_name
 
@@ -82,7 +94,9 @@ class ProfileEditForm(UserProfileForm):
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
 
-        if ' ' in first_name:
+        invalid_characters = [' ', '*', '#','@','$','(','+','-','!','^','&']
+
+        if any(char in first_name for char in invalid_characters):
             raise forms.ValidationError("First name cannot contain spaces.")
 
         return first_name

@@ -94,14 +94,14 @@
                                         <div class="mb-4">
                                             <label class="form-label">Price</label>
                                             <div class="row gx-2">
-                                                <input placeholder="$" type="text" class="form-control"  name='price' required>
+                                                <input placeholder="0" type="text" class="form-control"  name='price' required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Quatity</label>
-                                            <input placeholder="" type="text" class="form-control"  name='quantity' required>
+                                            <input placeholder="0" type="text" class="form-control"  name='quantity' required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -111,6 +111,12 @@
                                             <option value="{{ category.id }}">{{ category.category_name }} </option>
                                             {% endfor %}
                                         </select>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">offerPercentage</label>
+                                            <input placeholder="0.00" type="text" class="form-control"  name="discount_percentage">
+                                        </div>
                                     </div>
                                 </div>
                         </div>

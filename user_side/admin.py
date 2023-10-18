@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Category ,User ,Product , Cart,CartItem,Variation,TempUser,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,ReviewReply
+from .models import  Category ,User ,Product , Cart,CartItem,Variation,TempUser,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -49,21 +49,6 @@ class CouponsAdmin(admin.ModelAdmin):
 class ReviewRatingAdmin(admin.ModelAdmin):
     list_display = ('user','review',  'created_at','status')
 
-class ReviewReplyAdmin(admin.ModelAdmin):
-    list_display = ('review_subject', 'review_product', 'review_review', 'reply_text', 'created_at')
-
-    def review_subject(self, obj):
-        return obj.review.subject if obj.review else ""
-    review_subject.short_description = 'Review Subject'
-
-    def review_product(self, obj):
-        return obj.review.product if obj.review else ""
-    review_product.short_description = 'Review Product'
-
-    def review_review(self, obj):
-        return obj.review.review if obj.review else ""
-    review_review.short_description = 'Review Review'
-   
 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(User,AccountAdmin)
@@ -80,4 +65,3 @@ admin.site.register(Wishlist)
 admin.site.register(Coupons,CouponsAdmin)
 admin.site.register(UserCoupons)
 admin.site.register(ReviewRating,ReviewRatingAdmin)
-admin.site.register(ReviewReply,ReviewReplyAdmin)

@@ -16,12 +16,6 @@
       </div>
     </div>
     <section class="section block-product-single block-product-single-12">
-        {% for messages in messages  %}
-        <div class="alert alert-{{messages.tags}} alert-dismissible fade show" role="alert">
-          <strong></strong>{{messages}}
-          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true" >&times;</spam></button>
-        </div>
-        {% endfor %}
         <form id="cartForm" action="{% url 'user_add_cart' single_product.id %}" method="POST">
             {% csrf_token %}
             <div class="container">
@@ -230,20 +224,19 @@
                                                             <p class="body-p2">{{review.review}}</p>
                                                             </div>
                                                             <br>
-                                                                {% for reply in review_replay   %}
-                                                                    {% if review.user == review_replay.review.user %}
+                                                                {% if review.review_reply  %}
                                                                     <li>
-                                                                        <p><strong>VOXY(admin):</strong>{{ reply.reply_text }}</p>
+                                                                        <p><strong>VOXY(admin):</strong>{{ review.review_reply }}</p>
                                                                     </li>
-                                                                    {% endif %}
-                                                                {% endfor %}
+                                                                {% endif %}
                                                         </div>
                                                         </div>
 
                                                     </div>
                                                 {% endfor %}
+                                            {% else %}
                                                 No reviews yet Be the first one to comment.
-                                                <a class="link" href="#">click here to purchase</a>
+                                                <a class="link" href="#">click here to purchase and Add your Review</a>
                                             {% endif %}
                                         </div>
                                     </div>

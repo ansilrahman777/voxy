@@ -66,115 +66,127 @@
         {% endfor %}
         <section class="content-main">
             <form method="post" action="{% url 'admin_edit_product' product_id=product.id %}" enctype="multipart/form-data">
-            {% csrf_token %}            
-            <div class="row">
-                <div class="col-9">
-                    <div class="content-header">
-                        <h2 class="content-title"> Edit Product</h2>
-                        <div>
-                           <button type='Submit' class="btn btn-md rounded font-sm hover-up">Submit</button>
+                {% csrf_token %}            
+                <div class="row">
+                    <div class="col-9">
+                        <div class="content-header">
+                            <h2 class="content-title"> Edit Product</h2>
+                            <div>
+                            <button type='Submit' class="btn btn-md rounded font-sm hover-up">Submit</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        
-                        <div class="card-body">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
                             
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Product Name</label>
-                                    <input type="text" value="{{product.product_name}}" class="form-control" id="product_name" name='product_name'>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-control" rows="4" name="description">{{ product.description }}</textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Price</label>
-                                            <div class="row gx-2">
-                                                <input value="{{product.price}}" type="text" class="form-control"  name='price'>
+                            <div class="card-body">
+                                
+                                    <div class="mb-4">
+                                        <label for="product_name" class="form-label">Product Name</label>
+                                        <input type="text" value="{{product.product_name}}" class="form-control" id="product_name" name='product_name'>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" rows="4" name="description">{{ product.description }}</textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">Price</label>
+                                                <div class="row gx-2">
+                                                    <input value="{{product.price}}" type="text" class="form-control"  name='price'>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Quatity</label>
-                                            <input value="{{product.quantity}}" type="text" class="form-control"  name='quantity'>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">Quatity</label>
+                                                <input value="{{product.quantity}}" type="text" class="form-control"  name='quantity'>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">offerPercentage</label>
+                                                <input value="{{product.discount_percentage}}" type="text" class="form-control"  name="discount_percentage">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-4">
+                                                <label class="form-label">offerPrice</label>
+                                                <input value="{{product.discount_price}}" type="text" class="form-control"  disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select" name="category">
+                                                {% for category in categories %}
+                                                    <option value="{{ category.id }}" {% if category.id == product.category_id %}selected{% endif %}>{{ category.category_name }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <label class="form-label">Category</label>
-                                        <select class="form-select" name="category">
-                                            {% for category in categories %}
-                                                <option value="{{ category.id }}" {% if category.id == product.category_id %}selected{% endif %}>{{ category.category_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                           
-                        </div>
-                    </div> <!-- card end// -->
-                </div>
-                <div class="col-lg-6">
-                    <div class="card-header">
-                        <h4>MEDIA</h4>
+                            
+                            </div>
+                        </div> <!-- card end// -->
                     </div>
-
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div class="input-upload">
-                                        <img src="{% if product.product_images %}{{ product.product_images.url }}{% else %}{% static 'assets/imgs/theme/placeholder_image.png' %}{% endif %}" alt="">
-                                        <input class="form-control" type="file" name='product_images' value="{{product.product_images.url}}" accept="image/*"  >
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="input-upload">
-                                        {% if product.product_image_1 %}
-                                        <img src="{{ product.product_image_1.url }}" alt="">
-                                        <input class="form-control" type="file" name='product_image_1' value="{{product.product_image_1.url}}" accept="image/*"  >
-                                        {% else %}
-                                        <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
-                                        <input class="form-control" type="file" name='product_image_1' accept="image/*" >
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <div class="input-upload">
-                                        {% if product.product_image_2 %}
-                                        <img src="{{ product.product_image_2.url }}" alt="">
-                                        <input class="form-control" type="file" name='product_image_2' value="{{product.product_image_2.url}}" accept="image/*" >
-                                        {% else %}
-                                        <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
-                                        <input class="form-control" type="file" name='product_image_2' accept="image/*" >
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="input-upload">
-                                        {% if product.product_image_3 %}
-                                        <img src="{{ product.product_image_3.url }}" alt="">
-                                        <input class="form-control" type="file" name='product_image_1' value="{{product.product_image_3.url}}" accept="image/*" >
-                                        {% else %}
-                                        <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
-                                        <input class="form-control" type="file" name='product_image_3' accept="image/*" >
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div> 
+                    <div class="col-lg-6">
+                        <div class="card-header">
+                            <h4>MEDIA</h4>
                         </div>
 
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="input-upload">
+                                            <img src="{% if product.product_images %}{{ product.product_images.url }}{% else %}{% static 'assets/imgs/theme/placeholder_image.png' %}{% endif %}" alt="">
+                                            <input class="form-control" type="file" name='product_images' value="{{product.product_images.url}}" accept="image/*"  >
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="input-upload">
+                                            {% if product.product_image_1 %}
+                                            <img src="{{ product.product_image_1.url }}" alt="">
+                                            <input class="form-control" type="file" name='product_image_1' value="{{product.product_image_1.url}}" accept="image/*"  >
+                                            {% else %}
+                                            <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                            <input class="form-control" type="file" name='product_image_1' accept="image/*" >
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="input-upload">
+                                            {% if product.product_image_2 %}
+                                            <img src="{{ product.product_image_2.url }}" alt="">
+                                            <input class="form-control" type="file" name='product_image_2' value="{{product.product_image_2.url}}" accept="image/*" >
+                                            {% else %}
+                                            <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                            <input class="form-control" type="file" name='product_image_2' accept="image/*" >
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="input-upload">
+                                            {% if product.product_image_3 %}
+                                            <img src="{{ product.product_image_3.url }}" alt="">
+                                            <input class="form-control" type="file" name='product_image_1' value="{{product.product_image_3.url}}" accept="image/*" >
+                                            {% else %}
+                                            <img src="{% static 'assets/imgs/theme/upload.svg' %}" alt="">
+                                            <input class="form-control" type="file" name='product_image_3' accept="image/*" >
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
         </section>
     </main>
 
