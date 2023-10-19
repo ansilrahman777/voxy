@@ -45,11 +45,11 @@
                                     <span class="text">Users List</span>
                                 </a>
                             </li>
-                            {% comment %} <li class="menu-item  ">
-                                <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
-                                    <span class="text">Banners</span>
+                            <li class="menu-item  ">
+                                <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-stars"></i>
+                                    <span class="text">Reviews</span>
                                 </a>
-                            </li> {% endcomment %}
+                            </li>
                         </ul>
                         
                     </nav>
@@ -152,9 +152,35 @@
                                 </div> <!-- table-responsive //end -->
                             </div>
 
-                        </div> <!-- card end// -->
-                        
+                        </div>
+                        <div class="text-center" style="display: flex; justify-content: center; align-items: center;">
+                            <nav class="box-pagination">
+                              <ul class="pagination">
+                                  {% if categories.has_previous %}
+                                  <li class="page-item"><a class="page-link" href="?page={{ categories.previous_page_number }}">&larr;</a></li>
+                                  {% else %}
+                                  <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
+                                  {% endif %}
+                      
+                                  {% for i in categories.paginator.page_range %}
+                                      {% if categories.number == i %}
+                                      <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                      {% else %}
+                                      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                      {% endif %}
+                                  {% endfor %}
+                      
+                                  {% if categories.has_next %}
+                                  <li class="page-item"><a class="page-link" href="?page={{ categories.next_page_number }}">&rarr;</a></li>
+                                  {% else %}
+                                  <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
+                                  {% endif %}
+                              </ul>
+                            </nav>
+                        </div>
+                                                
                     </section>
+                    
                 </main>
 
             {% endblock body %}

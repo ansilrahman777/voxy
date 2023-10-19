@@ -1,0 +1,144 @@
+{% extends 'admin_temp/base.html' %}
+{% load static %}
+{% block title %}Review{% endblock title %}
+{% block body %}
+
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="/admin_index" class="brand-wrap">
+                <img src="{% static 'assets/imgs/theme/logo.png' %}" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_category"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Category</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_orders"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/admin_coupons"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_users"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users List</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Reviews</span>
+                    </a>
+                </li>
+            </ul>
+            
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <strong></strong>{{ message }}
+            <button type="button" class="close" onclick="dismissAlert(this)">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Review</h2>
+                    {{review.created_at}}
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card">
+                        <section class="content-body p-xl-4">
+                            <div class="row border-bottom mb-4 pb-4">
+                                <div class="row">
+                                    <h4> User:<span class="text-muted">{{review.user.first_name |capfirst}} {{review.user.last_name |capfirst}}</span></h4>
+                                </div> 
+                                <div class="col-md-7">
+                                    <div class="mb-3">
+                                        <label class="form-label">Subject</label>
+                                        <input class="form-control" type="text" value="{{review.subject}}" disabled>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Review</label>
+                                        <textarea type="text" class="form-control" disabled>{{review.review}}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <h4>PRODUCT DETAILS:</h4>
+                                    <h5 style="max-width:90%">Name:</h5>{{review.product.product_name}}
+                                    <h5 style="max-width:90%">Category:</h5>{{review.product.category}}
+                                    <h5 style="max-width:90%">Description:</h5>{{review.product.description}}
+                                    <h5 style="max-width:90%">Price:</h5>{{review.product.price}}
+                                    <hr>
+                                    <h4>Previous Reply:{{review.review_reply}}</h4>
+                                </div>
+                                <form method="post" action="{% url 'admin_review_replay' review.id %}">
+                                    {% csrf_token %}
+                                    <div class="col-md-5">
+                                        <div class="mb-3">
+                                            <label class="form-label">Admin Replay</label>
+                                            <input class="form-control" type="text" placeholder="Replay" name="review_reply" >
+                                        </div>
+                                        <button class="btn btn-primary" type="submit">Replay</button> &nbsp;
+                                    </div>
+                                </form>
+                            </div> 
+                        </section> 
+                </div> 
+            </div>
+            <div class="text-center " style="display: flex; justify-content: center; align-items: center;">
+                <nav class="box-pagination">
+                  <ul class="pagination">
+                      {% if reviews.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ reviews.previous_page_number }}">&larr;</a></li>
+                      {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
+                      {% endif %}
+          
+                      {% for i in reviews.paginator.page_range %}
+                          {% if reviews.number == i %}
+                          <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                          {% else %}
+                          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                          {% endif %}
+                      {% endfor %}
+          
+                      {% if reviews.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{ reviews.next_page_number }}">&rarr;</a></li>
+                      {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
+                      {% endif %}
+                  </ul>
+                </nav>
+            </div>
+        </section>
+
+
+    </main>  
+    
+
+{% endblock body %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.conf import settings 
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
+from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,Wallet
 from django.contrib import messages,auth
 from .forms import SignupForm,ProfileEditForm,ReviewForm
 from django.contrib.auth import authenticate, login,logout
@@ -26,7 +26,6 @@ from django.core.mail import EmailMessage
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_index(request):
     products = Product.objects.all().filter(is_available=True)
-
     context = {
         'products': products,
     }
@@ -797,6 +796,20 @@ def user_remove_address(request, id):
     return HttpResponseRedirect(referer or '/user_address/')
 
 
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+def user_wallet(request):
+    current_user = request.user
+    try:
+        wallet = Wallet.objects.get(user=current_user)
+    except Wallet.DoesNotExist:
+        wallet = Wallet.objects.create(user=current_user, amount=0)
+    wallet_amount = wallet.amount
+  
+    context = {'wallet_amount': wallet_amount}
+
+    return render(request, 'user_temp/user_wallet.html', context)
+
 
 # ----------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------checkout--------------------------------------------------------
@@ -1124,8 +1137,15 @@ def user_cash_on_delivery(request, order_number):
 def user_order(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
 
+    paginator = Paginator(orders,10)
+    page = request.GET.get('page')
+    paged_orders = paginator.get_page(page)
+    orders_count = orders.count()
+
     context={
-        'orders':orders
+        'orders':orders,
+        'orders':paged_orders,
+        'orders_count':orders_count,
     }
 
     return render(request,'user_temp/user_order.html',context)
@@ -1133,25 +1153,37 @@ def user_order(request):
 def user_update_order_status(request, order_id, new_status):
     order = get_object_or_404(Order, pk=order_id)
     order_products = OrderProduct.objects.filter(order__id=order_id)
+
     if new_status == 'Order Placed':
         order.status = 'Order Placed'
     elif new_status == 'Accepted':
-        order.status = 'Accepted'
+        order.status = 'Shipped'
     elif new_status == 'Delivered':
         order.status = 'Delivered'
     elif new_status == 'Return':
-        order.status = 'Return Pending'
+        if request.method == 'POST':
+            return_reason = request.POST.get('return_reason')
+            order.status = 'Return Pending'
+            order.return_reason = return_reason
+            order.save()
+            messages.success(request, f"Return reason submitted for Order #{order.order_number}.")
+            return redirect('user_order')
+        else:
+            return render(request, 'user_temp/user_order.html', {'order': order})
+
     elif new_status == 'Cancelled':
         order.status = 'Cancelled'
         for order_product in order_products:
             product = order_product.product
             product.quantity += order_product.quantity
             product.save()
+
     order.save()
     
     messages.success(request, f"Order #{order.order_number} has been updated to '{new_status}' status.")
     
     return redirect('user_order')
+
 
 @login_required
 def user_order_detailed_view(request, order_id):

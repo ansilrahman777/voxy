@@ -1,0 +1,95 @@
+{% extends 'user_temp/base.html' %} 
+{% load static %} 
+{% block title%}PROFILE{%endblock title %}
+{% block body %}
+
+<main class="main">
+  <section class="section block-banner-shop"> 
+    <div class="container"> 
+      <h1 class="text-56-medium">PROFILE</h1>
+      <div class="breadcrumbs"> 
+        <ul> 
+          <li> <a href="/">Home </a></li>
+          <li> <a href="/user_profile">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section block-content-shop">
+      <div class="container">
+          <div class="row">
+            <div class="col-lg-4 pb-5">
+              <!-- Account Sidebar-->
+              <div class="author-card pb-3">
+                <div
+                  class="author-card-cover"
+                  style="background-image: url('{% static 'img/about/about-us.jpg' %}')"
+                >
+                  <a
+                    class="btn btn-style-1 btn-white btn-sm"
+                    href="#"
+                    data-toggle="tooltip"
+                    title=""
+                    data-original-title="You currently have 290 Reward points to spend"
+                  >
+                    <i class="fa fa-award text-md"></i>&nbsp;Active
+                  </a>
+                </div>
+                <div class="author-card-profile">
+                  <div class="author-card-avatar">
+                    <img src="{% static 'img/about/testimonial-author.jpg' %}" alt="" />
+                  </div>
+                  <div class="author-card-details">
+                    <h5 class="author-card-name text-lg">{{request.user.username}}</h5>
+                    <span class="author-card-position"
+                      >Joined {{request.user.date_joined}}</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="wizard">
+                <nav class="list-group list-group-flush">
+                    <a class="list-group-item " href="/user_profile"><i class="fe-icon-user text-muted"></i>Profile</a>
+                    <a class="list-group-item " href="/user_address"><i class="fe-icon-user text-muted"></i>Address</a>
+                    <a class="list-group-item " href="/user_order"><i class="fe-icon-user text-muted"></i>Order details</a>
+                    <a class="list-group-item " href="/user_change_password"><i class="fe-icon-user text-muted"></i>Change Password</a>
+                    <a class="list-group-item active" href="/user_wallet"><i class="fe-icon-user text-muted"></i>My Wallet</a>
+                    <hr>
+                    <a class="list-group-item " href="/user_logout"><i class="fe-icon-user text-muted"></i>Logout</a>
+                </nav>
+              </div>
+            </div>
+            <div class="col-lg-8 pb-5">
+                <div class="mainDiv">
+                    <div class="cardStyle">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <img
+                          src="{% static 'img/icon/wallet.png' %}"
+                          class=" p-1 img-fluid"
+                          width="150"
+                        />
+                      </div>
+                      <div class="inputDiv text-center">
+                        <h1>voXy Wallet</h1>
+                      </div>
+                      <div class="row"style="height: 40px;">
+                            
+                      </div>
+                      <div class="inputDiv text-center">
+                        <h6>Balance Amount</h6>
+                        <h5>&#8377; {{wallet_amount}}</h5>
+                      </div>
+                    </div>
+                  </div>
+
+            </div>
+          </div>
+        
+          
+      </div>
+      
+  </section>
+</main> 
+
+{% endblock body %}

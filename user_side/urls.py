@@ -34,6 +34,7 @@ urlpatterns = [
     path('user_add_address',views.user_add_address,name='user_add_address'),
     path('user_edit_address/<int:id>',views.user_edit_address,name='user_edit_address'),
     path('user_remove_address/<int:id>',views.user_remove_address,name='user_remove_address'),
+    path('user_wallet',views.user_wallet,name='user_wallet'),
 
     path('user_shipping',views.user_shipping,name='user_shipping'),
     path('user_checkout',views.user_checkout,name='user_checkout'),

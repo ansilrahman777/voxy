@@ -45,11 +45,11 @@
                         <span class="text">Users List</span>
                     </a>
                 </li>
-                {% comment %} <li class="menu-item  ">
-                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Banners</span>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Reviews</span>
                     </a>
-                </li> {% endcomment %}
+                </li>
             </ul>
             
         </nav>
@@ -141,7 +141,32 @@
                         </table>
                     </div> <!-- table-responsive //end -->
                 </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
+            </div>
+            <div class="text-center" style="display: flex; justify-content: center; align-items: center;">
+                <nav class="box-pagination">
+                  <ul class="pagination">
+                      {% if users.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ users.previous_page_number }}">&larr;</a></li>
+                      {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
+                      {% endif %}
+          
+                      {% for i in users.paginator.page_range %}
+                          {% if users.number == i %}
+                          <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                          {% else %}
+                          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                          {% endif %}
+                      {% endfor %}
+          
+                      {% if users.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{ users.next_page_number }}">&rarr;</a></li>
+                      {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
+                      {% endif %}
+                  </ul>
+                </nav>
+            </div>
             
         </section>
     </main>

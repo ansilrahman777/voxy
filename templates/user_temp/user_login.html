@@ -38,16 +38,16 @@
 
                     <form method="POST" id="login-form" action="{% url 'user_login' %}">
                         {% csrf_token %}
-                        <p>
-                            <input type="email" placeholder="Email" name="email" id="email" required>
+                        <p class="form-group">
+                            <input class="form-control" type="email" placeholder="Email" name="email" id="email" required>
                         </p>
-                        <p>
-                            <input type="password" placeholder="Password" name="password" id="password" required>
+                        <p class="form-group">
+                            <input class="form-control" type="password" placeholder="Password" name="password" id="password" required>
                         </p>
                         <p class="forgot-signup-links">
                             <a href="/user_forgot_password">Forgot Password?</a> | <a href="{% url 'user_sign_up' %}">Sign Up</a> 
                         </p>
-                        <p><input type="submit" value="Login"></p>
+                        <p><input class="btn btn-black d-block" type="submit" value="Login"></p>
                     </form>
                 </div>
             </div>

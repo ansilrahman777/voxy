@@ -24,7 +24,7 @@
                             <h4 class="font-weight-bold mt-0 mb-4 ">
                             DELIVERY ADDRESS 
                             <div class="float-right">
-                                <button type="button" class="btn btn-dark " data-toggle="modal" data-target="#exampleModal">
+                                <button type="button" class="btn btn-black" data-toggle="modal" data-target="#exampleModal">
                                 ADD NEW ADDRESS
                                 </button>
                                 {% comment %} add addresss modal {% endcomment %}
@@ -40,91 +40,83 @@
                                         
                                         <div class="modal-body">
                                             <div class="address-form">
-                                            <form class="row" method="post" action="{% url 'user_add_address' %}">
-                                                {% csrf_token %}
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-lg-6">
-                                                            <div class="checkout__input">
-                                                                <p>First Name<span>*</span></p>
-                                                                <input type="text" name="first_name" required>
+                                                <form class="row" method="post" action="{% url 'user_add_address' %}">
+                                                    {% csrf_token %}
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" placeholder="First Name*" type="text" name="first_name" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group">
+                                                                    <input class="form-control" placeholder="Last Name" type="text" name="last_name" required>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="checkout__input">
-                                                                <p>Last Name<span>*</span></p>
-                                                                <input type="text" name="last_name" required>
-                                                            </div>
+                                                    </div>
+                                            
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input class="form-control" placeholder="Phone*" type="text" name="phone" required>
                                                         </div>
                                                     </div>
-                                                </div>
-                                        
-                                                <div class="col-md-6">
-                                                    <div class="checkout__input">
-                                                        <p>Phone<span>*</span></p>
-                                                        <input type="text" name="phone" required>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="col-md-12">
-                                                    <div class="checkout__input">
-                                                        <p>Address<span>*</span></p>
-                                                        <input type="text" placeholder="Street Address" name="address_line_1" required>
-                                                    </div>
-                                                </div>
-                                        
-                                                <div class="col-md-12">
-                                                    <div class="checkout__input">
-                                                        <input type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" name="address_line_2" >
-                                                    </div>    
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="row">
-                                                        <div class="checkout__input">
-                                                        <p>STATE<span>*</span></p>
-                                                        <select id="state" name="state" required>
-                                                            <option value="" disabled selected>Select State</option>
-                                                            {% for state, state_name in state_choices %}
-                                                                <option value="{{ state }}">{{ state_name }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                        </div>
                                                     
-                                                        <div class="checkout__input">
-                                                            <p>city<span>*</span></p>
-                                                            <input type="text" name='city' required>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <input class="form-control"   type="text" placeholder="Street Address*" name="address_line_1" required>
                                                         </div>
                                                     </div>
-
-                                                </div>
-                
-                                                <div class="col-md-6">
-                                                    <div class="checkout__input">
-                                                        <p>Postcode / ZIP<span>*</span></p>
-                                                        <input type="text" name="pin" required>
+                                            
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <input class="form-control"  type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" name="address_line_2" >
+                                                        </div>    
                                                     </div>
-                                                </div>
                 
-                                                <div class="col-md-12">
-                                                    <div class="checkout__input">
-                                                        <p>Country/State<span>*</span></p>
-                                                        <input type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <select id="state" name="state" required>
+                                                                <option class="form-control" value="" disabled selected>Select State</option>
+                                                                {% for state, state_name in state_choices %}
+                                                                    <option class="form-control" value="{{ state }}">{{ state_name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                                
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input class="form-control" placeholder="City*" type="text" name='city' required>
+                                                        </div>
+                                                    </div>
                 
-                                                <div class="col-md-6">
-                                                    <div class="checkout__input__checkbox">
-                                                    <p>Set as Default Address</p>
-                                                    <input type="checkbox" name="is_default" id="acc">
+    
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input class="form-control" placeholder="Postcode / ZIP*" type="text" name="pin" required>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                
-                                                <div class="modal-footer col-md-12">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit"class="btn btn-primary">Add Address</button>
-                                                </div>
-                                            </form>
+                
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <input class="form-control" type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
+                                                        </div>
+                                                    </div>
+                
+                                                    <div class="col-md-6">
+                                                        <div class="form-group" style="display: flex; align-items: center;">
+                                                        <input type="checkbox" name="is_default" id="acc">
+                                                        <p style="font-size: 15px;">&nbsp; Set as Default Address </p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="modal-footer col-md-12">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit"class="btn btn-primary">Add Address</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                         
@@ -169,92 +161,93 @@
                                                         </div>
                                                         
                                                         <div class="modal-body">
-                                                        <div class="address-form">
-                                                            <form class="row" method="post" action="{% url 'user_edit_address' id=address.id %}">
-                                                            {% csrf_token %}
-                                                                <div class="col-md-12">
-                                                                    <div class="row">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="checkout__input">
-                                                                                <p>First Name<span>*</span></p>
-                                                                                <input type="text" name="first_name" value="{{address.first_name}}" required>
+                                                            <div class="address-form">
+                                                                <form class="row" method="post" action="{% url 'user_edit_address' id=address.id %}">
+                                                                    {% csrf_token %}
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
+                                                                            <div class="col-lg-6">
+                                                                                <div class="checkout__input">
+                                                                                    <p>First Name<span>*</span></p>
+                                                                                    <input type="text" name="first_name" value="{{address.first_name}}" required>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-6">
+                                                                                <div class="checkout__input">
+                                                                                    <p>Last Name<span>*</span></p>
+                                                                                    <input type="text" name="last_name" value="{{address.last_name}}" required>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-lg-6">
-                                                                            <div class="checkout__input">
-                                                                                <p>Last Name<span>*</span></p>
-                                                                                <input type="text" name="last_name" value="{{address.last_name}}" required>
-                                                                            </div>
-                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                        
-                                                                <div class="col-md-6">
-                                                                    <div class="checkout__input">
-                                                                        <p>Phone<span>*</span></p>
-                                                                        <input type="text" name="phone" value="{{address.phone}}"  required>
-                                                                    </div>
-                                                                </div>
-                                                                
-                                                                <div class="col-md-12">
-                                                                    <div class="checkout__input">
-                                                                        <p>Address<span>*</span></p>
-                                                                        <input type="text" placeholder="Street Address" name="address_line_1"  value="{{address.address_line_1}}"  required>
-                                                                    </div>
-                                                                </div>
-                                                        
-                                                                <div class="col-md-12">
-                                                                    <div class="checkout__input">
-                                                                        <input type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" value="{{address.address_line_2}}"  name="address_line_2" >
-                                                                    </div>    
-                                                                </div>
-                                                        
-                                                                <div class="col-md-6">
-                                                                <div class="checkout__input">
-                                                                    <p>STATE<span>*</span></p>
-                                                                    <select id="state" name="state" required>
-                                                                        <option value="" disabled>Select State</option>
-                                                                        {% for state, state_name in state_choices %}
-                                                                            <option value="{{ state }}" {% if state == address.state %}selected{% endif %}>{{ state_name }}</option>
-                                                                        {% endfor %}
-                                                                    </select>
-                                                                </div>
-                                                                </div>
                                                             
-                                                                <div class="col-md-6">
-                                                                    <div class="checkout__input">
-                                                                        <p>city<span>*</span></p>
-                                                                        <input type="text" name='city'  value="{{address.city}}"  required>
+                                                                    <div class="col-md-6">
+                                                                        <div class="checkout__input">
+                                                                            <p>Phone<span>*</span></p>
+                                                                            <input type="text" name="phone" value="{{address.phone}}"  required>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                
-                                                                <div class="col-md-6">
-                                                                <div class="checkout__input">
-                                                                    <p>Postcode / ZIP<span>*</span></p>
-                                                                    <input type="text" name="pin"  value="{{address.pin}}"  required>
-                                                                </div>
-                                                                </div>
-                                
-                                                                <div class="col-md-12">
-                                                                <div class="checkout__input">
-                                                                    <p>Country/State<span>*</span></p>
-                                                                    <input type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
-                                                                </div>
-                                                                </div>
+                                                                    
+                                                                    <div class="col-md-12">
+                                                                        <div class="checkout__input">
+                                                                            <p>Address<span>*</span></p>
+                                                                            <input type="text" placeholder="Street Address" name="address_line_1"  value="{{address.address_line_1}}"  required>
+                                                                        </div>
+                                                                    </div>
+                                                            
+                                                                    <div class="col-md-12">
+                                                                        <div class="checkout__input">
+                                                                            <input type="text" placeholder="Apartment, Suite, Unit, etc. (Optional)" value="{{address.address_line_2}}"  name="address_line_2" >
+                                                                        </div>    
+                                                                    </div>
+                                                            
+                                                                    <div class="col-md-6">
+                                                                        <div class="checkout__input">
+                                                                            <p>STATE<span>*</span></p>
+                                                                            <select id="state" name="state" required>
+                                                                                <option value="" disabled>Select State</option>
+                                                                                {% for state, state_name in state_choices %}
+                                                                                    <option value="{{ state }}" {% if state == address.state %}selected{% endif %}>{{ state_name }}</option>
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
                                                                 
-                                                                <div class="col-md-6">
-                                                                <div class="checkout__input__checkbox">
-                                                                    <p>Set as Default Address</p>
-                                                                    <input type="checkbox" name="is_default" id="acc" {% if address.is_default %}checked{% endif %}>
-                                                                </div>
-                                                                </div> 
-                                                                <div class="modal-footer col-md-12">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                <button type="submit"class="btn btn-primary">Save Address</button>
+                                                                    <div class="col-md-6">
+                                                                        <div class="checkout__input">
+                                                                            <p>city<span>*</span></p>
+                                                                            <input type="text" name='city'  value="{{address.city}}"  required>
+                                                                        </div>
+                                                                    </div>
+                                    
+                                                                    <div class="col-md-6">
+                                                                        <div class="checkout__input">
+                                                                            <p>Postcode / ZIP<span>*</span></p>
+                                                                            <input type="text" name="pin"  value="{{address.pin}}"  required>
+                                                                        </div>
+                                                                    </div>
+                                    
+                                                                    <div class="col-md-12">
+                                                                        <div class="checkout__input">
+                                                                            <p>Country/State<span>*</span></p>
+                                                                            <input type="text" placeholder="INDIA" value="INDIA" name="country" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="col-md-6">
+                                                                            <div class="form-group" style="display: flex; align-items: center;">
+                                                                                <input type="checkbox" name="is_default" id="acc" {% if address.is_default %}checked{% endif %}>
+                                                                                <p style="font-size: 15px;">&nbsp; Set as Default Address </p>
+                                                                            </div>
+                                                                    </div> 
+                                                                    
+                                                                    <div class="modal-footer col-md-12">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                    <button type="submit"class="btn btn-primary">Save Address</button>
                 
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                         
                                                     </div>

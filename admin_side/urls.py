@@ -17,8 +17,6 @@ urlpatterns = [
     path('admin_enable_disable_category/<int:id>',views.admin_enable_disable_category,name='admin_enable_disable_category'),
     path('admin_unlist_list_product/<int:product_id>',views.admin_unlist_list_product,name='admin_unlist_list_product'),
 
-    path('admin_banners',views.admin_banners,name='admin_banners'),
-
     path('admin_add_category',views.admin_add_category,name='admin_add_category'),
     path('admin_add_product',views.admin_add_product,name='admin_add_product'),
 
@@ -29,6 +27,8 @@ urlpatterns = [
     path('admin_update_order_status/<int:order_id>/<str:new_status>/', views.admin_update_order_status, name='admin_update_order_status'),
     path('admin_order_details/<int:order_id>/',views.admin_order_details,name='admin_order_details'),
     path('admin_review',views.admin_review,name='admin_review'),
+    path('admin_review_replay/<int:id>/',views.admin_review_replay,name='admin_review_replay'),
+
 
     path('admin_coupons',views.admin_coupons,name='admin_coupons'),
     path('admin_add_coupons',views.admin_add_coupons,name='admin_add_coupons'),

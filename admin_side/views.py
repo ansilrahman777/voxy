@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import HttpResponse
-from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating
+from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating,Wallet
 from django.contrib import messages,auth
 from user_side.forms import SignupForm
 from django.contrib.auth import authenticate, login,logout
@@ -13,7 +13,8 @@ from django.db import IntegrityError
 from datetime import datetime
 from django.utils import timezone
 from decimal import Decimal,InvalidOperation  
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError,ObjectDoesNotExist
+from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
 
 # Create your views here.
 
@@ -58,8 +59,16 @@ def admin_category(request):
         return redirect('admin_login')
 
     categories = Category.objects.all()
+
+    paginator = Paginator(categories,6)
+    page = request.GET.get('page')
+    paged_categories = paginator.get_page(page)
+    categories_count = categories.count()
+
     context = {
-        'categories' : categories
+        'categories' : categories,
+        'categories':paged_categories,
+        'categories_count':categories_count,
     }
     return render(request,'admin_temp/admin_category.html',context)
     
@@ -206,8 +215,16 @@ def admin_products(request):
         return redirect('admin_login')
 
     products = Product.objects.all()
+
+    paginator = Paginator(products,6)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+    products_count = products.count()
+    
     context = {
-        'products' : products
+        'products' : products,
+        'products':paged_products,
+        'products_count':products_count,
     }
     return render(request,'admin_temp/admin_products.html',context)
 
@@ -434,8 +451,16 @@ def admin_users(request):
         return redirect('admin_login')
 
     users = User.objects.all().exclude(is_admin=True)
+
+    paginator = Paginator(users,6)
+    page = request.GET.get('page')
+    paged_users = paginator.get_page(page)
+    users_count = users.count()
+    
     context = {
-        'users' : users
+        'users' : users,
+        'users':paged_users,
+        'users_count':users_count,
     }
     return render(request,'admin_temp/admin_users.html',context)
 
@@ -460,15 +485,20 @@ def admin_user_block_unblock(request,id):
 
     return redirect('admin_users')
 
-def admin_banners(request):
-    return render(request,'admin_temp/admin_banners.html')
 
 @login_required
 def admin_orders(request):
     orders = Order.objects.all()
 
+    paginator = Paginator(orders,10)
+    page = request.GET.get('page')
+    paged_orders = paginator.get_page(page)
+    orders_count = orders.count()
+
     context={
-        'orders':orders
+        'orders':orders,
+        'orders':paged_orders,
+        'orders_count':orders_count,
     }
     return render(request,'admin_temp/admin_orders.html',context)
 
@@ -503,15 +533,27 @@ def admin_update_order_status(request, order_id, new_status):
             product.quantity += order_product.quantity
             product.save()
     elif new_status == 'Accepted':
-        order.status = 'Accepted'
+        order.status = 'Shipped'
     elif new_status == 'Delivered':
         order.status = 'Delivered'
     elif new_status == 'Return':
         order.status = 'Returned'
+            
+    if new_status == 'Return':
         for order_product in order_products:
             product = order_product.product
             product.quantity += order_product.quantity
             product.save()
+        if order.payment.payment_method == 'Razorpay':
+            try:
+                user_wallet = Wallet.objects.get(user=order.user)
+                user_wallet.amount += float(order.order_total)
+                user_wallet.save()
+            except ObjectDoesNotExist:
+                user_wallet = Wallet.objects.create(user=order.user, amount=float(order.order_total))
+                user_wallet.save()
+
+            
     
     order.save()
     
@@ -525,7 +567,17 @@ def admin_coupons(request):
         return redirect('admin_login')
 
     coupons = Coupons.objects.all()
-    context = {'coupons': coupons}
+
+    paginator = Paginator(coupons,6)
+    page = request.GET.get('page')
+    paged_coupons = paginator.get_page(page)
+    coupons_count = coupons.count()
+
+    context={
+        'coupons':coupons,
+        'coupons':paged_coupons,
+        'coupons_count':coupons_count,
+    }
     return render(request, 'admin_temp/admin_coupons.html', context)
     
 @login_required
@@ -630,9 +682,30 @@ def admin_delete_coupons(request, coupon_id):
 @login_required
 def admin_review(request):
     reviews = ReviewRating.objects.all()
-    context = {'reviews': reviews}
+    paginator = Paginator(reviews,6)
+    page = request.GET.get('page')
+    paged_reviews = paginator.get_page(page)
+    reviews_count = reviews.count()
+    context={
+        'reviews':reviews,
+        'reviews':paged_reviews,
+        'reviews_count':reviews_count,
+    }
 
     return render(request, 'admin_temp/admin_review.html',context)
 
+def admin_review_replay(request, id):
+    review = get_object_or_404(ReviewRating, id=id)
+
+    if request.method == 'POST':
+        review_reply = request.POST.get('review_reply')
+        review.review_reply = review_reply
+        review.save() 
+        return redirect('admin_review')
+
+    context = {
+        'review': review, 
+    }
+    return render(request, 'admin_temp/admin_review_replay.html', context)
 
 

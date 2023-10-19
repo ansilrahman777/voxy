@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Category ,User ,Product , Cart,CartItem,Variation,TempUser,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating
+from .models import  Category ,User ,Product , Cart,CartItem,Variation,TempUser,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,Wallet
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -48,7 +48,8 @@ class CouponsAdmin(admin.ModelAdmin):
 
 class ReviewRatingAdmin(admin.ModelAdmin):
     list_display = ('user','review',  'created_at','status')
-
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ('user','amount','updated_at',)
 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(User,AccountAdmin)
@@ -65,3 +66,4 @@ admin.site.register(Wishlist)
 admin.site.register(Coupons,CouponsAdmin)
 admin.site.register(UserCoupons)
 admin.site.register(ReviewRating,ReviewRatingAdmin)
+admin.site.register(Wallet,WalletAdmin)

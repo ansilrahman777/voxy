@@ -328,6 +328,7 @@ class Order(models.Model):
     STATUS =(
         ('Order Placed','Order Placed'),
         ('Accepted','Accepted'),
+        ('Shipped','Shipped'),
         ('Delivered','Delivered'),
         ('Cancelled','Cancelled'),
         ('Return Pending','Return Pending'),
@@ -348,6 +349,7 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    return_reason = models.TextField(max_length=100,blank=True)
 
     def __str__(self):
         return self.user.first_name
@@ -420,4 +422,16 @@ class ReviewRating(models.Model):
 
     def __str__(self):
         return self.subject
+
+class Wallet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    amount = models.FloatField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.amount = round(self.amount, 2)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Wallet for User : {self.user.first_name}"
 

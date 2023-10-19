@@ -15,7 +15,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active ">
+                <li class="menu-item  ">
                     <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -45,16 +45,11 @@
                         <span class="text">Users List</span>
                     </a>
                 </li>
-                <li class="menu-item  ">
-                    <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-person"></i>
+                <li class="menu-item active ">
+                    <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-stars"></i>
                         <span class="text">Reviews</span>
                     </a>
                 </li>
-                {% comment %} <li class="menu-item  ">
-                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Banners</span>
-                    </a>
-                </li> {% endcomment %}
             </ul>
             
         </nav>
@@ -90,69 +85,52 @@
                                     <th scope="col">product</th>
                                     <th scope="col">subject</th>
                                     <th scope="col">review</th>
-                                    <th scope="col">created_at</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Replay</th>
+                                    <th scope="col">Reply</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for review in reviews %}
-                                <tr >
-                                    <td><a href="">{{review.user}}</a></td>
+                                <tr>
+                                    <td>{{review.user}}</td>
                                     <td><b>{{review.product}}</b></td>
-                                    <td>{{review.subject}}</td>
-                                    <td>{{review.review}}</td>
-                                    <td>{{review.created_at}}</td>
-                                    <td>{{review.status}}</td>
-                                    <td>
-                                            <button type="button" class="btn btn-xs" data-toggle="modal" data-target="#exampleModal">
-                                               Replay
-                                            </button>
-                                    </td>
-                                
+                                    <td><a href="{% url 'admin_review_replay' review.id %}">{{review.subject}}</a></td>
+                                    <td><a href="{% url 'admin_review_replay' review.id %}">{{review.review}}</a></td>
+                                    <td>{{review.review_reply}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-                    </div> <!-- table-responsive //end -->
-                </div> <!-- card-body end// -->
-            </div> <!-- card end// -->
+                    </div>
+                </div> 
+            </div>
+            <div class="text-center " style="display: flex; justify-content: center; align-items: center;">
+                <nav class="box-pagination">
+                  <ul class="pagination">
+                      {% if reviews.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ reviews.previous_page_number }}">&larr;</a></li>
+                      {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
+                      {% endif %}
+          
+                      {% for i in reviews.paginator.page_range %}
+                          {% if reviews.number == i %}
+                          <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                          {% else %}
+                          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                          {% endif %}
+                      {% endfor %}
+          
+                      {% if reviews.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{ reviews.next_page_number }}">&rarr;</a></li>
+                      {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
+                      {% endif %}
+                  </ul>
+                </nav>
+            </div>
         </section>
 
 
     </main>     
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Write Your Review</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-                <div class="block-form-comment">
-                    <form method="POST" id="review_submit">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Replay" name="reply_text">
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="text-center mt-10">
-                                <button type="submit" class="btn btn-red">Post Review</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        </div>
-    </div>
 
 {% endblock body %}

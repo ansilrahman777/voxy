@@ -45,11 +45,11 @@
                         <span class="text">Users List</span>
                     </a>
                 </li>
-                {% comment %} <li class="menu-item  ">
-                    <a class="menu-link" href="/admin_banners"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Banners</span>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Reviews</span>
                     </a>
-                </li> {% endcomment %}
+                </li>
             </ul>
             
         </nav>
@@ -83,12 +83,12 @@
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded">Change Status</i>
+                                        <i class="bx bx-dots-vertical-rounded"> {{order.status}}</i>
                                     </button>
                                     <div class="dropdown-menu">
                                         
                                         <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Accepted' %}">
-                                            <i class="bx bx-check me-1"></i> Accept
+                                            <i class="bx bx-check me-1"></i> Ship
                                         </a>
                                         <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Delivered' %}">
                                             <i class="bx bx-user-check me-1"></i> Deliver
@@ -197,8 +197,8 @@
                                                                 <span class="badge rounded-pill alert-success">Deliverd</span>
                                                             {% elif order.status == 'Order Placed' %}
                                                                 <span class="badge rounded-pill alert-success">Placed</span>
-                                                            {% elif order.status == 'Accepted' %}
-                                                                <span class="badge rounded-pill alert-warning">Accepted</span>
+                                                            {% elif order.status == 'Shipped' %}
+                                                                <span class="badge rounded-pill alert-warning">Shipped</span>
                                                             {% elif order.status == 'Cancelled' %}
                                                                 <span class="badge rounded-pill alert-danger">Cancelled</span>
                                                             {% elif order.status == 'Returned' %}
@@ -229,6 +229,15 @@
                                 </p>
                             </div>
                         </div> 
+                        {% if order.status == 'Return Pending' %}
+                            <div class="col-lg-4">
+                                <div class="box shadow-sm bg-light">
+                                    <h5 >Reutrn Reason</h5><br>
+                                    <h6>{{order.status}}</h6>
+                                    </p>
+                                </div>
+                            </div> 
+                        {% endif %}
                     </div>
                 </div> 
                 <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
