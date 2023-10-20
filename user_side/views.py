@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.conf import settings 
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,Wallet
+from .models import Product,Category,User,Cart,CartItem,Variation,Address,Order,OrderProduct,Payment,Wishlist,Coupons,UserCoupons,ReviewRating,Wallet,ContactUs
 from django.contrib import messages,auth
 from .forms import SignupForm,ProfileEditForm,ReviewForm
 from django.contrib.auth import authenticate, login,logout
@@ -50,11 +50,7 @@ def user_login(request):
         email=request.POST['email']
         password=request.POST['password']
 
-        print(f"Received email: {email}")
-        print(f"Received password: {password}")
-
         user = auth.authenticate(email=email,password=password)
-        print("User:", user)
 
         if user is not None:
             try:
@@ -1317,3 +1313,45 @@ def user_sumbit_review(request, product_id):
                 messages.success(request, 'Thank you, your review has been posted')
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)
+
+@login_required
+def user_order_invoice(request, order_id):
+    
+    order_products = OrderProduct.objects.filter(order__id=order_id)
+    orders = Order.objects.filter(is_ordered=True, id=order_id)
+    
+    payments = Payment.objects.filter(order__id=order_id)
+
+    for order_product in order_products:
+        order_product.total = order_product.quantity * order_product.product_price
+        order_product.single_product_total = order_product.quantity * order_product.product.discount_price
+    context = {
+        'order_products': order_products,
+        'orders': orders,
+        'payments': payments,
+    }
+
+    return render(request, 'user_temp/user_order_invoice.html', context)
+
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        website = request.POST.get('subject')
+        content = request.POST.get('content')
+
+        contact_entry = ContactUs(
+            name=name,
+            email=email,
+            mobile=mobile,
+            subject=website,
+            content=content
+        )
+        contact_entry.save()
+     
+        return redirect('/')  
+
+    return render(request, 'user_contact.html')

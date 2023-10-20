@@ -6,7 +6,7 @@
 
 <main class="main">
 
-  <section class="section-slide">
+    <section class="section-slide">
 		<div class="wrap-slick1">
 			<div class="slick1">
 				<div class="item-slick1" style="background-image: url({% static 'img/hero/hero-1.jpg' %});">
@@ -32,6 +32,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="item-slick1" style="background-image: url({% static 'img/hero/hero-2.jpg' %});">
 					<div class="container h-full">
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
@@ -79,143 +80,123 @@
 						</div>
 					</div>
 				</div>
+                <div class="item-slick1" style="background-image: url({% static 'img/hero/hero-3.jpg' %});">
+					<div class="container h-full">
+						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
+							<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
+								<span class="ltext-101 cl2 respon2">
+									BOOTS Collection 2018
+								</span>
+							</div>
+								
+							<div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
+								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
+									NEW SEASON
+								</h2>
+							</div>
+								
+							<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
+								<a href="/user_shop" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+									Shop Now
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</section>
-  <section class="banner spad">
-    <div class="container">
-        <div class="row">
-            {% for category in links %}
-                {% if not category.soft_deleted and category.category_name == "Boots" %}
-                    <div class="col-lg-7 offset-lg-4">
-                        <div class="banner__item">
-                            <div class="banner__item__pic">
-                                <img src="{% static 'img/banner/banner-1.jpg' %}" alt="">
-                            </div>
-                            <div class="banner__item__text">
-                                <h2>BOOTS Collections 2030</h2>
-                                <a href="{{ category.get_url }}">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
+    </section>
 
-            {% for category in links %}
-                {% if not category.soft_deleted and category.category_name == "Football" %}
-                    <div class="col-lg-5">
-                        <div class="banner__item banner__item--middle">
-                            <div class="banner__item__pic">
-                                <img src="{% static 'img/banner/banner-2.jpg' %}" alt="">
-                            </div>
-                            <div class="banner__item__text">
-                                <h2>FOOTBALL</h2>
-                                <a href="{{ category.get_url }}">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-            {% for category in links %}
-                {% if not category.soft_deleted and category.category_name == "Gloves" %}
-                    <div class="col-lg-7">
-                        <div class="banner__item banner__item--last">
-                            <div class="banner__item__pic">
-                                <img src="{% static 'img/banner/banner-3.jpg' %}" alt="">
-                            </div>
-                            <div class="banner__item__text">
-                                <h2>GOLVES Spring 2030</h2>
-                                <a href="{{ category.get_url }}">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-  </section>
-</main>
-    <!-- Portfolio Section  -->
-    {% comment %} <section>
-
-        <div class="portfolio-section">
-            <div class="portfolio-gallery" style="position: relative; height: 809.391px;">
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style=" height: 269.797px; position: absolute; left: 0px; top: 0px;">
-            <a src="{% static 'img/banner/banner-1.jpg'%}" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item --disable" style="height: 269.797px; position: absolute; left: 269.797px; top: 0px;">
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style=" height: 269.797px; position: absolute; left: 539.594px; top: 0px;">
-            <a href="img/works/2.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item --big set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style=" height: 539.594px; position: absolute; left: 809.391px; top: 0px;">
-            <a href="img/works/6.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/3.jpg&quot;); height: 269.797px; position: absolute; left: 0px; top: 269.797px;">
-            <a href="img/works/3.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/5.jpg&quot;); height: 269.797px; position: absolute; left: 269.797px; top: 269.797px;">
-            <a href="img/works/5.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg"data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/4.jpg&quot;); height: 269.797px; position: absolute; left: 539.594px; top: 269.797px;">
-            <a href="img/works/4.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/7.jpg&quot;); height: 269.797px; position: absolute; left: 0px; top: 539.594px;">
-            <a href="img/works/7.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/8.jpg&quot;); height: 269.797px; position: absolute; left: 269.797px; top: 539.594px;">
-            <a href="img/works/8.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="img/works/9.jpg" style="background-image: url(&quot;img/works/9.jpg&quot;); height: 269.797px; position: absolute; left: 539.594px; top: 539.594px;">
-            <a href="img/works/9.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/10.jpg&quot;); height: 269.797px; position: absolute; left: 809.391px; top: 539.594px;">
-            <a href="img/works/10.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            <div class="portfolio-item set-bg" data-setbg="{% static 'img/banner/banner-1.jpg'%}" style="background-image: url(&quot;img/works/11.jpg&quot;); height: 269.797px; position: absolute; left: 1079.19px; top: 539.594px;">
-            <a href="img/works/11.jpg" class="portfolio-view">loadmore</a>
-            </div>
-            </div>
-          </div>
-    </section> {% endcomment %}
-    <!-- Portfolio Section End -->
-
-    <!-- Product Section Begin -->
-    {% comment %} <section class="product spad">
+    <section class="banner spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <ul class="filter__controls">
-                        <li class="active" data-filter="*">PRODUCTS</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="row product__filter">
-                {% for product in products %}
-                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="{{product.product_images.url}}">
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
-                                <li><a href="{{ product.get_url }}"><img src="{% static 'img/icon/eye.png' %}" alt=""></a></li>
-                            </ul>
+                {% for category in links %}
+                    {% if not category.soft_deleted and category.category_name == "Boots" %}
+                        <div class="col-lg-7 offset-lg-4">
+                            <div class="banner__item">
+                                <div class="banner__item__pic">
+                                    <video id="myVideo" src="https://brand.assets.adidas.com/video/upload/q_auto,f_auto:video/video/upload/enIN/football-fw23-wwc-campaign-launch-iin-mh-large-animated-t.mp4" width="100%" height="100%" autoplay loop></video>
+                                </div>
+                                <div class="banner__item__text">
+                                    <h2>BOOTS Collections 2030</h2>
+                                    <a href="{{ category.get_url }}">Shop now</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="product__item__text">
-                            <h6>{{product.product_name}}</h6>
-                            {% if product.quantity <= 0 %}
-                                        <a class="add-cart text-danger">out of stock</a>
-                                        {% else %}
-                                        <a href="{{ product.get_url }}" class="add-cart">View Product</a>
-                                        {% endif %}
-                            
-                            <h5>{{product.product_price}}</h5>
+                    {% endif %}
+                {% endfor %}
+
+                {% for category in links %}
+                    {% if not category.soft_deleted and category.category_name == "Football" %}
+                        <div class="col-lg-5">
+                            <div class="banner__item banner__item--middle">
+                                <div class="banner__item__pic">
+                                    <img src="{% static 'img/banner/banner-2.jpg' %}" alt="">
+                                </div>
+                                <div class="banner__item__text">
+                                    <h2>FOOTBALL</h2>
+                                    <a href="{{ category.get_url }}">Shop now</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    {% endif %}
+                {% endfor %}
+                {% for category in links %}
+                    {% if not category.soft_deleted and category.category_name == "Gloves" %}
+                        <div class="col-lg-7">
+                            <div class="banner__item banner__item--last">
+                                <div class="banner__item__pic">
+                                    <img src="{% static 'img/banner/banner-3.jpg' %}" alt="">
+                                </div>
+                                <div class="banner__item__text">
+                                    <h2>GOLVES Spring 2030</h2>
+                                    <a href="{{ category.get_url }}">Shop now</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
-    </section> {% endcomment %}
-    <!-- Product Section End -->
+    </section>
+</main>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var video = document.querySelector("video");
+  
+      video.addEventListener("click", function () {
+        if (video.muted) {
+          video.muted = false; // Unmute the video
+        } else {
+          video.muted = true; // Mute the video
+        }
+      });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var video = document.getElementById("myVideo");
+  
+      // Create an Intersection Observer instance
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            // Video is in the viewport, play it
+            video.play();
+          } else {
+            // Video is not in the viewport, pause it
+            video.pause();
+          }
+        });
+      });
+  
+      // Observe the video element
+      observer.observe(video);
+    });
+</script>
+  
+  
+
+ 
 
 {% endblock body %}

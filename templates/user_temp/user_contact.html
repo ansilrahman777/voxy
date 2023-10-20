@@ -26,37 +26,40 @@
           <div class="col-lg-7 mb-40 wow bounceIn"> 
             <h4 class="mb-10">Get in Touch</h4>
             <p class="text-16-medium neutral-medium mb-30">Your email address will not be published. Required fields are marked *</p>
-            <div class="row"> 
-              <div class="col-lg-6 col-md-6 col-sm-6"> 
-                <div class="form-group"> 
-                  <input class="form-control" type="text" placeholder="Name *">
+            <div class="row">
+              <form method="post" action="{% url 'contact_us' %}">
+                {% csrf_token %}
+                <div class="col-lg-6 col-md-6 col-sm-6"> 
+                  <div class="form-group"> 
+                    <input name="name" class="form-control" type="text" placeholder="Name *">
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6"> 
-                <div class="form-group"> 
-                  <input class="form-control" type="text" placeholder="Email *">
+                <div class="col-lg-6 col-md-6 col-sm-6"> 
+                  <div class="form-group"> 
+                    <input name="email" class="form-control" type="text" placeholder="Email *">
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6"> 
-                <div class="form-group"> 
-                  <input class="form-control" type="text" placeholder="Phone number">
+                <div class="col-lg-6 col-md-6 col-sm-6"> 
+                  <div class="form-group"> 
+                    <input name="mobile" class="form-control" type="text" placeholder="Phone number">
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-6"> 
-                <div class="form-group"> 
-                  <input class="form-control" type="text" placeholder="Website">
+                <div class="col-lg-6 col-md-6 col-sm-6"> 
+                  <div class="form-group"> 
+                    <input name="subject" class="form-control" type="text" placeholder="Subject">
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-12"> 
-                <div class="form-group"> 
-                  <textarea class="form-control" placeholder="Contents" rows="6"></textarea>
+                <div class="col-lg-12"> 
+                  <div class="form-group"> 
+                    <textarea name="content" class="form-control" placeholder="Contents" rows="6"></textarea>
+                  </div>
                 </div>
-              </div>
-              <div class="col-lg-12"> 
-                <div class="text-center mt-10"> 
-                  <button class="btn btn-black">Post Comment</button>
+                <div class="col-lg-12"> 
+                  <div class="text-center mt-10"> 
+                    <button type="submit" class="btn btn-black">Post Comment</button>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>

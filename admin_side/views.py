@@ -10,17 +10,49 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.cache import cache_control
 from django.utils.text import slugify
 from django.db import IntegrityError
-from datetime import datetime
-from django.utils import timezone
+from datetime import datetime,timedelta
+from django.utils import timezone 
 from decimal import Decimal,InvalidOperation  
 from django.core.exceptions import ValidationError,ObjectDoesNotExist
 from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
+from django.http import JsonResponse
+import json
+from django.db.models import Sum,Count
+from django.template.loader import get_template
+from django.db.models.functions import TruncMonth
+from django.db.models import F
+from django.db.models import FloatField
 
-# Create your views here.
 
 def admin_index(request):
     if request.user.is_authenticated and request.user.is_admin and request.user.is_superadmin:
-        return render(request,'admin_temp/admin_index.html')
+        total_revenue = OrderProduct.objects.filter(ordered=True).aggregate(total_revenue=Sum('product_price'))['total_revenue'] or 0.0
+        total_orders = Order.objects.count()
+        total_products = Product.objects.count()
+        monthly_report = OrderProduct.objects.filter(ordered=True).annotate(month=TruncMonth('created_at')).values('month').annotate(total_revenue=Sum(F('product_price'),
+        output_field=FloatField()),total_orders=Count('order')).order_by('-month')    
+        current_date = datetime.now()
+
+        six_months_ago = current_date - timedelta(days=180)
+        monthly_report = monthly_report.filter(month__gte=six_months_ago)    
+        last_orders = Order.objects.order_by('-created_at')[:5]
+
+        first_day_current_month = current_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        first_day_last_month = first_day_current_month - timedelta(days=first_day_current_month.day)
+        last_month_data = monthly_report.filter(month=first_day_last_month)
+
+
+        context={
+            'total_revenue':total_revenue,
+            'total_orders':total_orders,
+            'total_products':total_products,
+            'monthly_report':monthly_report,
+            'last_orders':last_orders,
+            'last_month_data':last_month_data,
+        }
+        
+        return render(request,'admin_temp/admin_index.html',context)
+
     return render(request,'admin_temp/admin_login.html')
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
@@ -709,3 +741,44 @@ def admin_review_replay(request, id):
     return render(request, 'admin_temp/admin_review_replay.html', context)
 
 
+def get_weekly_sales():
+    end_date = timezone.now()
+    start_date = end_date - timezone.timedelta(days=7)
+
+    return OrderProduct.objects.filter(
+        order__created_at__range=(start_date, end_date)
+    ).values('product__product_name').annotate(weekly_sales=Sum('quantity'))
+
+
+
+def get_monthly_sales():
+    end_date = timezone.now()
+    start_date = end_date - timezone.timedelta(days=30)
+
+    return OrderProduct.objects.filter(
+        order__created_at__range=(start_date, end_date)
+    ).values('product__product_name').annotate(monthly_sales=Sum('quantity'))
+
+
+
+def get_yearly_sales():
+    end_date = timezone.now()
+    start_date = end_date - timezone.timedelta(days=365)
+
+    return OrderProduct.objects.filter(
+        order__created_at__range=(start_date, end_date)
+    ).values('product__product_name').annotate(yearly_sales=Sum('quantity'))
+
+
+
+
+def sales_report(request):
+    weekly_sales_data = list(get_weekly_sales().values('product__product_name','weekly_sales'))  # Convert QuerySet to a list of dictionaries
+    monthly_sales_data = list(get_monthly_sales().values('product__product_name','monthly_sales'))
+    yearly_sales_data = list(get_yearly_sales().values('product__product_name','yearly_sales'))
+    sales_data = {
+        'weekly_sales': weekly_sales_data,
+        'monthly_sales': monthly_sales_data,
+        'yearly_sales': yearly_sales_data,
+    }
+    return JsonResponse(sales_data, safe=False)

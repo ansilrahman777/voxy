@@ -1,0 +1,98 @@
+{% extends 'user_temp/base.html' %} 
+{% load static %} 
+{% block title%}OEDER INVOICE{%endblock title %}
+{% block body %}
+
+
+
+<div class="container mt-5"  >
+    <main class="main-wrap" style="margin-top: 100px; margin-bottom: 100px">
+        <section class="content-main">
+        {% for i in orders %}
+            {% with order=orders.0 order_product=order_products payment=payments.0 %}
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p>Details for Order ID: {{order.order_number}}</p>
+                </div>
+            </div>
+            <div class="panel-body p30">
+                <div class="row">
+                    
+                    <div class="col-lg-12">
+                        <div class="invoice-from">
+                            <ul class="list-unstyled text-right">
+                                <li><strong>Order Number:</strong> {{ order.order_number }}</li>
+                                <li><strong>Payment Method:</strong> {{ payment.payment_method }}</li>
+                                <li><strong>Order Total:</strong> {{ order.order_total }}</li>
+                                <li><strong>Order Date:</strong> {{ order.created_at }}</li>
+                                <li><strong>Status:</strong> {{ payment.status }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                 
+                        <div class="invoice-details mt25">
+                            <div class="well">
+                                <ul class="list-unstyled mb0">
+                                    <br>
+                                    <li><strong>ADDRESS DETAILS</strong></li>
+                                    <li>{{ order.address.first_name }} {{ order.address.last_name }}</li>
+                                    <li>{{order.address.address_line_1 }}</li>
+                                    <li>{{ order.address.city }}, {{ order.address.state }} {{ order.address.pin }}</li>
+                                    <li>{{ order.address.country }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                       
+                        <div class="invoice-items">
+                            <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="per70 text-center">Description</th>
+                                            <th class="per5 text-center">Qty</th>
+                                            <th class="per25 text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order_product in order.orderproduct_set.all %}
+                                            <tr>
+                                                <td>{{ order_product.product.product_name }}</td>
+                                                <td class="text-center">{{ order_product.quantity }}</td>
+                                                <td class="text-center">{{ order_product.product_price }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="2" class="text-right">Sub Total:</th>
+                                            <th class="text-center">&#8377;&nbsp;{{ order.order_total }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="2" class="text-right">Tax:</th>
+                                            <th class="text-center">&#8377;&nbsp;0</th>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <th colspan="2" class="text-right">Grand Total:</th>
+                                            <th class="text-center">&#8377;&nbsp;{{ order.order_total }}</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <a class="btn btn-secondary print ms-2" href="#">Download Invoice</a>
+                        </div>
+                        <div class="invoice-footer mt25">
+                            <p class="text-center">Thank you for shopping with us!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+        {% endfor %}
+    
+        </section>
+    </main>
+</div>
+{% endblock %}

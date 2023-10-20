@@ -12,7 +12,6 @@ from django.core.files.storage import default_storage
 from django.core.files import File
 
 
-# Create your models here.
 class User_manager(BaseUserManager):
     def create_user(self, email, username,first_name,last_name,mobile, password=None):
         if not email:
@@ -434,4 +433,15 @@ class Wallet(models.Model):
 
     def __str__(self):
         return f"Wallet for User : {self.user.first_name}"
+
+class ContactUs(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=100,)
+    mobile = models.CharField(max_length=50,)
+    subject = models.CharField(max_length=50)
+    content = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.email
+    
 

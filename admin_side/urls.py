@@ -3,6 +3,7 @@ from admin_side import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin_login',views.admin_login,name='admin_login'),
     path('admin_logout',views.admin_logout,name='admin_logout'),
@@ -34,8 +35,8 @@ urlpatterns = [
     path('admin_add_coupons',views.admin_add_coupons,name='admin_add_coupons'),
     path('admin_edit_coupons/<int:coupon_id>/',views.admin_edit_coupons,name='admin_edit_coupons'),
     path('admin_delete_coupons/<int:coupon_id>/',views.admin_delete_coupons,name='admin_delete_coupons'),
-    
-    
+
+    path('sales-report',views.sales_report,name='sales-report'),
     
 ]
 

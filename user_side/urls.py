@@ -46,6 +46,7 @@ urlpatterns = [
     path('user_update_order_status/<int:order_id>/<str:new_status>/', views.user_update_order_status, name='user_update_order_status'),
     path('user_order_detailed_view/<int:order_id>/',views.user_order_detailed_view,name='user_order_detailed_view'),
     path('user_sumbit_review/<int:product_id>/',views.user_sumbit_review,name='user_sumbit_review'),
+    path('user_order_invoice/<int:order_id>/',views.user_order_invoice,name='user_order_invoice'),
 
 
     path('user_wishlist/', views.user_wishlist, name='user_wishlist'),
@@ -54,6 +55,6 @@ urlpatterns = [
     path('user_apply_coupon', views.user_apply_coupon, name='user_apply_coupon'),
 
 
-
+    path('contact/', views.contact_us, name='contact_us'),
  
 ]
