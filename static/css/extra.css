@@ -20,3 +20,25 @@
     padding-right: 0.5rem;
   }
   
+  #videoContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place it behind other content */
+  }
+  
+  #myVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the video covers the entire container */
+  }
+
+  .cardCategoriesStyle1 {
+    background: transparent; /* Or use a background color */
+    position: relative;
+    z-index: 1; /* Place it above the video */
+    /* Add any other styles as needed */
+  }
+  

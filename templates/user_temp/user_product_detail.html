@@ -87,20 +87,11 @@
                         <div class="product-title">
                             <h3 class="mb-5">{{ single_product.product_name}}</h3>
                         </div>
-                        <div class="block-rating">
-                            <img src="{% static 'assets/imgs/template/icons/star-fill.svg'%}" alt="Guza">
-                            <img src="{% static 'assets/imgs/template/icons/star-fill.svg'%}" alt="Guza">
-                            <img src="{% static 'assets/imgs/template/icons/star-fill.svg'%}" alt="Guza">
-                            <img src="{% static 'assets/imgs/template/icons/star-fill.svg'%}" alt="Guza">
-                            <img src="{% static 'assets/imgs/template/icons/star-none.svg'%}" alt="Guza">
-                            <span class="text-17 neutral-medium-dark">(5)</span>
-                        </div>
                             {% if single_product.discount_percentage or  single_product.category.offer%}
                             <div class="block-price"><span class="price-line">&#8377;&nbsp;{{ single_product.price }}</span><span class="price-main">&#8377;&nbsp;{{ single_product.discount_price}}</span></div>
                             {% else %}
                             <div class="block-price"><span class="price-main">&#8377;&nbsp;{{ single_product.price}}</span></div>
                             {% endif %}
-                        {% comment %} <p class="body-p2 viewed-guest viewed-guest-black mb-25"><span class="text-17-medium">{{ single_product.description}}</span></p> {% endcomment %}
                         {% if single_product.variation_set.sizes %}
                         <div class="block-size"><span>Size:</span>
                             <div class="product__details__option__size">
@@ -147,7 +138,6 @@
                             <div class="free-shipping">Free shipping</div>
                             <div class="time-shipping">30 - Days Returns</div>
                         </div>
-                        {% comment %} <div class="block-share"><a class="campage body-p2 mr-30" href="#">Campage</a><a class="link-share body-p2" href="#">Share</a></div> {% endcomment %}
                         <div class="block-tags-product">
                             <p class="body-p2"><span class="neutral-medium-dark">Category:</span><a class="neutral-dark" href="#">Dress</a></p>
                         </div>
@@ -179,30 +169,6 @@
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                             <div class="comments-area">
                                 <div class="row">
-                                    {% comment %} <div class="col-lg-12 mb-30">
-                                        <h4 class="mb-30 title-question">Customer reviews</h4>
-                                        <div class="d-flex align-items-center mb-30">
-                                        <div class="product-rate d-inline-block mr-15">
-                                            <div class="product-rating" style="width: 90%"></div>
-                                        </div>
-                                        <h6>4.8 out of 5</h6>
-                                        </div>
-                                        <div class="progress"><span>5 star</span>
-                                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                                        </div>
-                                        <div class="progress"><span>4 star</span>
-                                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-                                        </div>
-                                        <div class="progress"><span>3 star</span>
-                                        <div class="progress-bar" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
-                                        </div>
-                                        <div class="progress"><span>2 star</span>
-                                        <div class="progress-bar" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
-                                        </div>
-                                        <div class="progress mb-30"><span>1 star</span>
-                                        <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85%</div>
-                                        </div><a class="font-xs text-muted" href="#">How are ratings calculated?</a>
-                                    </div> {% endcomment %}
                                     <div class="col-lg-12 mb-30">
                                         <h4 class="mb-30 title-question">Customer Reviews &amp; Ratings</h4>
                                         <div class="comment-list">

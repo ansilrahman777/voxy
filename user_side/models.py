@@ -10,6 +10,8 @@ from django.dispatch import receiver
 import logging
 from django.core.files.storage import default_storage
 from django.core.files import File
+import random
+import string
 
 
 class User_manager(BaseUserManager):
@@ -65,11 +67,22 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
+    referral_code = models.CharField(max_length=10, unique=True, blank=True, null=True)
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','mobile','first_name','last_name']
 
     objects = User_manager()
+
+    def generate_referral_code(self):
+        code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        return code
+
+    def save(self, *args, **kwargs):
+        if not self.referral_code:
+            self.referral_code = self.generate_referral_code()
+        super(User, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.email

@@ -15,6 +15,7 @@ import requests,random
 import razorpay
 from django.http import JsonResponse
 from django.db import transaction
+import secrets
 #activation
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -40,6 +41,9 @@ def user_contact(request):
 # ----------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------login-----------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
+
+def generate_referral_code():
+    return ''.join(secrets.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") for _ in range(10))
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_login(request):
@@ -123,9 +127,20 @@ def user_sign_up(request):
             username = email.split("@")[0]
 
             user = User.objects.create_user(first_name=first_name,last_name=last_name,email=email,username=username,mobile=mobile,password=password)
-            # user.save()
 
+            referral_code = form.cleaned_data['referral_code']
+            if referral_code:
+                try:
+                    referrer = User.objects.get(referral_code=referral_code)
+                    referrer_wallet, created = Wallet.objects.get_or_create(user=referrer)
+                    referrer_wallet.amount += 100
+                    referrer_wallet.save()
 
+                    referred_user_wallet, created = Wallet.objects.get_or_create(user=user)
+                    referred_user_wallet.amount += 200
+                    referred_user_wallet.save()
+                except User.DoesNotExist:
+                    raise forms.ValidationError("Invalid referral code")
 
             current_site = get_current_site(request)
             mail_subject = 'please activate your account'
@@ -162,6 +177,7 @@ def activate(request,uidb64,token):
     
     if user is not None and default_token_generator.check_token(user,token):
         user.is_active = True
+        user.referral_code = generate_referral_code()
         user.save()
         messages.success(request,'activation successfull')
         return redirect('user_login')
@@ -283,7 +299,6 @@ def user_shop(request, category_slug=None):
 
 def search(request):
     keyword = request.GET.get('keyword') 
-
     products = Product.objects.none()  
 
     if keyword:

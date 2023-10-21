@@ -1,15 +1,22 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import validators
-from .models import User,ReviewRating
+from .models import User,ReviewRating,Wallet
 import re
 
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'placeholder': 'Enter Password'
+        'placeholder': 'Enter Password',
+        'class': 'form-control', 
     }))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'placeholder': 'Confirm Password'
+        'placeholder': 'Confirm Password',
+        'class': 'form-control', 
+    }))
+    referral_code = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={
+        'placeholder': 'Referral Code (optional)',
+        'class': 'form-control', 
+
     }))
 
     class Meta:
@@ -22,6 +29,8 @@ class SignupForm(forms.ModelForm):
         self.fields['last_name'].widget.attrs['placeholder'] = 'Last name'
         self.fields['email'].widget.attrs['placeholder'] = 'Email'
         self.fields['mobile'].widget.attrs['placeholder'] = 'Mobile Number'
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -84,6 +93,17 @@ class SignupForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Password doesn't match")
+
+    def clean_referral_code(self):
+        referral_code = self.cleaned_data.get('referral_code')
+
+        if referral_code:
+            try:
+                referrer = User.objects.get(referral_code=referral_code)
+            except User.DoesNotExist: 
+                raise forms.ValidationError("Invalid referral code")
+
+        return referral_code
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

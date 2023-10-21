@@ -9,7 +9,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="breadcrumb__text">
-          <h4>{{request.user.first_name |capfirst}}</h4>
+          <h4>ORDER DETAILS</h4>
           <div class="breadcrumb__links">
             <a href="/">Home</a>
             <span>Profile</span>
@@ -118,17 +118,9 @@
                                         <tr>
                                             <td colspan="4">
                                                 <article class="float-end">
-                                                    {% comment %} <dl class="dlist">
-                                                        <dt>Subtotal:</dt>
-                                                        <dd>$973.35</dd>
-                                                    </dl>
-                                                    <dl class="dlist">
-                                                        <dt>Shipping cost:</dt>
-                                                        <dd>$10.00</dd>
-                                                    </dl> {% endcomment %}
                                                     <dl class="dlist">
                                                         <dt>Grand total:</dt>
-                                                        <dd> <b class="h5">${{order.order_total}}</b> </dd>
+                                                        <dd> <b class="h5">&#8377;&nbsp;{{order.order_total}}</b> </dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:
@@ -179,7 +171,7 @@
                         {% endif %}
                     </div>
                 </div> 
-                <a class="btn btn-secondary print ms-2" href="{% url 'user_order_invoice' order.id %}"><i class="icon material-icons md-print"></i></a>
+                <a class="btn btn-secondary print ms-2" href="{% url 'user_order_invoice' order.id %}">Download Invoice</a>
             </div> 
             {% endwith %}
         {% endfor %}
