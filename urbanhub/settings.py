@@ -20,10 +20,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&1r5!3#*qw6-*pzd2i48c&y&z1q4o#60rlp9c^=gqf@9g1sw8q'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG',default=False,cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -82,9 +82,9 @@ AUTH_USER_MODEL = 'user_side.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_data',
-        'USER':'postgres',
-        'PASSWORD':'ansil',
+        'NAME':config('NAME'),
+        'USER':config('USER'),
+        'PASSWORD':config('PASSWORD'),
         # 'HOST':'localhost',
         # 'PORT':'5432'
     }
@@ -158,14 +158,14 @@ MESSAGE_TAGS = {
 
 
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'anzzfcb777@gmail.com'
-EMAIL_HOST_PASSWORD ='ensrlcqtsjrabxcl'
-EMAIL_USE_TLS = True
+EMAIL_HOST =config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD =config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS =config('EMAIL_USE_TLS')
 
 # razorpay
 
-KEY = 'rzp_test_QLdX2Sorqhxv6w'
-SECRET ='Uw7JwJDvXMVSZ96vLZQcfgZY'
+KEY =config('KEY')
+SECRET =config('SECRET')
 
