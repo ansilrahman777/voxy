@@ -335,12 +335,14 @@ def user_product_detail(request,category_slug,product_slug):
         order_products=None
     
     reviews = ReviewRating.objects.filter(product__id=single_product.id,status=True)
+    review_count=reviews.count()
     context = {
         'single_product': single_product,
         'wishlist_products':wishlist_products,
         'order_products':order_products,
         'reviews':reviews,
         'current_user':current_user,
+        'review_count':review_count,
     }
     return render(request,'user_temp/user_product_detail.html',context)
 

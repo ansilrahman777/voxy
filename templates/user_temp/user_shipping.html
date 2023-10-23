@@ -408,57 +408,48 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="box-detail-cart">
-                        <h4 class="mb-25">Your Order</h4>
-                        <div class="box-info-cart"> 
-                            <div class="shopping__cart__table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for cart_item in cart_items %}
-                                        <tr>
-                                            <td class="product__cart__item">
-                                                <div class="product__cart__item__pic ">
-                                                    <a href="{{ cart_item.product.get_url}}">
-                                                        <img src="{{ cart_item.product.product_images.url }}" alt="" class="cart-item-image">
-                                                    </a>                                        
-                                                </div>
-                                                <div class="product__cart__item__text">
-                                                    <h6>{{cart_item.product.product_name}}</h6>
-                                                </div>
-                                            </td>
-                                            <td class="quantity__item">
-                                                <div class="col"> 
-                                                    <h6 class="text-dark">{{cart_item.quantity}}</h6>
-                                                </div>                                    
-                                            </td>
-                                            <td class="cart__price">&#8377;&nbsp;{{cart_item.sub_total}}</td>
-                                            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                                <div class="cart__total" style="background-color: transparent; ">
-                                    <h6>Cart total</h6>
-                                    <ul>
-                                        <li>Subtotal <span>&#8377;&nbsp;{{total}}</span></li>
-                                        {% if applied_coupon_code %}
-                                        <li>Discount <span>-&nbsp;&nbsp;&#8377;&nbsp;{{applied_coupon_discount}}</span></li>
-                                        {% endif %}
-                                        <li>Grand Total <span>&#8377;&nbsp;{{grand_total}}</span></li>
-                                    </ul>
-                                </div>
-                                <a href="/user_checkout " class="btn btn-black">Proceed to checkout</a>
+                      <h4 class="mb-25">Your Order</h4>
+                      <div class="box-info-cart"> 
+                          {% for cart_item in cart_items %}
+                              <div class="box-info-checkout-inner">
+                                  <div class="list-items-cart"> 
+                                  <div class="item-cart"> 
+                                      <div class="item-cart-image"> <img src="{{cart_item.product.product_images.url}}" alt="Guza"></div>
+                                      <div class="item-cart-info">
+                                      <div class="item-cart-info-1"> <p class="text-17-medium">{{cart_item.product.product_name}} <span class="font-weight-bold">- x {{cart_item.quantity}}</span></p>
+                                      </div>
+                                      <div class="item-cart-info-2"> 
+                                          <p class="body-p2">&nbsp;&nbsp;&#8377;&nbsp;{{cart_item.sub_total}}</p>
+                                      </div>
+                                      </div>
+                                  </div>
+                                  </div>
+                              </div>
+                          {% endfor %}
+                          <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                              <h5 class="neutral-medium-dark">Subtotal</h5>
+                              <h5 class="neutral-dark">&#8377;&nbsp;{{total}}</h5>
+                          </div>
+                          {% if applied_coupon_discount %}
+                              <div class="box-info-cart-inner">
+                                  <p class="text-17-medium text-uppercase mb-15 neutral-medium-dark">Discount</p>
+                                  <div class="list-radio"> 
+                                      <div class="item-radio">
+                                          <label>
+                                          <input type="radio" name="shipping" checked="checked">Coupon Code:{{applied_coupon_code}}
+                                          </label><span class="price-ship">-&nbsp;&nbsp;&#8377;&nbsp;{{applied_coupon_discount}}</span>
+                                      </div>
+                                  </div>
+                              </div>
+                          {% endif %}
+                            <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                              <h5 class="neutral-medium-dark">Total</h5>
+                              <h5 class="color-9">&#8377;&nbsp;{{grand_total}}</h5>
                             </div>
-                        </div>
-                        </div>
+                        <div class="box-button-checkout"><a href="/user_checkout " class="btn btn-black">Proceed to checkout</a></div>
+                      </div>
                     </div>
-                </div>
+                  </div>
             </div>
         </div>
     </section>

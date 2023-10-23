@@ -14,7 +14,7 @@
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 							<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
 								<span class="ltext-101 cl2 respon2">
-									BOOTS Collection 2018
+									BOOTS Collection 2023
 								</span>
 							</div>
 								
@@ -33,18 +33,18 @@
 					</div>
 				</div>
 
-				<div class="item-slick1" style="background-image: url({% static 'img/hero/hero-2.jpg' %});">
+				<div class="item-slick1" style="background-image: url({% static 'img/hero/1.gif' %});">
 					<div class="container h-full">
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 							<div class="layer-slick1 animated visible-false" data-appear="rollIn" data-delay="0">
 								<span class="ltext-101 cl2 respon2">
-									MENS GLOVES New-Season
+									NEW SEASON
 								</span>
 							</div>
 								
 							<div class="layer-slick1 animated visible-false" data-appear="lightSpeedIn" data-delay="800">
 								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									ADIDAS & NIKE
+									Adidas Trae Young 1
 								</h2>
 							</div>
 								
@@ -62,7 +62,7 @@
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 							<div class="layer-slick1 animated visible-false" data-appear="rotateInDownLeft" data-delay="0">
 								<span class="ltext-101 cl2 respon2">
-									FOOTBALL 
+									Nike Air Zoom Mercurial Vapor
 								</span>
 							</div>
 								
@@ -85,13 +85,13 @@
 						<div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
 							<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
 								<span class="ltext-101 cl2 respon2">
-									BOOTS Collection 2018
+									NEW Collection 
 								</span>
 							</div>
 								
 							<div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
 								<h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
-									NEW SEASON
+									Adidas Women's 2022 Champions League Ball
 								</h2>
 							</div>
 								
@@ -106,36 +106,7 @@
 			</div>
 		</div>
     </section>
-	<section class="section icon-box-type1 wow fadeInUp"> 
-        <div class="container"> 
-          <div class="row"> 
-            <div class="col-lg-3 col-sm-6"> 
-              <div class="box-icon-type-1"> 
-                <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage3/ship.svg'%}" alt="Guza"></div>
-                <div class="item-info"> <span class="text-18">Free Shipping</span></div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-sm-6"> 
-              <div class="box-icon-type-1"> 
-                <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage4/return.svg'%}" alt="Guza"></div>
-                <div class="item-info"> <span class="text-18">60 - Days Returns</span></div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-sm-6"> 
-              <div class="box-icon-type-1"> 
-                <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage4/payment.svg'%}" alt="Guza"></div>
-                <div class="item-info"> <span class="text-18">Security Payment</span></div>
-              </div>
-            </div>
-            <div class="col-lg-3 col-sm-6"> 
-              <div class="box-icon-type-1"> 
-                <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage4/cart.svg'%}" alt="Guza"></div>
-                <div class="item-info"> <span class="text-18">Order Tracking</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-    </section>
+
 	<section class="section box-categories"> 
         <div class="container"> 
           <div class="row align-items-center"> 
@@ -144,7 +115,7 @@
                 <div class="cardInfo"> 
                   <p class="tag-title text-16-medium mb-15">Boots Collection</p>
                   <h2 class="mb-30">Play with your heart</h2>
-				  <p class="body-p2 mb-30"></p><a class="link-underline" href="/user_shop/category/boots/">Shop Now</a>
+				          <p class="body-p2 mb-30"></p><a class="link-underline" href="/user_shop/category/boots/">Shop Now</a>
 
                 </div>
                 <div class="cardImage"> <img src="{% static 'img/banner/banner-1.jpg' %}" alt="Guza"></div>
@@ -180,105 +151,91 @@
             </div>
           </div>
         </div>
-      </section>
-	<section class="section">
-		<video id="myVideo" src="https://brand.assets.adidas.com/video/upload/q_auto,f_auto:video/video/upload/enIN/football-fw23-wwc-campaign-launch-iin-mh-large-animated-t.mp4" width="100%" height="100%" autoplay loop></video>
     </section>
-
-
-
-	
-    {% comment %} <section class="banner spad">
-        <div class="container">
-            <div class="row">
-                {% for category in links %}
-                    {% if not category.soft_deleted and category.category_name == "Boots" %}
-                        <div class="col-lg-7 offset-lg-4">
-                            <div class="banner__item">
-                                <div class="banner__item__pic">
-                                    <video id="myVideo" src="https://brand.assets.adidas.com/video/upload/q_auto,f_auto:video/video/upload/enIN/football-fw23-wwc-campaign-launch-iin-mh-large-animated-t.mp4" width="100%" height="100%" autoplay loop></video>
-                                </div>
-                                <div class="banner__item__text">
-                                    <h2>BOOTS Collections 2030</h2>
-                                    <a href="{{ category.get_url }}">Shop now</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-
-                {% for category in links %}
-                    {% if not category.soft_deleted and category.category_name == "Football" %}
-                        <div class="col-lg-5">
-                            <div class="banner__item banner__item--middle">
-                                <div class="banner__item__pic">
-                                    <img src="{% static 'img/banner/banner-2.jpg' %}" alt="">
-                                </div>
-                                <div class="banner__item__text">
-                                    <h2>FOOTBALL</h2>
-                                    <a href="{{ category.get_url }}">Shop now</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                {% for category in links %}
-                    {% if not category.soft_deleted and category.category_name == "Gloves" %}
-                        <div class="col-lg-7">
-                            <div class="banner__item banner__item--last">
-                                <div class="banner__item__pic">
-                                    <img src="{% static 'img/banner/banner-3.jpg' %}" alt="">
-                                </div>
-                                <div class="banner__item__text">
-                                    <h2>GOLVES Spring 2030</h2>
-                                    <a href="{{ category.get_url }}">Shop now</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+    <section class="section block-collection-1"> 
+      <div class="container"> 
+        <div class="">
+          <div class="row align-items-center"> 
+            <div class="col-lg-6 wow fadeInLeft">
+              <video id="videoPlayer" src="{% static 'img/vedio1.mp4' %}" autoplay loop style="width: 100%;" muted></video>
+            </div>            
+            <div class="col-lg-6">
+              <div class="box-info-collection-1 wow fadeInDown">
+                <h2 class="text-48-semibold mb-15">2023 Collection</h2>
+                <p class="body-p2 mb-30">Thelma shoes are handmade by expert Italian artisans dedicated to preserving inherited techniques.</p><a class="btn btn-black" href="#">View Collection</a>
+              </div>
             </div>
+          </div>
         </div>
-    </section> {% endcomment %}
-
-</main>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var video = document.querySelector("video");
+      </div>
+    </section>
   
-      video.addEventListener("click", function () {
-        if (video.muted) {
-          video.muted = false; // Unmute the video
+    <section class="section icon-box-type1 wow fadeInUp"> 
+      <div class="container"> 
+        <div class="row"> 
+          <div class="col"> 
+            <div class="box-icon-type-1"> 
+              <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage3/ship.svg'%}" alt="Guza"></div>
+              <div class="item-info"> <span class="text-18">Free Shipping</span></div>
+            </div>
+          </div>
+          <div class="col"> 
+            <div class="box-icon-type-1"> 
+              <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage4/return.svg'%}" alt="Guza"></div>
+              <div class="item-info"> <span class="text-18">60 - Days of Return</span></div>
+            </div>
+          </div>
+          <div class="col"> 
+            <div class="box-icon-type-1"> 
+              <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage4/payment.svg'%}" alt="Guza"></div>
+              <div class="item-info"> <span class="text-18">Security Payment</span></div>
+            </div>
+          </div>
+          <div class="col"> 
+            <div class="box-icon-type-1"> 
+              <div class="item-image"> <img src="{% static 'assets/imgs/page/homepage4/cart.svg'%}" alt="Guza"></div>
+              <div class="item-info"> <span class="text-18">Order Tracking</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+</main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var video = document.getElementById("videoPlayer");
+
+    video.addEventListener("click", function() {
+      if (video.muted) {
+        video.muted = false;
+      } else {
+        video.muted = true;
+      }
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var video = document.getElementById("videoPlayer");
+    var options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.5 // Change this threshold as needed
+    };
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          video.play();
         } else {
-          video.muted = true; // Mute the video
+          video.pause();
         }
       });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var video = document.getElementById("myVideo");
-  
-      // Create an Intersection Observer instance
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            // Video is in the viewport, play it
-            video.play();
-          } else {
-            // Video is not in the viewport, pause it
-            video.pause();
-          }
-        });
-      });
-  
-      // Observe the video element
-      observer.observe(video);
-    });
-</script>
-  
-  
+    }, options);
 
- 
+    observer.observe(video);
+  });
+</script>
 
 {% endblock body %}

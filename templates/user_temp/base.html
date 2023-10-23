@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.rtl.min.css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/template/favicon.svg'%}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/icon/voxy.png' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/elegant-icons.css'%}" type="text/css">
@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css'%}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/style_user.css'%}">
     <link rel="stylesheet" href="{% static 'css/extra.css'%}">
     <link rel="stylesheet" href="{% static 'css/profile.css'%}">
     <link rel="stylesheet" href="{% static 'assets/css/style2513.css' %}">
@@ -36,55 +35,41 @@
 
 <body>
       <header class="header sticky-bar">
-          <div class="container">
-            <div class="main-header">
-              <div class="header-logo"> <a class="d-flex" href="/"><img alt="voXy" src="{% static 'img/voxy.png'%}"></a></div>
-              <div class="header-menu"> 
-                <div class="header-nav">
-                  <nav class="nav-main-menu d-none d-xl-block">
-                    <ul class="main-menu">
-                      <li class="has-mega-menu"><a class="active" href="/">Home</a>
-                      </li>
-                      <li class="has-children"><a href="/user_shop">Shop</a>
-                      </li>
-                      <li class="has-mega-menu"><a href="/user_about">About</a>
-                      </li>
-                      <li class="has-children"><a href="/user_contact">Contact</a>
-                      </li>
-                    </ul>
-                  </nav>
-                  <div class="burger-icon burger-icon-white"><span class="burger-icon-top"></span><span class="burger-icon-mid"></span><span class="burger-icon-bottom"></span></div>
-                </div>
+        <div class="container">
+          <div class="main-header">
+            <div class="header-logo"> <a class="d-flex" href="/"><img alt="voXy" src="{% static 'img/voxy.png'%}"></a></div>
+            <div class="header-menu"> 
+              <div class="header-nav">
+                <nav class="nav-main-menu d-none d-xl-block">
+                  <ul class="main-menu">
+                    <li class="has-mega-menu"><a class="active" href="/">Home</a>
+                    </li>
+                    <li class="has-children"><a href="/user_shop">Shop</a>
+                    </li>
+                    <li class="has-mega-menu"><a href="/user_about">About</a>
+                    </li>
+                    <li class="has-children"><a href="/user_contact">Contact</a>
+                    </li>
+                  </ul>
+                </nav>
+                <div class="burger-icon burger-icon-white"><span class="burger-icon-top"></span><span class="burger-icon-mid"></span><span class="burger-icon-bottom"></span></div>
               </div>
-                <div class="header-account">
-                    <a class="account-icon account" href="/user_profile">
-                      <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_116_451)">
-                          <path d="M6 24C6 21.8783 6.84285 19.8434 8.34315 18.3431C9.84344 16.8429 11.8783 16 14 16C16.1217 16 18.1566 16.8429 19.6569 18.3431C21.1571 19.8434 22 21.8783 22 24H20C20 22.4087 19.3679 20.8826 18.2426 19.7574C17.1174 18.6321 15.5913 18 14 18C12.4087 18 10.8826 18.6321 9.75736 19.7574C8.63214 20.8826 8 22.4087 8 24H6ZM14 15C10.685 15 8 12.315 8 9C8 5.685 10.685 3 14 3C17.315 3 20 5.685 20 9C20 12.315 17.315 15 14 15ZM14 13C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5C11.79 5 10 6.79 10 9C10 11.21 11.79 13 14 13Z"></path>
-                        </g>
-                        <defs>
-                          <clippath id="clip0_116_451">
-                            <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
-                          </clippath>
-                        </defs>
-                      </svg>
-                    </a>
-                    {%if user.id is  None%}
-                    <a href="/user_login">
-                        {% comment %} <span class="number-tag">3</span> {% endcomment %}
-                      <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_116_452)">
-                          <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z"></path>
-                        </g>
-                        <defs>
-                          <clippath id="clip0_116_452">
-                            <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
-                          </clippath>
-                        </defs>
-                      </svg>
-                    </a>
-                    {% else %}
-                    <a class="account-icon wishlist" href="#">
+            </div>
+              <div class="header-account">
+                  <a class="account-icon account" href="/user_profile">
+                    <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0_116_451)">
+                        <path d="M6 24C6 21.8783 6.84285 19.8434 8.34315 18.3431C9.84344 16.8429 11.8783 16 14 16C16.1217 16 18.1566 16.8429 19.6569 18.3431C21.1571 19.8434 22 21.8783 22 24H20C20 22.4087 19.3679 20.8826 18.2426 19.7574C17.1174 18.6321 15.5913 18 14 18C12.4087 18 10.8826 18.6321 9.75736 19.7574C8.63214 20.8826 8 22.4087 8 24H6ZM14 15C10.685 15 8 12.315 8 9C8 5.685 10.685 3 14 3C17.315 3 20 5.685 20 9C20 12.315 17.315 15 14 15ZM14 13C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5C11.79 5 10 6.79 10 9C10 11.21 11.79 13 14 13Z"></path>
+                      </g>
+                      <defs>
+                        <clippath id="clip0_116_451">
+                          <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
+                        </clippath>
+                      </defs>
+                    </svg>
+                  </a>
+                  {%if user.id is  None%}
+                  <a href="/user_login">
                       {% comment %} <span class="number-tag">3</span> {% endcomment %}
                     <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
                       <g clip-path="url(#clip0_116_452)">
@@ -96,52 +81,63 @@
                         </clippath>
                       </defs>
                     </svg>
-                    </a>
-                    {% endif %}
-                    <a class="account-icon cart" href="#">
-                      {% comment %} <span class="number-tag">1</span> {% endcomment %}
-                      <svg width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_116_450)">
-                          <path d="M9 10V8C9 6.67392 9.52678 5.40215 10.4645 4.46447C11.4021 3.52678 12.6739 3 14 3C15.3261 3 16.5979 3.52678 17.5355 4.46447C18.4732 5.40215 19 6.67392 19 8V10H22C22.2652 10 22.5196 10.1054 22.7071 10.2929C22.8946 10.4804 23 10.7348 23 11V23C23 23.2652 22.8946 23.5196 22.7071 23.7071C22.5196 23.8946 22.2652 24 22 24H6C5.73478 24 5.48043 23.8946 5.29289 23.7071C5.10536 23.5196 5 23.2652 5 23V11C5 10.7348 5.10536 10.4804 5.29289 10.2929C5.48043 10.1054 5.73478 10 6 10H9ZM9 12H7V22H21V12H19V14H17V12H11V14H9V12ZM11 10H17V8C17 7.20435 16.6839 6.44129 16.1213 5.87868C15.5587 5.31607 14.7956 5 14 5C13.2044 5 12.4413 5.31607 11.8787 5.87868C11.3161 6.44129 11 7.20435 11 8V10Z"></path>
-                        </g>
-                        <defs>
-                          <clippath id="clip0_116_450">
-                            <rect width="24" height="24" transform="translate(2 2)"></rect>
-                          </clippath>
-                        </defs>
-                      </svg>
-                    </a>
-                </div>
+                  </a>
+                  {% else %}
+                  <a class="account-icon wishlist" href="#">
+                    {% comment %} <span class="number-tag">3</span> {% endcomment %}
+                  <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_116_452)">
+                      <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z"></path>
+                    </g>
+                    <defs>
+                      <clippath id="clip0_116_452">
+                        <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
+                      </clippath>
+                    </defs>
+                  </svg>
+                  </a>
+                  {% endif %}
+                  <a class="account-icon cart" href="#">
+                    {% comment %} <span class="number-tag">1</span> {% endcomment %}
+                    <svg width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0_116_450)">
+                        <path d="M9 10V8C9 6.67392 9.52678 5.40215 10.4645 4.46447C11.4021 3.52678 12.6739 3 14 3C15.3261 3 16.5979 3.52678 17.5355 4.46447C18.4732 5.40215 19 6.67392 19 8V10H22C22.2652 10 22.5196 10.1054 22.7071 10.2929C22.8946 10.4804 23 10.7348 23 11V23C23 23.2652 22.8946 23.5196 22.7071 23.7071C22.5196 23.8946 22.2652 24 22 24H6C5.73478 24 5.48043 23.8946 5.29289 23.7071C5.10536 23.5196 5 23.2652 5 23V11C5 10.7348 5.10536 10.4804 5.29289 10.2929C5.48043 10.1054 5.73478 10 6 10H9ZM9 12H7V22H21V12H19V14H17V12H11V14H9V12ZM11 10H17V8C17 7.20435 16.6839 6.44129 16.1213 5.87868C15.5587 5.31607 14.7956 5 14 5C13.2044 5 12.4413 5.31607 11.8787 5.87868C11.3161 6.44129 11 7.20435 11 8V10Z"></path>
+                      </g>
+                      <defs>
+                        <clippath id="clip0_116_450">
+                          <rect width="24" height="24" transform="translate(2 2)"></rect>
+                        </clippath>
+                      </defs>
+                    </svg>
+                  </a>
               </div>
             </div>
           </div>
+        </div>
       </header>
 
       <div class="mobile-header-active mobile-header-wrapper-style perfect-scrollbar">
         <div class="mobile-header-wrapper-inner">
           <div class="mobile-header-content-area">
             <div class="mobile-menu-head">
-              <div class="box-head-1"><a class="link-underline mr-20 account-icon account" href="#">Login</a><a class="link-underline account-icon account" href="#">Sign Up</a><a class="close-mobile" href="#"><img src="assets/imgs/template/icons/close.svg" alt="Guza"></a></div>
-              <div class="box-head-2"><a class="back-mobile" href="#"><img src="assets/imgs/template/icons/back.svg" alt="Guza"></a></div>
+              {%if user.id is None%}
+              <div class="box-head-1"><a class="link-underline mr-20 account-icon account" href="/user_login">Login</a><a class="link-underline account-icon account" href="/user_sign_up">Sign Up</a><a class="close-mobile" href="#"><img src="{% static 'assets/imgs/template/icons/close.svg'%}" alt="Voxy"></a></div>
+              {% endif %}
+              <div class="box-head-2"><a class="back-mobile" href="#"><img src="{% static 'assets/imgs/template/icons/back.svg'%}" alt="Guza"></a></div>
             </div>
             <div class="perfect-scroll">
               <div class="mobile-menu-wrap mobile-header-border">
                 <nav>
                   <ul class="mobile-menu font-heading">
-                      <li class="has-mega-menu"><a class="active" href="/">Home</a>
-                      </li>
-                      <li class="has-children"><a href="/user_shop">Shop</a>
-                        
-                      </li>
-                      <li class="has-mega-menu"><a href="/user_about">About</a>
-                        
-                      </li>
-                      <li class="has-children"><a href="/user_contact">Contact</a>
-                        
-                      </li>
-                      <li class="has-children"><a href="/user_login">login</a>
-                        
-                      </li>
+                    <li class="has-children"><a class="active" href="/">Home</a>
+                    </li>
+                    <li class="has-children"><a href="/user_shop">Shop</a>
+                    </li>
+                    <li class="has-children"><a href="/user_about">About</a>
+                    </li>
+                    <li class="has-children"><a href="/user_contact">Contact</a>
+                    </li>
+
                   </ul>
                 </nav>
               </div>

@@ -118,12 +118,22 @@
                             <div class="list-radio"> 
                                 <div class="item-radio">
                                     <label>
-                                    <input type="radio" name="shipping" checked="checked">Coupon Code:{{applied_coupon_code}}
+                                    <input type="radio" name="shipping" checked="checked" disabled>Coupon Code:{{applied_coupon_code}}
                                     </label><span class="price-ship">-&nbsp;&nbsp;&#8377;&nbsp;{{applied_coupon_discount}}</span>
                                 </div>
                             </div>
                         </div>
                     {% endif %}
+                    <div class="box-info-cart-inner">
+                        <p class="text-17-medium text-uppercase mb-15 neutral-medium-dark">Shipping</p>
+                        <div class="list-radio"> 
+                            <div class="item-radio">
+                                <label>
+                                <input type="radio" name="shipping" disabled>Free shipping on every order
+                                </label><span class="price-ship">&nbsp;&nbsp;&#8377;&nbsp;0.00</span>
+                            </div>
+                        </div>
+                    </div>
                       <div class="d-flex align-items-center justify-content-between box-border-bottom">
                         <h5 class="neutral-medium-dark">Total</h5>
                         <h5 class="color-9">&#8377;&nbsp;{{grand_total}}</h5>

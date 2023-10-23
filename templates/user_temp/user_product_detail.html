@@ -139,7 +139,7 @@
                             <div class="time-shipping">30 - Days Returns</div>
                         </div>
                         <div class="block-tags-product">
-                            <p class="body-p2"><span class="neutral-medium-dark">Category:</span><a class="neutral-dark" href="#">Dress</a></p>
+                            <p class="body-p2"><span class="neutral-medium-dark">Category:</span><a class="neutral-dark" href="#">{{single_product.category}}</a></p>
                         </div>
                         </div>
                     </div>
@@ -151,20 +151,13 @@
                         <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews (3)</button>
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Reviews ({{review_count}})</button>
                         </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                             <p>{{ single_product.description}}</p>
-                            <div class="row mt-40">
-                                <div class="col-lg-6">
-                                <p><strong>Model wears:</strong>UK 10/ EU 38/ US 6<br><strong>Occasion:</strong>Lifestyle, Sport<br><strong>Country:</strong>Italy</p>
-                                </div>
-                                <div class="col-lg-6">
-                                <p><strong>Outer:</strong>Leather 100%, Polyamide 100%<br><strong>Lining:</strong>Polyester 100%<br><strong>CounSoletry:</strong>Rubber 100%</p>
-                                </div>
-                            </div>
+                            
                             </div>
                             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
                             <div class="comments-area">
@@ -202,7 +195,7 @@
                                                 {% endfor %}
                                             {% else %}
                                                 No reviews yet Be the first one to comment.
-                                                <a class="link" href="#">click here to purchase and Add your Review</a>
+                                                <a class="link" href="#">click here to purchase</a>
                                             {% endif %}
                                         </div>
                                     </div>
