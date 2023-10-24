@@ -8,7 +8,6 @@
         </svg></a>
         <h5 class="mb-15">Your Cart</h5>
         <p class="body-p2"><span class="text-17-medium">Free Shipping </span> on every order<span class="text-17-medium"></span></p>
-        
         <div class="box-products-cart">
         {% if cart_items%}
             <div class="list-items-cart">
@@ -39,7 +38,6 @@
                         {% else %}
                         <p class="body-p2"><span class="price-main">&#8377;&nbsp;{{ cart_item.product.price}}</span></p>
                         {% endif %}
-                    <a class="btn-remove-cart" href="{% url 'user_remove_cart_item' cart_item.product.id cart_item.id %}" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
                     </div>
                 </div>
                 </div>

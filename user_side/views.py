@@ -273,13 +273,13 @@ def user_shop(request, category_slug=None):
     if category_slug != None:
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=categories,is_available=True)
-        paginator = Paginator(products,6)
+        paginator = Paginator(products,8)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
     else:
         products = Product.objects.all().filter(is_available=True).order_by('id')   
-        paginator = Paginator(products,6)
+        paginator = Paginator(products,8)
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
@@ -1150,7 +1150,7 @@ def user_cash_on_delivery(request, order_number):
 def user_order(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
 
-    paginator = Paginator(orders,10)
+    paginator = Paginator(orders,3)
     page = request.GET.get('page')
     paged_orders = paginator.get_page(page)
     orders_count = orders.count()

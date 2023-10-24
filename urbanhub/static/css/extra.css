@@ -19,3 +19,212 @@
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
+  .btn-small {
+    padding: 0.25rem 0.5rem; /* Adjust the padding values to make the button smaller */
+    font-size: 0.75rem; /* Adjust the font size to make the text smaller */
+  }
+  
+  body{
+    padding-top:40px;
+    background:#E6E6FA    
+    }
+    .card {
+        box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+    }
+
+    .card {
+        box-shadow: 0 1px 2px 0 rgba(228, 217, 217, 0.932);
+    }
+    
+    .avatar-md {
+        height: 5rem;
+        width: 5rem;
+    }
+    
+    .fs-19 {
+        font-size: 19px;
+    }
+    
+    .primary-link {
+        color: #000000;
+        -webkit-transition: all .5s ease;
+        transition: all .5s ease;
+    }
+    
+    a {
+        color: #02af74;
+        text-decoration: none;
+    }
+    
+    .bookmark-post .favorite-icon a, .job-box.bookmark-post .favorite-icon a {
+        background-color: #da3746;
+        color: #fff;
+        border-color: black;
+    }
+    .favorite-icon a {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        line-height: 30px;
+        text-align: center;
+        border: 1px solid #eff0f2;
+        border-radius: 6px;
+        color: rgba(173,181,189,.55);
+        -webkit-transition: all .5s ease;
+        transition: all .5s ease;
+    }
+    
+    
+    .candidate-list-box .favorite-icon {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+    .fs-14 {
+        font-size: 14px;
+    }
+    .bg-soft-secondary {
+        background-color: rgba(105, 7, 7, 0.15)!important;
+        color: #74788d!important;
+    }
+    
+    .mt-1 {
+        margin-top: 0.25rem!important;
+    }
+
+    body {
+        color: #000;
+        overflow-x: hidden;
+        height: 100%;
+        background-color: #8C9EFF;
+        background-repeat: no-repeat;
+    }
+    
+    .card {
+        z-index: 0;
+        background-color: #ECEFF1;
+        padding-bottom: 20px;
+        margin-top: 90px;
+        margin-bottom: 90px;
+        border-radius: 10px;
+    }
+
+    
+    /*Icon progressbar*/
+    #progressbar {
+        margin-bottom: 10px;
+        overflow: hidden;
+        color: #173e92;
+        padding-left: 0px;
+        margin-top: 10px;
+    } 
+    
+    #progressbar li {
+        list-style-type: none;
+        font-size: 13px;
+        width: 25%;
+        float: left;
+        position: relative;
+        font-weight: 400;
+    }
+    
+    #progressbar .step0:before {
+        font-family: FontAwesome;
+        content: "\f10c";
+        color: #fff;
+    }
+    
+    #progressbar li:before {
+        width: 40px;
+        height: 40px;
+        line-height: 45px;
+        display: block;
+        font-size: 20px;
+        background: #C5CAE9;
+        border-radius: 50%;
+        margin: auto;
+        padding: 0px;
+    }
+    
+    /*ProgressBar connectors*/
+    #progressbar li:after {
+        content: '';
+        width: 100%;
+        height: 12px;
+        background: #C5CAE9;
+        position: absolute;
+        left: 0;
+        top: 16px;
+        z-index: -1;
+    }
+    
+    #progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        position: absolute;
+        left: -50%;
+    }
+    
+    #progressbar li:nth-child(2):after, #progressbar li:nth-child(3):after {
+        left: -50%;
+    }
+    
+    #progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        position: absolute;
+        left: 50%;
+    }
+    
+    #progressbar li:last-child:after {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    
+    #progressbar li:first-child:after {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    
+    /*Color number of the step and the connector before it*/
+    #progressbar li.active:before, #progressbar li.active:after {
+        background: #2fec00;
+    }
+    #progressbar li.cancel:before, #progressbar li.cancel:after {
+        background: #d60606;
+    }
+    #progressbar li.pending:before, #progressbar li.pending:after {
+        background: #d67506;
+    }
+    
+    #progressbar li.active:before {
+        font-family: FontAwesome;
+        content: "\f00c";
+    }
+    #progressbar li.cancel:before {
+        font-family: FontAwesome;
+        content: "\f00d";
+        color: white;
+    }
+    #progressbar li.pending:before {
+        font-family: FontAwesome;
+        content: "\f00d";
+        color: white;
+    }
+    .icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+    }
+    
+    .icon-content { 
+        padding-bottom: 20px;
+    }
+    
+    @media screen and (max-width: 992px) {
+        .icon-content {
+            width: 50%;
+        }
+    }
+    

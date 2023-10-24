@@ -3,178 +3,243 @@
 {% block title%}ORDER DETAILS{%endblock title %}
 {% block body %}
 
-<!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option"style="margin-top: 90px;">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="breadcrumb__text">
-          <h4>ORDER DETAILS</h4>
-          <div class="breadcrumb__links">
-            <a href="/">Home</a>
-            <span>Profile</span>
-          </div>
+    <div class="container"> 
+        <h1 class="text-56-medium">Order Details</h1>
+        <div class="breadcrumbs"> 
+          <ul> 
+            <li> <a href="/">Home </a></li>
+            <li> <a href="/user_order">Orders</a></li>
+            <li> <a href="">Orders Details</a></li>
+          </ul>
         </div>
-      </div>
     </div>
-  </div>
 </section>
-<!-- Breadcrumb Section End -->
 
 <div class="container mt-5">
     <main class="main-wrap">
-        <section class="content-main">
-
-        {% for i in orders %}
-            {% with order=orders.0 order_product=order_products payment=payments.0 %}
-            <div class="content-header">
-                <div>
-                    <h2 class="content-title card-title">Order detail</h2>
-                    <p>Details for Order ID: {{order.order_number}}</p>
-                </div>
-            </div>
-            <div class="card">
-                <header class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                            <span>
-                                <i class="material-icons md-calendar_today"></i> <b>{{order.created_at}}</b>
-                            </span> 
+        <div class="card d-flex justify-content-center">
+            {% for order in orders %}
+                {% if order.status == 'Delivered' %}
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-12  justify-content-center" >
+                        <ul id="progressbar" class="text-center d-flex justify-content-center" >
+                            <li class="active step0"></li>
+                            <li class="active step0"></li>
+                            <li class="active step0"></li>
+                        </ul>
                         </div>
                     </div>
-                </header> <!-- card-header end// -->
-                <div class="card-body">
-                    <div class="row mb-50 mt-20 order-info-wrap">
-                        <div class="col-md-4">
-                            <article class="icontext align-items-start">
-                                <span class="icon icon-sm rounded-circle bg-primary-light">
-                                    <i class="text-primary material-icons md-person"></i>
-                                </span>
-                                <div class="text">
-                                    <h6 class="mb-1">Customer</h6>
-                                    <p class="mb-1">
-                                        {{order.address.first_name}}{{order.address.last_name}}<br>{{order.address.phone}}
-                                    </p>
-                                    <a href="#">View profile</a>
-                                </div>
-                            </article>
-                        </div> <!-- col// -->
-                        <div class="col-md-4">
-                            <article class="icontext align-items-start">
-                                <span class="icon icon-sm rounded-circle bg-primary-light">
-                                    <i class="text-primary material-icons md-local_shipping"></i>
-                                </span>
-                                <div class="text">
-                                    <h6 class="mb-1">Order info</h6>
-                                    <p class="mb-1">
-                                        Shipping: Standard <br> Pay method:{{payment.payment_method}} <br> Status: {{payment.status}}
-                                    </p>
-                                </div>
-                            </article>
-                        </div> <!-- col// -->
-                        <div class="col-md-4">
-                            <article class="icontext align-items-start">
-                                <span class="icon icon-sm rounded-circle bg-primary-light">
-                                    <i class="text-primary material-icons md-place"></i>
-                                </span>
-                                <div class="text">
-                                    <h6 class="mb-1">Deliver to</h6>
-                                    <p class="mb-1">
-                                        {{order.address.address_line_1}},{{order.address.address_line_2}} <br>{{order.address.city}},{{order.address.state}},{{order.address.country}}<br> PIN {{order.address.pin}} 
-                                    </p>
-                                </div>
-                            </article>
-                        </div> <!-- col// -->
-                    </div> <!-- row // -->
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th width="40%">Product</th>
-                                            <th width="20%">Unit Price</th>
-                                            <th width="20%">Quantity</th>
-                                            <th width="20%" class="text-end">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
-                                        {% for order_product in order_products %}
-                                            <tr>
-                                                <td>
-                                                    <a class="itemside" href="#">
-                                                        <div class="left">
-                                                            <img src="{{ order_product.product.product_images.url }}" width="40" height="40" class="img-xs" alt="Item">
-                                                        </div>
-                                                        <div class="info"> {{order_product.product.product_name}}</div>
-                                                    </a>
-                                                </td>
-                                                <td> ${{order_product.product.price}} </td>
-                                                <td> {{order_product.quantity}} </td>
-                                                <td class="text-end">{{order_product.single_product_total}}</td>
-                                            </tr>
-                                        {% endfor %}
-                                        <tr>
-                                            <td colspan="4">
-                                                <article class="float-end">
-                                                    <dl class="dlist">
-                                                        <dt>Grand total:</dt>
-                                                        <dd> <b class="h5">&#8377;&nbsp;{{order.order_total}}</b> </dd>
-                                                    </dl>
-                                                    <dl class="dlist">
-                                                        <dt class="text-muted">Status:
-                                                            {% if order.status == 'Delivered' %}
-                                                                <span class="badge rounded-pill alert-success">Deliverd</span>
-                                                            {% elif order.status == 'Order Placed' %}
-                                                                <span class="badge rounded-pill alert-success">Placed</span>
-                                                            {% elif order.status == 'Shipped' %}
-                                                                <span class="badge rounded-pill alert-warning">Shipped</span>
-                                                            {% elif order.status == 'Cancelled' %}
-                                                                <span class="badge rounded-pill alert-danger">Cancelled</span>
-                                                            {% elif order.status == 'Returned' %}
-                                                                <span class="badge rounded-pill alert-danger">Returned</span>
-                                                            {% elif order.status == 'Return Pending' %}
-                                                                <span class="badge rounded-pill alert-danger">Return Pending</span>
-                                                            {% endif %}
-                                                        </dt>
-                                                        <dd>
-                                                            <span class="badge rounded-pill alert-success text-success">{{payment.status}}</span>
-                                                        </dd>
-                                                    </dl>
-                                                </article>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div> <!-- table-responsive// -->
-                        </div> <!-- col// -->
-                        <div class="col-lg-1"></div>
-                        <div class="col-lg-4">
-                            <div class="box shadow-sm bg-light">
-                                <h5 >Payment info</h5><br>
-                                <p>
-                                   <h6>Tranc ID:{{payment.payment_id}}</h6>
-                                   <h6>{{payment.payment_method}}</h6>
-                                   <h6>{{payment.status}}</h6>
-                                </p>
+                {% elif order.status == 'Order Placed' %}
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-12">
+                        <ul id="progressbar" class="text-center  d-flex justify-content-center">
+                            <li class="active step0"></li>
+                            <li class="step0"></li>
+                            <li class="step0"></li>
+                        </ul>
+                        </div>
+                    </div>
+                {% elif order.status == 'Shipped' %}
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-12">
+                        <ul id="progressbar" class="text-center  d-flex justify-content-center">
+                            <li class="active step0"></li>
+                            <li class="active step0"></li>
+                            <li class="step0"></li>
+                        </ul>
+                        </div>
+                    </div>
+                {% elif order.status == 'Cancelled' %}
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-12">
+                        <ul id="progressbar" class="text-center  d-flex justify-content-center">
+                            <li class="cancel "></li>
+                            <li class="cancel "></li>
+                            <li class="cancel "></li>
+                        </ul>
+                        </div>
+                    </div>
+                {% elif order.status == 'Return Pending' %}
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12">
+                    <ul id="progressbar" class="text-center  d-flex justify-content-center">
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="pending"></li>
+                    </ul>
+                    </div>
+                </div>
+                {% elif order.status == 'Returned' %}
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12 justify-content-center">
+                    <ul id="progressbar" class="text-center  d-flex justify-content-center">
+                        <li class="active step0"></li>
+                        <li class="active step0"></li>
+                        <li class="cancel"></li>
+                    </ul>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            <div class="row justify-content-center">
+                <div class="col-4 d-flex justify-content-center">
+                    <img class="avatar-md img-thumbnail " src="{% static 'img/icon/palced.png' %}" >
+                </div>
+                <div class="col-4 d-flex justify-content-center">
+                    <img class="avatar-md img-thumbnail " src="{% static 'img/icon/shipped.png' %}">
+                </div>
+                <div class="col-4 d-flex justify-content-center">
+                    <img class="avatar-md img-thumbnail " src="{% static 'img/icon/delivered.png' %}">
+                </div>
+            </div>
+        </div>
+        <section class="content-main">
+
+            {% for i in orders %}
+                {% with order=orders.0 order_product=order_products payment=payments.0 %}
+                <div class="card">
+                    <header class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                                <span>
+                                    <i class="material-icons md-calendar_today"></i> <b>{{order.created_at}}</b>
+                                </span> 
                             </div>
-                        </div> 
-                        {% if order.status == 'Return Pending' %}
+                        </div>
+                    </header> 
+                    <div class="card-body">
+                        <div class="row mb-50 mt-20 order-info-wrap">
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                        <i class="text-primary material-icons md-person"></i>
+                                    </span>
+                                    <div class="text">
+                                        <h6 class="mb-1">Customer</h6>
+                                        <p class="mb-1">
+                                            {{order.address.first_name}}{{order.address.last_name}}<br>{{order.address.phone}}
+                                        </p>
+                                        <a href="#">View profile</a>
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                        <i class="text-primary material-icons md-local_shipping"></i>
+                                    </span>
+                                    <div class="text">
+                                        <h6 class="mb-1">Order info</h6>
+                                        <p class="mb-1">
+                                            Shipping: Standard <br> Pay method:{{payment.payment_method}} <br> Status: {{payment.status}}
+                                        </p>
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                            <div class="col-md-4">
+                                <article class="icontext align-items-start">
+                                    <span class="icon icon-sm rounded-circle bg-primary-light">
+                                        <i class="text-primary material-icons md-place"></i>
+                                    </span>
+                                    <div class="text">
+                                        <h6 class="mb-1">Deliver to</h6>
+                                        <p class="mb-1">
+                                            {{order.address.address_line_1}},{{order.address.address_line_2}} <br>{{order.address.city}},{{order.address.state}},{{order.address.country}}<br> PIN {{order.address.pin}} 
+                                        </p>
+                                    </div>
+                                </article>
+                            </div> <!-- col// -->
+                        </div> <!-- row // -->
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th width="40%">Product</th>
+                                                <th width="20%">Unit Price</th>
+                                                <th width="20%">Quantity</th>
+                                                <th width="20%" class="text-end">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                            {% for order_product in order_products %}
+                                                <tr>
+                                                    <td>
+                                                        <a class="itemside" href="#">
+                                                            <div class="left">
+                                                                <img src="{{ order_product.product.product_images.url }}" width="40" height="40" class="img-xs" alt="Item">
+                                                            </div>
+                                                            <div class="info"> {{order_product.product.product_name}}</div>
+                                                        </a>
+                                                    </td>
+                                                    <td> ${{order_product.product.price}} </td>
+                                                    <td> {{order_product.quantity}} </td>
+                                                    <td class="text-end">{{order_product.single_product_total}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr>
+                                                <td colspan="4">
+                                                    <article class="float-end">
+                                                        <dl class="dlist">
+                                                            <dt>Grand total:</dt>
+                                                            <dd> <b class="h5">&#8377;&nbsp;{{order.order_total}}</b> </dd>
+                                                        </dl>
+                                                        <dl class="dlist">
+                                                            <dt class="text-muted">Status:
+                                                                {% if order.status == 'Delivered' %}
+                                                                    <span class="badge rounded-pill alert-success">Deliverd</span>
+                                                                {% elif order.status == 'Order Placed' %}
+                                                                    <span class="badge rounded-pill alert-success">Placed</span>
+                                                                {% elif order.status == 'Shipped' %}
+                                                                    <span class="badge rounded-pill alert-warning">Shipped</span>
+                                                                {% elif order.status == 'Cancelled' %}
+                                                                    <span class="badge rounded-pill alert-danger">Cancelled</span>
+                                                                {% elif order.status == 'Returned' %}
+                                                                    <span class="badge rounded-pill alert-danger">Returned</span>
+                                                                {% elif order.status == 'Return Pending' %}
+                                                                    <span class="badge rounded-pill alert-danger">Return Pending</span>
+                                                                {% endif %}
+                                                            </dt>
+                                                            <dd>
+                                                                <span class="badge rounded-pill alert-success text-success">{{payment.status}}</span>
+                                                            </dd>
+                                                        </dl>
+                                                    </article>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div> <!-- table-responsive// -->
+                            </div> <!-- col// -->
+                            <div class="col-lg-1"></div>
                             <div class="col-lg-4">
                                 <div class="box shadow-sm bg-light">
-                                    <h5 >Reutrn Reason</h5><br>
-                                    <h6>{{order.status}}</h6>
+                                    <h5 >Payment info</h5><br>
+                                    <p>
+                                    <h6>Tranc ID:{{payment.payment_id}}</h6>
+                                    <h6>{{payment.payment_method}}</h6>
+                                    <h6>{{payment.status}}</h6>
                                     </p>
                                 </div>
                             </div> 
-                        {% endif %}
-                    </div>
+                            {% if order.status == 'Return Pending' %}
+                                <div class="col-lg-4">
+                                    <div class="box shadow-sm bg-light">
+                                        <h5 >Reutrn Reason</h5><br>
+                                        <h6>{{order.status}}</h6>
+                                        </p>
+                                    </div>
+                                </div> 
+                            {% endif %}
+                        </div>
+                    </div> 
+                    <a class="btn btn-secondary print ms-2" href="{% url 'user_order_invoice' order.id %}">Download Invoice</a>
                 </div> 
-                <a class="btn btn-secondary print ms-2" href="{% url 'user_order_invoice' order.id %}">Download Invoice</a>
-            </div> 
-            {% endwith %}
-        {% endfor %}
+                {% endwith %}
+            {% endfor %}
 
         </section>
     </main>

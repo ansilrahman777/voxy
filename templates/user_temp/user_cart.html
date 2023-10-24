@@ -8,8 +8,8 @@
       <div class="container"> 
         <div class="breadcrumbs"> 
           <ul> 
-            <li> <a href="#">Home </a></li>
-            <li> <a href="#">Cart Items</a></li>
+            <li> <a href="/">Home </a></li>
+            <li> <a href="#">Cart</a></li>
           </ul>
         </div>
       </div>
@@ -72,7 +72,7 @@
                                                     <a href="{% url 'user_remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light bg-white border-0" type="button" id="button-minus"> <i class="fa fa-minus"></i> </a>
                                             </div>
 
-                                            <div class="col-3 ">
+                                            <div class="col-4 ">
                                                 <input type="text" class="qty-val form-control bg-white " name="quantity" value="{{ cart_item.quantity }}">
                                             </div>
 
@@ -111,7 +111,10 @@
                                     {% endif %}
                                     
                                 </div>
-                                <div class="coupon-right" ><a class="btn btn-border" href="/user_shop">Update Cart</a></div>
+                                <div class="row justify-content-between">
+                                    <div class="col coupon-right" ><a class="btn btn-border" href="/user_shop">Shop</a></div>
+                                    <div class="col coupon-right" ><a class="btn btn-border" href="/user_wishlist">Whislist</a></div>
+                                </div>
                             </div>
                         </form>
                         <br>
@@ -136,8 +139,8 @@
                                         </select>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" id="applyCouponBtn">Select</button>
+                                        <button type="button" class="btn btn-border" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-black" id="applyCouponBtn">Select</button>
                                     </div>
                                 </div>
                             </div>
@@ -255,6 +258,17 @@
             // Close the modal
             $("#couponModal").modal("hide");
         });
+
+        // Close the modal when the "Close" button is pressed
+        $("#closeCouponBtn").click(function () {
+            $("#couponModal").modal("hide");
+        });
+        
+        // Add this part to close the modal when a value is selected in the dropdown
+        $("#couponSelect").change(function () {
+            // Close the modal when a value is selected
+            $("#couponModal").modal("hide");
+        });
     });
 </script>
 <script>
@@ -271,5 +285,6 @@
         this.submit();
     });
 </script>
+
 
 {% endblock %}

@@ -448,11 +448,11 @@ class Wallet(models.Model):
         return f"Wallet for User : {self.user.first_name}"
 
 class ContactUs(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50,null=True, blank=True, default=None)
     email = models.EmailField(max_length=100,)
-    mobile = models.CharField(max_length=50,)
-    subject = models.CharField(max_length=50)
-    content = models.CharField(max_length=500)
+    mobile = models.CharField(max_length=50,null=True, blank=True, default=None)
+    subject = models.CharField(max_length=50,null=True, blank=True, default=None)
+    content = models.CharField(max_length=500,null=True, blank=True, default=None)
 
     def __str__(self):
         return self.email
