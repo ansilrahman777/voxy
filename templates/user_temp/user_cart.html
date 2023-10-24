@@ -89,7 +89,8 @@
                                     </div>
                                 </div>
                                 <div class="item-cart-info-2">
-                                    <p class="body-p2"></p><a  href="{% url 'user_remove_cart_item' cart_item.product.id cart_item.id %}" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart"></a>
+                                    <p class="body-p2"></p>
+                                    <a href="#" data-product-id="{{ cart_item.product.id }}" data-cart-item-id="{{ cart_item.id }}" class="btn-remove-cart1"><i class="fa fa-close"></i></a>
                                 </div>
                                 </div>
                             </div>
@@ -178,72 +179,35 @@
   </main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    $(".btn-remove-cart").click(function (e) {
+    $(".btn-remove-cart1").click(function (e) {
         e.preventDefault();
-    
+
         var productId = $(this).data("product-id");
         var cartItemId = $(this).data("cart-item-id");
-    
-        // Construct the URL dynamically
-        var url = `/user_remove_cart_item/${productId}/${cartItemId}/`;
-    
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-            },
-            success: function (data) {
-                // Handle success (e.g., update the cart view)
-                // You can use data to check if the item was successfully removed
-                // For example, if data.success is true, you can update the cart UI
-                // Remove the item from the cart UI without reloading the page
-                $(e.target).closest("tr").remove(); // Remove the row containing the item from the cart table
-            },
-            error: function (error) {
-                // Handle error
-                console.log(error);
+        var removeButton = $(this);
+
+        // Show a SweetAlert confirmation dialog
+        Swal.fire({
+            title: 'Confirm Removal',
+            text: 'Are you sure you want to remove this item?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user confirms, proceed with removal
+                var url = `/user_remove_cart_item/${productId}/${cartItemId}/`;
+
+                // Perform a full page reload
+                window.location.href = url;
             }
         });
     });
-    $(document).ready(function () {
-        $(".button-minus").click(function (e) {
-            e.preventDefault(); // Prevent the default form submission behavior
-    
-            var productId = $(this).data("product-id");
-            var cartItemId = $(this).data("cart-item-id");
-    
-            var quantityInput = $(`.quantity-input[data-cart-item-id="${cartItemId}"]`);
-    
-            $.ajax({
-                type: "POST",
-                url: `/user_remove_cart/${productId}/${cartItemId}/`,
-                data: {
-                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
-                },
-                success: function (data) {
-                    // Handle success (e.g., update the cart view)
-                    // You can use data to check if the item was successfully removed
-    
-                    // Update the quantity input value, ensuring it doesn't go negative
-                    var currentQuantity = parseInt(quantityInput.val());
-                    if (currentQuantity - 1 < 1) {
-                        // Remove the item from the cart UI without reloading the page
-                        $(e.target).closest("tr").remove(); // Remove the row containing the item from the cart table
-                    } else {
-                        // Update the quantity input value
-                        quantityInput.val(currentQuantity - 1);
-                    }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    // Handle AJAX error
-                }
-            });
-        });
-    });
 </script>
-
 
 <!-- JavaScript to update the hidden input field with the selected coupon code -->
 <script>
@@ -271,6 +235,8 @@
         });
     });
 </script>
+
+
 <script>
     document.getElementById('couponForm').addEventListener('submit', function(event) {
         // Prevent the form from submitting normally

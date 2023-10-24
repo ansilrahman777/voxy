@@ -365,14 +365,12 @@ def user_coming_soon(request,id):
 # ------------------------------------------------------cart----------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
         cart =request.session.create()
     return cart
 
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_add_cart(request, product_id):
     current_user=request.user
     product = Product.objects.get(id=product_id)
@@ -490,7 +488,6 @@ def user_add_cart(request, product_id):
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)
 
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_remove_cart(request, product_id,cart_item_id):
 
     
@@ -510,7 +507,6 @@ def user_remove_cart(request, product_id,cart_item_id):
         pass
     return redirect('user_cart')
 
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_remove_cart_item(request, product_id,cart_item_id):
 
     
@@ -524,7 +520,6 @@ def user_remove_cart_item(request, product_id,cart_item_id):
 
     return redirect('user_cart')
 
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_cart(request, total=0, quantity=0, cart_items=None):
 
     
@@ -961,6 +956,9 @@ def user_place_order(request,total=0,quantity=0,cart_items=None):
 
     grand_total = 0
     for cart_item in cart_items:
+        if cart_item.product.quantity <=0:
+            messages.warning(request, f"{cart_item.product.product_name} is out of stock")
+            return redirect('user_cart')
         total += (cart_item.product.discount_price * cart_item.quantity)
         quantity += cart_item.quantity
     grand_total = total
