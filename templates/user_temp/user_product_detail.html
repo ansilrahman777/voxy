@@ -120,7 +120,7 @@
                         
                         <div class="block-quantity">
                                 {% if single_product.quantity <= 0 %}
-                                    <a class="btn btn-black" style="background-color: red; color: white; border: none;" href="#">out of stock</a>
+                                    <a class="btn btn-black" style="background-color: red; color: white; border: none;" href="{% url 'user_coming_soon' single_product.id %}">out of stock</a>
                                 {% else %}
                                 <button type="method" class="btn btn-black">Add to Cart</button>
                                 {% endif %}

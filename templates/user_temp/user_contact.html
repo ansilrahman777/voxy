@@ -1,4 +1,5 @@
 {% extends 'user_temp/base.html' %}
+{% load static %}
 {% block title %}CONTACT{% endblock title %}
 {% block body %}
 
@@ -8,6 +9,15 @@
       <div class="box-banner-info wow bounceIn"> 
         <p class="overline-t2-medium text-uppercase primary-navy mb-10">NEED HELP?</p>
         <h2 class="color-primary-dark mb-30">Haven’t found what <br class="d-none d-lg-block">you’re looking for? <br class="d-none d-lg-block">Contact us</h2>
+      </div>
+    </section>
+
+    <section class="section block-banner-street" style="background-image: url({% static 'img/hero/bg.jpg' %});"> 
+      <div class="container"> 
+        <div class="box-banner-street">
+          <h1 class="text-68 mb-10">Football is not just a game;</h1>
+          <p class="text-24 mb-30"> it's a passion, a lifestyle, and the pursuit of glory.</p>
+        </div>
       </div>
     </section>
     

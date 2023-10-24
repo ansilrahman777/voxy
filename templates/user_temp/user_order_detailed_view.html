@@ -221,19 +221,9 @@
                                     <p>
                                     <h6>Tranc ID:{{payment.payment_id}}</h6>
                                     <h6>{{payment.payment_method}}</h6>
-                                    <h6>{{payment.status}}</h6>
                                     </p>
                                 </div>
                             </div> 
-                            {% if order.status == 'Return Pending' %}
-                                <div class="col-lg-4">
-                                    <div class="box shadow-sm bg-light">
-                                        <h5 >Reutrn Reason</h5><br>
-                                        <h6>{{order.status}}</h6>
-                                        </p>
-                                    </div>
-                                </div> 
-                            {% endif %}
                         </div>
                     </div> 
                     <a class="btn btn-secondary print ms-2" href="{% url 'user_order_invoice' order.id %}">Download Invoice</a>

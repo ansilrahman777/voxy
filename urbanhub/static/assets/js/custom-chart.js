@@ -53,23 +53,23 @@ async function getSalesReport() {
                     labels: productNames,
                     datasets: [
                         {
-                            label: 'Weekly Sales',
+                            label: 'Sales Report',
                             data: weeklySales,
                             backgroundColor: 'rgba(44, 120, 220, 0.2)',
                             borderColor: 'rgba(44, 120, 220)',
                         },
-                        {
-                            label: 'Monthly Sales',
-                            data: monthlySales,
-                            backgroundColor: 'rgba(4, 209, 130, 0.2)',
-                            borderColor: 'rgb(4, 209, 130)',
-                        },
-                        {
-                            label: 'Yearly Sales',
-                            data: yearlySales,
-                            backgroundColor: 'rgba(380, 200, 230, 0.2)',
-                            borderColor: 'rgb(380, 200, 230)',
-                        }
+                        // {
+                        //     label: 'Monthly Sales',
+                        //     data: monthlySales,
+                        //     backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                        //     borderColor: 'rgb(4, 209, 130)',
+                        // },
+                        // {
+                        //     label: 'Yearly Sales',
+                        //     data: yearlySales,
+                        //     backgroundColor: 'rgba(380, 200, 230, 0.2)',
+                        //     borderColor: 'rgb(380, 200, 230)',
+                        // }
                     ]
                 },
                 options: {

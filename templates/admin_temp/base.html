@@ -3,7 +3,6 @@
 <html lang="en">
 
 
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:35 GMT -->
 <head>
     <meta charset="utf-8">
     <title>{% block title %} {% endblock title %}</title>
@@ -14,9 +13,7 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/theme/favicon.svg' %}">
-    <!-- Template CSS -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/icon/voxy.png' %}">
     <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" type="text/css" />
 </head>
 
@@ -32,9 +29,9 @@
                     <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
                 </li>
                 <li class="dropdown nav-item">
-                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'assets/imgs/people/avatar2.jpg' %}" alt="User"></a>
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="{% static 'img/icon/voxy.png' %}" alt="User"></a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                        <a class="dropdown-item text-danger" href="/admin_logout"><i class="material-icons md-exit_to_app"></i>Logout{{request.user}}</a>
+                        <a class="dropdown-item text-danger" href="/admin_logout"><i class="material-icons md-exit_to_app"></i>{{request.user}}</a>
                     </div>
                 </li>
             </ul>

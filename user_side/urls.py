@@ -20,6 +20,8 @@ urlpatterns = [
     path('user_shop/search/',views.search,name='search'),
 
     path('user_product_detail/<int:product_id>/',views.user_product_detail,name='user_product_detail'),
+    path('user_coming_soon/<int:id>/',views.user_coming_soon,name='user_coming_soon'),
+
 
     path('user_cart',views.user_cart,name='user_cart'),
     path('user_add_cart/<int:product_id>/',views.user_add_cart,name='user_add_cart'),

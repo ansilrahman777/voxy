@@ -52,7 +52,6 @@ def admin_index(request):
         }
         
         return render(request,'admin_temp/admin_index.html',context)
-
     return render(request,'admin_temp/admin_login.html')
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
@@ -212,7 +211,6 @@ def admin_edit_category(request, id):
     return render(request, 'admin_temp/admin_edit_category.html', {'category': category})
 
 @login_required(login_url='admin_login')
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_enable_disable_category(request,id):
     if not request.user.is_authenticated:
@@ -448,7 +446,6 @@ def admin_edit_product(request, product_id):
 
 
 @login_required(login_url='admin_login')
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_unlist_list_product(request,product_id):
     if not request.user.is_authenticated :
@@ -518,7 +515,8 @@ def admin_user_block_unblock(request,id):
     return redirect('admin_users')
 
 
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_orders(request):
     orders = Order.objects.all()
 
@@ -534,7 +532,8 @@ def admin_orders(request):
     }
     return render(request,'admin_temp/admin_orders.html',context)
 
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_order_details(request, order_id):
     
     order_products = OrderProduct.objects.filter(order__id=order_id)
@@ -553,7 +552,8 @@ def admin_order_details(request, order_id):
 
     return render(request, 'admin_temp/admin_order_details.html', context)
 
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_update_order_status(request, order_id, new_status):
     order = get_object_or_404(Order, pk=order_id)
     order_products = OrderProduct.objects.filter(order__id=order_id)
@@ -593,7 +593,8 @@ def admin_update_order_status(request, order_id, new_status):
     
     return redirect('admin_orders')
     
-@login_required    
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)  
 def admin_coupons(request):
     if not request.user.is_authenticated:
         return redirect('admin_login')
@@ -612,7 +613,8 @@ def admin_coupons(request):
     }
     return render(request, 'admin_temp/admin_coupons.html', context)
     
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_add_coupons(request):
     if not request.user.is_authenticated:
         return redirect('admin_login')
@@ -656,7 +658,8 @@ def admin_add_coupons(request):
 
     return render(request,'admin_temp/admin_add_coupons.html')
 
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_edit_coupons(request, coupon_id):
     try:
         coupon = Coupons.objects.get(pk=coupon_id)
@@ -698,7 +701,8 @@ def admin_edit_coupons(request, coupon_id):
     context = {'coupon': coupon}
     return render(request, 'admin_temp/admin_edit_coupons.html', context)
 
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_delete_coupons(request, coupon_id):
     try:
         coupon = Coupons.objects.get(pk=coupon_id)
@@ -711,7 +715,8 @@ def admin_delete_coupons(request, coupon_id):
     
     return redirect('admin_coupons')
 
-@login_required
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_review(request):
     reviews = ReviewRating.objects.all()
     paginator = Paginator(reviews,6)
@@ -726,6 +731,8 @@ def admin_review(request):
 
     return render(request, 'admin_temp/admin_review.html',context)
 
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_review_replay(request, id):
     review = get_object_or_404(ReviewRating, id=id)
 

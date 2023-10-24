@@ -190,7 +190,11 @@
                         <div class="product-item">
                             <div class="cardProduct wow fadeInUp">
                             <div class="cardImage"><a href="{{ product.get_url }}"><img class="imageMain" src="{{product.product_images.url}}" alt="voxly"><img class="imageHover" src="{{product.product_images.url}}" alt="voxly"></a>
-                                <div class="button-select"><a href="{{ product.get_url }}">View Product</a></div>
+                              {% if product.quantity <= 0 %}
+                              <div class="button-select" ><a href="{% url 'user_coming_soon' product.id %}" style="background-color: red !important;">Out Of Stock</a></div>
+                              {% else %}
+                              <div class="button-select"><a href="{{ product.get_url }}">View Product</a></div>
+                              {% endif %}
                                 <div class="box-quick-button">
                                     {% if product in wishlist_products %}
                                         <a class="btn " style="background-color: white;" href="{% url 'user_remove_wishlist' product.id %}">

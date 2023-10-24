@@ -32,9 +32,11 @@ def user_index(request):
     }
     return render(request,'user_temp/user_index.html',context)
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_about(request):
     return render(request,'user_temp/user_about.html') 
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_contact(request):
     return render(request,'user_temp/user_contact.html') 
 
@@ -133,11 +135,11 @@ def user_sign_up(request):
                 try:
                     referrer = User.objects.get(referral_code=referral_code)
                     referrer_wallet, created = Wallet.objects.get_or_create(user=referrer)
-                    referrer_wallet.amount += 100
+                    referrer_wallet.amount += 200
                     referrer_wallet.save()
 
                     referred_user_wallet, created = Wallet.objects.get_or_create(user=user)
-                    referred_user_wallet.amount += 200
+                    referred_user_wallet.amount += 100
                     referred_user_wallet.save()
                 except User.DoesNotExist:
                     raise forms.ValidationError("Invalid referral code")
@@ -192,7 +194,7 @@ def user_logout(request):
     messages.success(request,'logout successfull')
     return redirect('user_login')
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_forgot_password(request):
     if request.method=='POST':
         email = request.POST['email']
@@ -221,7 +223,7 @@ def user_forgot_password(request):
 
     return render(request,'user_temp/user_forgot_password.html')
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_reset_password_validate(request,uidb64,token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -239,6 +241,7 @@ def user_reset_password_validate(request,uidb64,token):
 
     return render(request,'user_temp/user_reset_password.html')
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_reset_password(request):
     if request.method == 'POST':
         password = request.POST['password']
@@ -264,7 +267,7 @@ def user_reset_password(request):
 # ------------------------------------------------------shop------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 
-@never_cache
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_shop(request, category_slug=None):
     user=request.user
     category = None
@@ -296,7 +299,7 @@ def user_shop(request, category_slug=None):
 
     return render(request, 'user_temp/user_shop.html', context)
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def search(request):
     keyword = request.GET.get('keyword') 
     products = Product.objects.none()  
@@ -314,7 +317,7 @@ def search(request):
 # ------------------------------------------------------product------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 
-@never_cache
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_product_detail(request,category_slug,product_slug):
     user=request.user
     current_user=request.user
@@ -346,17 +349,30 @@ def user_product_detail(request,category_slug,product_slug):
     }
     return render(request,'user_temp/user_product_detail.html',context)
 
+
+def user_coming_soon(request,id):
+    user=request.user
+    try:
+        single_product = Product.objects.get(id=id)
+    except Exception as e:
+        raise e
+
+    context = {
+        'single_product': single_product,
+    }
+    return render(request,'user_temp/user_coming_soon.html',context)
 # ----------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------cart----------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
         cart =request.session.create()
     return cart
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_add_cart(request, product_id):
     current_user=request.user
     product = Product.objects.get(id=product_id)
@@ -474,7 +490,7 @@ def user_add_cart(request, product_id):
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_remove_cart(request, product_id,cart_item_id):
 
     
@@ -494,7 +510,7 @@ def user_remove_cart(request, product_id,cart_item_id):
         pass
     return redirect('user_cart')
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_remove_cart_item(request, product_id,cart_item_id):
 
     
@@ -508,7 +524,7 @@ def user_remove_cart_item(request, product_id,cart_item_id):
 
     return redirect('user_cart')
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_cart(request, total=0, quantity=0, cart_items=None):
 
     
@@ -568,10 +584,12 @@ def user_cart(request, total=0, quantity=0, cart_items=None):
 # ----------------------------------------------------------------------------------------------------------------
 
 @login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_profile(request):
     return render(request,'user_temp/user_profile.html')
 
 @login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_profile_edit(request):
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, instance=request.user)
@@ -792,7 +810,6 @@ def user_edit_address(request,id):
     return HttpResponseRedirect(referer or '/user_address/')
 
 
-    
 @login_required(login_url='user_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_remove_address(request, id):
@@ -1078,8 +1095,8 @@ def user_payment(request,order_number):
 
     return render(request,'user_temp/user_order_confirmed.html',context)
 
-    
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_cash_on_delivery(request, order_number):
     current_user = request.user
     try:
@@ -1147,6 +1164,8 @@ def user_cash_on_delivery(request, order_number):
 
     return render(request,'user_temp/user_order_confirmed.html',context)
 
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_order(request):
     orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
 
@@ -1163,6 +1182,8 @@ def user_order(request):
 
     return render(request,'user_temp/user_order.html',context)
 
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_update_order_status(request, order_id, new_status):
     order = get_object_or_404(Order, pk=order_id)
     order_products = OrderProduct.objects.filter(order__id=order_id)
@@ -1197,8 +1218,8 @@ def user_update_order_status(request, order_id, new_status):
     
     return redirect('user_order')
 
-
-@login_required
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_order_detailed_view(request, order_id):
     
     order_products = OrderProduct.objects.filter(order__id=order_id)
@@ -1271,7 +1292,8 @@ def user_remove_wishlist(request, product_id):
 # ------------------------------------------------user_coupons--------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------
 
-
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_apply_coupon(request):
     total = 0
 
@@ -1311,6 +1333,7 @@ def user_apply_coupon(request):
 
     return redirect('user_cart')
 
+@login_required(login_url='user_login')
 def user_sumbit_review(request, product_id):
     if request.method == "POST":
         try:
@@ -1331,7 +1354,8 @@ def user_sumbit_review(request, product_id):
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)
 
-@login_required
+@login_required(login_url='user_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_order_invoice(request, order_id):
     
     order_products = OrderProduct.objects.filter(order__id=order_id)

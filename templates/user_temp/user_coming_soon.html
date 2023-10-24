@@ -1,0 +1,27 @@
+{% extends 'user_temp/base.html' %}
+{% load static %}
+{% block title %}VOXY{% endblock title %}
+{% block body %}
+
+
+<main class="main">
+    <section class="section ">
+      <div class="box-commingsoon">
+        <div class="commingsoon-left wow bounceIn">
+          <div class="box-logo-commingsoon"><a href="/"></a></div>
+          <div class="box-info-commingsoon">
+            <h2 class="mb-10 mt-100">We are coming!</h2>
+            <p class="body-p2 mb-25">We are preparing something amazing and exciting OFFER for you.</p>
+            <div class="box-count box-count-square">
+              <div class="deals-countdown" data-countdown="2023/12/20 00:00:00"></div>
+            </div>
+            <div class="mt-100">
+            </div>
+          </div>
+        </div>
+        <div class="commingsoon-right wow bounceIn" style="background-image: url({{single_product.product_images.url}});"></div>
+        </div>
+    </section>
+  </main>
+
+  {% endblock %}
