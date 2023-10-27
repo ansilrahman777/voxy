@@ -1,6 +1,6 @@
 {% extends 'user_temp/base.html' %}
 {% load static %}
-{% block title %}SIGN UP{% endblock title %}
+{% block title %}VOXY{% endblock title %}
 {% block body %}
 
 <section class="breadcrumb-option" style="margin-top: 90px;">
@@ -9,10 +9,6 @@
       <div class="col-lg-12">
         <div class="breadcrumb__text">
           <h4>Sign Up</h4>
-          <div class="breadcrumb__links">
-            <a href="/">Home</a>
-            <span>Sign Up</span>
-          </div>
         </div>
       </div>
     </div>
@@ -72,7 +68,7 @@
                   <span class="text-danger">{{ form.referral_code.errors.0 }}</span>
               {% endif %}
             </div>
-            <p class="forgot-signup-links">
+            <p class="forgot-signup-links mb-2">
               Already have an account? <a href="/user_login">Login</a>
             </p>
             <div class="form-group">

@@ -1209,6 +1209,14 @@ def user_update_order_status(request, order_id, new_status):
             product = order_product.product
             product.quantity += order_product.quantity
             product.save()
+        if order.payment.payment_method == 'Razorpay':
+            try:
+                user_wallet = Wallet.objects.get(user=order.user)
+                user_wallet.amount += float(order.order_total)
+                user_wallet.save()
+            except ObjectDoesNotExist:
+                user_wallet = Wallet.objects.create(user=order.user, amount=float(order.order_total))
+                user_wallet.save()
 
     order.save()
     

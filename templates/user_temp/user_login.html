@@ -1,6 +1,6 @@
 {% extends 'user_temp/base.html' %} 
 {% load static %} 
-{% block title%}LOGIN{%endblock title %} 
+{% block title%}VOXY{%endblock title %} 
 
 {% block body %}
 
@@ -15,10 +15,7 @@
         <div class="col-lg-12">
           <div class="breadcrumb__text">
             <h4>Login</h4>
-            <div class="breadcrumb__links">
-              <a href="/">Home</a>
-              <span>Login</span>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -44,7 +41,7 @@
                         <p class="form-group">
                             <input class="form-control" type="password" placeholder="Password" name="password" id="password" required>
                         </p>
-                        <p class="forgot-signup-links">
+                        <p class="forgot-signup-links mb-2">
                             <a href="/user_forgot_password">Forgot Password?</a> | <a href="{% url 'user_sign_up' %}">Sign Up</a> 
                         </p>
                         <p><input class="btn btn-black d-block" type="submit" value="Login"></p>

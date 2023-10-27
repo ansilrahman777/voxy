@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import HttpResponse
-from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating,Wallet
+from user_side.models import Product,Category,User,Order,Payment,OrderProduct,Coupons,UserCoupons,ReviewRating,Wallet,ContactUs
 from django.contrib import messages,auth
 from user_side.forms import SignupForm
 from django.contrib.auth import authenticate, login,logout
@@ -518,7 +518,7 @@ def admin_user_block_unblock(request,id):
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def admin_orders(request):
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('-created_at')
 
     paginator = Paginator(orders,10)
     page = request.GET.get('page')
@@ -564,6 +564,14 @@ def admin_update_order_status(request, order_id, new_status):
             product = order_product.product
             product.quantity += order_product.quantity
             product.save()
+        if order.payment.payment_method == 'Razorpay':
+            try:
+                user_wallet = Wallet.objects.get(user=order.user)
+                user_wallet.amount += float(order.order_total)
+                user_wallet.save()
+            except ObjectDoesNotExist:
+                user_wallet = Wallet.objects.create(user=order.user, amount=float(order.order_total))
+                user_wallet.save()
     elif new_status == 'Accepted':
         order.status = 'Shipped'
     elif new_status == 'Delivered':
@@ -576,7 +584,6 @@ def admin_update_order_status(request, order_id, new_status):
             product = order_product.product
             product.quantity += order_product.quantity
             product.save()
-        if order.payment.payment_method == 'Razorpay':
             try:
                 user_wallet = Wallet.objects.get(user=order.user)
                 user_wallet.amount += float(order.order_total)
@@ -757,7 +764,6 @@ def get_weekly_sales():
     ).values('product__product_name').annotate(weekly_sales=Sum('quantity'))
 
 
-
 def get_monthly_sales():
     end_date = timezone.now()
     start_date = end_date - timezone.timedelta(days=30)
@@ -767,7 +773,6 @@ def get_monthly_sales():
     ).values('product__product_name').annotate(monthly_sales=Sum('quantity'))
 
 
-
 def get_yearly_sales():
     end_date = timezone.now()
     start_date = end_date - timezone.timedelta(days=365)
@@ -775,8 +780,6 @@ def get_yearly_sales():
     return OrderProduct.objects.filter(
         order__created_at__range=(start_date, end_date)
     ).values('product__product_name').annotate(yearly_sales=Sum('quantity'))
-
-
 
 
 def sales_report(request):
@@ -789,3 +792,14 @@ def sales_report(request):
         'yearly_sales': yearly_sales_data,
     }
     return JsonResponse(sales_data, safe=False)
+
+@login_required(login_url='admin_login')
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+def admin_contact(request):
+    contact_us = ContactUs.objects.all()
+  
+    context = {
+        'contact_us': contact_us, 
+    }
+    return render(request, 'admin_temp/admin_contact.html', context)
+    

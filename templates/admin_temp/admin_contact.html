@@ -15,7 +15,7 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item ">
+                <li class="menu-item  ">
                     <a class="menu-link" href="/admin_index"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
@@ -25,7 +25,7 @@
                         <span class="text">Category</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item">
                     <a class="menu-link" href="/admin_products"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
@@ -45,12 +45,12 @@
                         <span class="text">Users List</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item">
                     <a class="menu-link" href="/admin_review"> <i class="icon material-icons md-stars"></i>
                         <span class="text">Reviews</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item active ">
                     <a class="menu-link" href="/admin_contact"> <i class="icon material-icons md-announcement"></i>
                         <span class="text">Contacts</span>
                     </a>
@@ -72,47 +72,34 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Review</h2>
-                    {{review.created_at}}
                 </div>
             </div>
             <div class="card mb-4">
-                <div class="card">
-                        <section class="content-body p-xl-4">
-                            <div class="row border-bottom mb-4 pb-4">
-                                <div class="row">
-                                    <h4> User:<span class="text-muted">{{review.user.first_name |capfirst}} {{review.user.last_name |capfirst}}</span></h4>
-                                </div> 
-                                <div class="col-md-7">
-                                    <div class="mb-3">
-                                        <label class="form-label">Subject</label>
-                                        <input class="form-control" type="text" value="{{review.subject}}" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Review</label>
-                                        <textarea type="text" class="form-control" disabled>{{review.review}}</textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <h4>PRODUCT DETAILS:</h4>
-                                    <h5 style="max-width:90%">Name:</h5>{{review.product.product_name}}
-                                    <h5 style="max-width:90%">Category:</h5>{{review.product.category}}
-                                    <h5 style="max-width:90%">Description:</h5>{{review.product.description}}
-                                    <h5 style="max-width:90%">Price:</h5>{{review.product.price}}
-                                    <hr>
-                                    <h4>Previous Reply:{{review.review_reply}}</h4>
-                                </div>
-                                <form method="post" action="{% url 'admin_review_replay' review.id %}">
-                                    {% csrf_token %}
-                                    <div class="col-md-5">
-                                        <div class="mb-3">
-                                            <label class="form-label">Admin Replay</label>
-                                            <input class="form-control" type="text" placeholder="Replay" name="review_reply" >
-                                        </div>
-                                        <button class="btn btn-primary" type="submit">Replay</button> &nbsp;
-                                    </div>
-                                </form>
-                            </div> 
-                        </section> 
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th scope="col">Emaiil</th>
+                                    <th scope="col">Mobile</th>
+                                    <th scope="col">Subject</th>
+                                    <th scope="col">Content</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contact in contact_us %}
+                                <tr>
+                                    <td>{{contact.name}}</td>
+                                    <td><b>{{contact.email}}</b></td>
+                                    <td>{{contact.mobile}}</td>
+                                    <td>{{contact.subject}}</td>
+                                    <td>{{contact.content}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div> 
             </div>
             <div class="text-center " style="display: flex; justify-content: center; align-items: center;">
@@ -143,7 +130,6 @@
         </section>
 
 
-    </main>  
-    
+    </main>     
 
 {% endblock body %}

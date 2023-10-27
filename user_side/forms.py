@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import validators
 from .models import User,ReviewRating,Wallet
 import re
+import phonenumbers
+from phonenumbers import is_valid_number
 
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
@@ -49,6 +51,9 @@ class SignupForm(forms.ModelForm):
 
         if ' ' in mobile:
             raise forms.ValidationError("Mobile number cannot contain spaces.")
+
+        if not re.match(r'^[789]\d{9}$', mobile):
+            raise forms.ValidationError("Please enter a valid mobile number.")
 
         return mobile
 

@@ -1,6 +1,6 @@
 {% extends 'user_temp/base.html' %}
 {% load static %}
-{% block title %}CONTACT{% endblock title %}
+{% block title %}VOXY{% endblock title %}
 {% block body %}
 
 <main class="main">
@@ -41,12 +41,12 @@
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6"> 
                     <div class="form-group"> 
-                      <input name="name" class="form-control" type="text" placeholder="Name *">
+                      <input name="name" class="form-control" type="text" placeholder="Name *" required>
                     </div>
                   </div>
                   <div class="col-lg-6 col-md-6 col-sm-6"> 
                     <div class="form-group"> 
-                      <input name="email" class="form-control" type="text" placeholder="Email *">
+                      <input name="email" class="form-control" type="text" placeholder="Email *" required>
                     </div>
                   </div>
                   <div class="col-lg-6 col-md-6 col-sm-6"> 
@@ -61,7 +61,7 @@
                   </div>
                   <div class="col-lg-12"> 
                     <div class="form-group"> 
-                      <textarea name="content" class="form-control" placeholder="Contents" rows="6"></textarea>
+                      <textarea name="content" class="form-control" placeholder="Contents" rows="6" required></textarea>
                     </div>
                   </div>
                   <div class="col-lg-12"> 
