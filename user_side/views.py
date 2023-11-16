@@ -1271,7 +1271,7 @@ def user_add_wishlist(request, product_id):
 
     if not Wishlist.objects.filter(user=user, product=product).exists():
         Wishlist.objects.create(user=user, product=product)
-        messages.success(request, 'Product added to wishlist.')
+        messages.success(request, 'Product Added to the wishlist.')
     else:
         messages.warning(request, 'Product is already in the wishlist.')
 
@@ -1286,7 +1286,7 @@ def user_remove_wishlist(request, product_id):
     try:
         wishlist_item = Wishlist.objects.get(user=user, product=product)
         wishlist_item.delete()
-        messages.success(request, 'Product removed from wishlist.')
+        messages.success(request, 'Product Removed from the wishlist.')
     except Wishlist.DoesNotExist:
         messages.warning(request, 'Product is not in the wishlist.')
 
@@ -1309,11 +1309,11 @@ def user_apply_coupon(request):
         try:
             coupon = Coupons.objects.get(coupon_code=coupon_code, is_expired=False, valid_from__lte=timezone.now(), valid_to__gte=timezone.now())
         except Coupons.DoesNotExist:
-            messages.error(request, 'Invalid coupon code or the coupon has expired.')
+            messages.error(request, 'Invalid coupon code or the Coupon has expired.')
             return redirect('user_cart')
 
         if coupon.is_used_by_user(request.user):
-            messages.error(request, 'This coupon has already been used by you.')
+            messages.error(request, 'This coupon has already been used.')
             return redirect('user_cart')
 
         try:
@@ -1329,13 +1329,13 @@ def user_apply_coupon(request):
             pass
 
         if total < coupon.minimum_amount:
-            messages.error(request, 'The cart total does not meet the minimum purchase amount for this coupon.')
+            messages.error(request, 'The cart total does not meet the minimum purchase amount for this coupon .')
             return redirect('user_cart')
 
         request.session['applied_coupon_code'] = coupon.coupon_code
         request.session['applied_coupon_discount'] = coupon.discount
 
-        messages.success(request, 'Coupon applied successfully.')
+        messages.success(request, 'Coupon Applied Successfully.')
 
     return redirect('user_cart')
 
@@ -1346,7 +1346,7 @@ def user_sumbit_review(request, product_id):
             reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
             form = ReviewForm(request.POST, instance=reviews)
             form.save()
-            messages.success(request, 'Thank you, your review has been updated')
+            messages.success(request, 'Thank you, your review has been updated successfully')
         except ObjectDoesNotExist:
             form = ReviewForm(request.POST)
             if form.is_valid():
@@ -1356,7 +1356,7 @@ def user_sumbit_review(request, product_id):
                 data.product_id = product_id
                 data.user_id = request.user.id
                 data.save()
-                messages.success(request, 'Thank you, your review has been posted')
+                messages.success(request, 'Thank you, your review has been Posted successfully')
         referer = request.META.get('HTTP_REFERER')
         return HttpResponseRedirect(referer)
 
