@@ -94,7 +94,7 @@ def user_login(request):
                 pass
 
             if user.is_blocked:
-                messages.error(request, "Your account is blocked. Please contact the administrator.")
+                messages.error(request, "Your account is blocked. Please contact the Admin from the contact Page.")
             else:
                 auth.login(request, user)
                 messages.success(request, "Login successful")
@@ -158,7 +158,7 @@ def user_sign_up(request):
             send_email.send()
 
 
-            messages.success(request,'signup successfull, activation link is sent to the registerd email ')
+            messages.success(request,'Signup successfull,Activation link is sent to the registerd Email ')
             return redirect('user_login')
 
     else:
