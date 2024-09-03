@@ -1,1 +1,1 @@
-VOXY IS A ECOMMERCE WEBSITE FOR BUYING SPORTS ITEMS LIKE FOOTBALL ,BOOTS AND GLOVES
+Created Voxy with the aim of offering a comprehensive e-commerce solution tailored for sports gear enthusiasts. The platform seamlessly incorporates user authentication, diverse payment options facilitated by Razorpay, and robust email verification to ensure heightened security.
