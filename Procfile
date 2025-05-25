@@ -1,1 +1,1 @@
-web: gunicorn voxy.wsgi:application
+web: gunicorn urbanhub.wsgi:application
