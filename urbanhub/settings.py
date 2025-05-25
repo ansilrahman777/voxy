@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG',default=False,cast=bool)
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['voxy.ansilrahman.in', 'voxy.onrender.com']
+ALLOWED_HOSTS = ['voxy.ansilrahman.in', 'voxy-zvj5.onrender.com']
 
 
 # Application definition
