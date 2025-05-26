@@ -97,6 +97,8 @@ AUTH_USER_MODEL = 'user_side.User'
 #     }
 # }
 
+
+#neon and cloud implemented 
 DATABASES = {
     'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=600)
 }
