@@ -29,7 +29,7 @@ DEBUG = config('DEBUG',default=False,cast=bool)
 APPEND_SLASH = True
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['voxy.ansilrahman.in', 'voxy-zvj5.onrender.com']
+ALLOWED_HOSTS = ['voxy.ansilrahman.in', 'voxy-zvj5.onrender.com','127.0.0.1']
 
 
 # Application definition
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_side',
     'admin_side',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -96,10 +98,16 @@ AUTH_USER_MODEL = 'user_side.User'
 # }
 
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
+    'default': dj_database_url.parse(config('DATABASE_URL'), conn_max_age=600)
 }
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET')
+}
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 # Password validation
@@ -151,8 +159,8 @@ STATIC_ROOT =BASE_DIR /'static'
 STATICFILES_DIRS = [
     'urbanhub/static'
 ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 from django.contrib.messages import constants as messages
