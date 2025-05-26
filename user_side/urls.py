@@ -9,12 +9,12 @@ urlpatterns = [
     path('user_login',views.user_login,name='user_login'),
     path('user_sign_up',views.user_sign_up,name='user_sign_up'),
     path('user_forgot_password',views.user_forgot_password,name='user_forgot_password'),
-    path('user_logout/', views.user_logout, name='user_logout'),
+    path('user_logout', views.user_logout, name='user_logout'),
     path('activate/<uidb64>/<token>/',views.activate,name='activate'),
     path('user_reset_password_validate/<uidb64>/<token>/',views.user_reset_password_validate,name='user_reset_password_validate'),
     path('user_reset_password',views.user_reset_password,name='user_reset_password'),
 
-    path('user_shop/',views.user_shop,name='user_shop'),
+    path('user_shop',views.user_shop,name='user_shop'),
     path('user_shop/category/<str:category_slug>/',views.user_shop,name='products_by_category'),
     path('user_shop/category/<str:category_slug>/<str:product_slug>/', views.user_product_detail, name='user_product_detail'),
     path('user_shop/search/',views.search,name='search'),
@@ -51,7 +51,7 @@ urlpatterns = [
     path('user_order_invoice/<int:order_id>/',views.user_order_invoice,name='user_order_invoice'),
 
 
-    path('user_wishlist/', views.user_wishlist, name='user_wishlist'),
+    path('user_wishlist', views.user_wishlist, name='user_wishlist'),
     path('user_add_wishlist/<int:product_id>/', views.user_add_wishlist, name='user_add_wishlist'),
     path('user_remove_wishlist/<int:product_id>/', views.user_remove_wishlist, name='user_remove_wishlist'),
     path('user_apply_coupon', views.user_apply_coupon, name='user_apply_coupon'),
